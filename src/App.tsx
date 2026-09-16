@@ -4,6 +4,7 @@ import { MotionConfig } from 'framer-motion'
 import Navbar from './components/layout/Navbar'
 import Footer from './components/layout/Footer'
 import ScrollToTop from './components/layout/ScrollToTop'
+import FloatingContactBar from './components/contact/FloatingContactBar'
 import { AppointmentProvider } from './components/appointment/AppointmentContext'
 import Home from './pages/Home'
 
@@ -26,7 +27,7 @@ export default function App() {
   return (
     <MotionConfig reducedMotion="user">
       <AppointmentProvider>
-        <div className="flex min-h-screen flex-col bg-white font-sans text-slate-700 antialiased">
+        <div className="flex min-h-screen flex-col bg-white font-sans text-slate-700 antialiased pb-16 lg:pb-0">
           <ScrollToTop />
           <Navbar />
           <main className="flex-1 pt-[68px]">
@@ -43,6 +44,7 @@ export default function App() {
             </Suspense>
           </main>
           <Footer />
+          <FloatingContactBar />
         </div>
       </AppointmentProvider>
     </MotionConfig>

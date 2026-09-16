@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react'
-import { CheckCircle2 } from 'lucide-react'
+import { CheckCircle2, Loader2 } from 'lucide-react'
 import Button from '../common/Button'
 
 interface FormErrors {
@@ -8,7 +8,7 @@ interface FormErrors {
   phone?: string
 }
 
-type SubmissionStatus = 'idle' | 'success'
+type SubmissionStatus = 'idle' | 'submitting' | 'success'
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const PHONE_PATTERN = /^[+\d][\d\s-]{6,14}$/
@@ -43,12 +43,15 @@ export default function ContactForm() {
     setErrors(nextErrors)
 
     if (Object.keys(nextErrors).length === 0) {
-      // No backend is connected; reset the form and show the success state.
-      setStatus('success')
-      setName('')
-      setEmail('')
-      setPhone('')
-      setMessage('')
+      // No backend is connected — simulate a short submit, then show success.
+      setStatus('submitting')
+      window.setTimeout(() => {
+        setStatus('success')
+        setName('')
+        setEmail('')
+        setPhone('')
+        setMessage('')
+      }, 700)
     }
   }
 
@@ -169,8 +172,20 @@ export default function ContactForm() {
           />
         </div>
 
-        <Button type="submit" size="lg" className="w-full sm:w-auto">
-          Submit
+        <Button
+          type="submit"
+          size="lg"
+          disabled={status === 'submitting'}
+          className="w-full sm:w-auto aria-disabled:cursor-not-allowed aria-disabled:opacity-70"
+        >
+          {status === 'submitting' ? (
+            <>
+              <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
+              Submitting…
+            </>
+          ) : (
+            'Submit'
+          )}
         </Button>
       </form>
     </div>

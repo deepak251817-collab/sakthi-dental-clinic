@@ -2,6 +2,7 @@ import Container from '../components/common/Container'
 import PageHero from '../components/common/PageHero'
 import ContactForm from '../components/contact/ContactForm'
 import ContactInfo from '../components/contact/ContactInfo'
+import LocationSection from '../components/contact/LocationSection'
 
 export default function Contact() {
   return (
@@ -19,6 +20,8 @@ export default function Contact() {
           </div>
         </Container>
       </section>
+
+      <LocationSection />
     </>
   )
 }

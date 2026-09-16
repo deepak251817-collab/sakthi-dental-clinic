@@ -1,6 +1,7 @@
 import { ArrowRight } from 'lucide-react'
 import AnimatedSection from '../common/AnimatedSection'
 import Button from '../common/Button'
+import AppointmentButton from '../common/AppointmentButton'
 import Container from '../common/Container'
 
 export default function FinalCTA() {
@@ -24,13 +25,11 @@ export default function FinalCTA() {
               comfortable, personalized treatment.
             </p>
             <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <Button
-                to="/contact"
-                size="lg"
+              <AppointmentButton
+                source="Final CTA"
+                variant="onDark"
                 className="bg-white text-primary-700 hover:bg-primary-50 focus-visible:outline-white"
-              >
-                Fix an Appointment
-              </Button>
+              />
               <Button
                 to="/treatments"
                 size="lg"

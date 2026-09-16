@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { HeartHandshake, PhoneCall } from 'lucide-react'
 import Button from '../common/Button'
+import AppointmentButton from '../common/AppointmentButton'
 
 export default function Hero() {
   return (
@@ -29,9 +30,7 @@ export default function Hero() {
               a modern and welcoming environment.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Button to="/contact" size="lg">
-                Fix an Appointment
-              </Button>
+              <AppointmentButton source="Home hero" />
               <Button href="tel:+919862890897" variant="secondary" size="lg">
                 <PhoneCall className="h-4 w-4" aria-hidden="true" />
                 Emergency Dental Support

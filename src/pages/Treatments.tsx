@@ -1,5 +1,5 @@
 import AnimatedSection from '../components/common/AnimatedSection'
-import Button from '../components/common/Button'
+import AppointmentButton from '../components/common/AppointmentButton'
 import Container from '../components/common/Container'
 import PageHero from '../components/common/PageHero'
 import TreatmentGrid from '../components/treatments/TreatmentGrid'
@@ -23,9 +23,7 @@ export default function Treatments() {
             <p className="mb-5 text-slate-500">
               Not sure which treatment you need? Our dentists will guide you.
             </p>
-            <Button to="/contact" size="lg">
-              Fix an Appointment
-            </Button>
+            <AppointmentButton source="Treatments page" />
           </AnimatedSection>
         </Container>
       </section>

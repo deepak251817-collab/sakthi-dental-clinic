@@ -1,9 +1,10 @@
 import { useEffect } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { Link, NavLink } from 'react-router-dom'
-import { CalendarPlus, X } from 'lucide-react'
+import { NavLink } from 'react-router-dom'
+import { X } from 'lucide-react'
 import { navLinks } from '../../lib/constants'
 import { cn } from '../../lib/utils'
+import AppointmentButton from '../common/AppointmentButton'
 
 interface MobileMenuProps {
   isOpen: boolean
@@ -90,13 +91,7 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
             </nav>
 
             <div className="border-t border-primary-100 p-5">
-              <Link
-                to="/contact"
-                className="flex w-full items-center justify-center gap-2 rounded-full bg-primary-600 px-5 py-3 text-sm font-semibold text-white shadow-soft transition-colors hover:bg-primary-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
-              >
-                <CalendarPlus className="h-4 w-4" aria-hidden="true" />
-                Fix an Appointment
-              </Link>
+              <AppointmentButton source="Mobile menu" className="w-full" />
             </div>
           </motion.div>
         </>

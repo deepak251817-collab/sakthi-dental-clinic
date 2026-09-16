@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
-import { CalendarPlus, Menu } from 'lucide-react'
+import { Menu } from 'lucide-react'
 import { navLinks } from '../../lib/constants'
 import { cn } from '../../lib/utils'
 import Container from '../common/Container'
+import AppointmentButton from '../common/AppointmentButton'
 import MobileMenu from './MobileMenu'
 
 export default function Navbar() {
@@ -66,13 +67,7 @@ export default function Navbar() {
                   {link.label}
                 </NavLink>
               ))}
-              <Link
-                to="/contact"
-                className="ml-3 inline-flex items-center gap-2 rounded-full bg-primary-600 px-5 py-2.5 text-sm font-semibold text-white shadow-soft transition-colors hover:bg-primary-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
-              >
-                <CalendarPlus className="h-4 w-4" aria-hidden="true" />
-                Fix an Appointment
-              </Link>
+              <AppointmentButton source="Navbar" size="md" className="ml-3" />
             </div>
 
             {/* Mobile hamburger */}

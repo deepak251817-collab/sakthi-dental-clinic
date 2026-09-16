@@ -1,5 +1,5 @@
 import AnimatedSection from '../components/common/AnimatedSection'
-import Button from '../components/common/Button'
+import AppointmentButton from '../components/common/AppointmentButton'
 import Container from '../components/common/Container'
 import PageHero from '../components/common/PageHero'
 import FAQItem from '../components/faq/FAQItem'
@@ -27,9 +27,7 @@ export default function FAQ() {
             <p className="mb-5 text-slate-500">
               Have a question that isn't answered here? We are happy to help.
             </p>
-            <Button to="/contact" size="lg">
-              Fix an Appointment
-            </Button>
+            <AppointmentButton source="FAQ page" />
           </AnimatedSection>
         </Container>
       </section>

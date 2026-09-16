@@ -1,6 +1,6 @@
 import { Eye, HeartPulse, Target } from 'lucide-react'
 import AnimatedSection from '../components/common/AnimatedSection'
-import Button from '../components/common/Button'
+import AppointmentButton from '../components/common/AppointmentButton'
 import Container from '../components/common/Container'
 import PageHero from '../components/common/PageHero'
 import SectionHeading from '../components/common/SectionHeading'
@@ -167,9 +167,7 @@ export default function About() {
           </div>
 
           <AnimatedSection className="mt-12 text-center">
-            <Button to="/contact" size="lg">
-              Fix an Appointment
-            </Button>
+            <AppointmentButton source="About page" />
           </AnimatedSection>
         </Container>
       </section>

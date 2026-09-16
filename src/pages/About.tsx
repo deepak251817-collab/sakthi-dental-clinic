@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Eye, HeartPulse, Target } from 'lucide-react'
 import AnimatedSection from '../components/common/AnimatedSection'
 import AppointmentButton from '../components/common/AppointmentButton'
@@ -5,7 +6,8 @@ import Container from '../components/common/Container'
 import PageHero from '../components/common/PageHero'
 import SectionHeading from '../components/common/SectionHeading'
 import DoctorCard from '../components/doctors/DoctorCard'
-import { doctors } from '../data/doctors'
+import DoctorModal from '../components/doctors/DoctorModal'
+import { doctors, type Doctor } from '../data/doctors'
 
 const founderJourney = [
   {
@@ -31,6 +33,8 @@ const founderJourney = [
 ]
 
 export default function About() {
+  const [activeDoctor, setActiveDoctor] = useState<Doctor | null>(null)
+
   return (
     <>
       <PageHero
@@ -161,7 +165,7 @@ export default function About() {
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {doctors.map((doctor, index) => (
               <AnimatedSection key={doctor.name} delay={(index % 3) * 0.06}>
-                <DoctorCard doctor={doctor} />
+                <DoctorCard doctor={doctor} onOpen={setActiveDoctor} />
               </AnimatedSection>
             ))}
           </div>
@@ -171,6 +175,8 @@ export default function About() {
           </AnimatedSection>
         </Container>
       </section>
+
+      <DoctorModal doctor={activeDoctor} onClose={() => setActiveDoctor(null)} />
     </>
   )
 }

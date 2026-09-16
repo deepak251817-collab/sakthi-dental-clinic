@@ -28,9 +28,15 @@ export default function App() {
     <MotionConfig reducedMotion="user">
       <AppointmentProvider>
         <div className="flex min-h-screen flex-col bg-white font-sans text-slate-700 antialiased pb-16 lg:pb-0">
+          <a
+            href="#main-content"
+            className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[60] focus:rounded-full focus:bg-primary-600 focus:px-5 focus:py-2.5 focus:text-sm focus:font-semibold focus:text-white focus:shadow-lifted"
+          >
+            Skip to main content
+          </a>
           <ScrollToTop />
           <Navbar />
-          <main className="flex-1 pt-[68px]">
+          <main id="main-content" className="flex-1 pt-[68px]">
             <Suspense fallback={<RouteFallback />}>
               <Routes>
                 <Route path="/" element={<Home />} />

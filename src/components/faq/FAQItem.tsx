@@ -14,8 +14,10 @@ interface FAQItemProps {
  */
 export default function FAQItem({ faq, defaultOpen = false }: FAQItemProps) {
   const [open, setOpen] = useState(defaultOpen)
-  const panelId = useId()
-  const buttonId = useId()
+  const rawPanelId = useId()
+  const rawButtonId = useId()
+  const panelId = `faq-panel-${rawPanelId.replace(/[^a-zA-Z0-9-]/g, '')}`
+  const buttonId = `faq-button-${rawButtonId.replace(/[^a-zA-Z0-9-]/g, '')}`
 
   return (
     <div className="overflow-hidden rounded-2xl border border-primary-100 bg-white shadow-soft">

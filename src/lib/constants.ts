@@ -20,6 +20,7 @@ export const navLinks = [
   { label: 'Home', href: '/' },
   { label: 'About', href: '/about' },
   { label: 'Treatments', href: '/treatments' },
+  { label: 'Gallery', href: '/gallery' },
   { label: 'FAQs', href: '/faq' },
   { label: 'Contact', href: '/contact' },
 ] as const
@@ -29,6 +30,7 @@ export const footerLinks = {
     { label: 'Home', href: '/' },
     { label: 'About', href: '/about' },
     { label: 'Treatments', href: '/treatments' },
+    { label: 'Gallery', href: '/gallery' },
     { label: 'Privacy Policy', href: '/privacy-policy' },
   ],
   keyTreatments: [

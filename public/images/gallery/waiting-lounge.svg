@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-label="Illustration of a comfortable waiting lounge">
+  <rect width="800" height="600" fill="#f7f9ff"/>
+  <rect x="150" y="300" width="220" height="120" rx="20" fill="#dfe8ff"/>
+  <rect x="430" y="300" width="220" height="120" rx="20" fill="#c5d6ff"/>
+  <rect x="150" y="270" width="220" height="44" rx="16" fill="#a2bcfc" opacity="0.7"/>
+  <rect x="430" y="270" width="220" height="44" rx="16" fill="#a2bcfc" opacity="0.5"/>
+  <circle cx="400" cy="170" r="30" fill="#6480f2" opacity="0.4"/>
+  <text x="400" y="540" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="24" fill="#5167e6">Waiting Lounge</text>
+</svg>

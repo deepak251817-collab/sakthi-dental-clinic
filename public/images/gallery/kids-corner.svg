@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-label="Illustration of a cheerful pediatric dental corner">
+  <rect width="800" height="600" fill="#fdf5f8"/>
+  <circle cx="250" cy="220" r="46" fill="#f9d8e6"/>
+  <circle cx="400" cy="180" r="34" fill="#f2b9d3"/>
+  <rect x="180" y="330" width="200" height="110" rx="24" fill="#f9d8e6"/>
+  <rect x="430" y="330" width="200" height="110" rx="24" fill="#f2b9d3" opacity="0.7"/>
+  <path d="M400 300c-10-12-26-8-26 5 0 10 14 19 26 28 12-9 26-18 26-28 0-13-16-17-26-5z" fill="#e58bb4"/>
+  <text x="400" y="540" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="24" fill="#c05c8e">Kids' Corner</text>
+</svg>

@@ -34,6 +34,35 @@ The site presents the clinic's treatments, doctors, facilities and patient testi
 * [Framer Motion](https://www.framer.com/motion/)
 * [Lucide React](https://lucide.dev) icons
 
+## Advanced Features
+
+* **Appointment request flow** — one site-wide modal (keyboard accessible, Escape to close, focus handling, inline validation, submitting + success states). Every "Fix an Appointment" CTA on the site opens this same flow. This is a frontend request flow only — no booking backend is connected; submissions are simulated and the success message asks the clinic team to confirm by phone.
+* **Floating quick contact actions** — desktop floating action group with tooltips and a mobile fixed bottom bar (Call `tel:+919862890897`, WhatsApp chat with a prefilled message, and Appointment). These are direct contact actions, not automated booking.
+* **Location / directions section** — address card with a Google Maps **Get Directions** link built from the supplied address, plus a keyless Google Maps embed (no API key used or exposed).
+* **Treatment search and filtering** — live search across treatment titles and descriptions, category filter chips (General, Restorative, Cosmetic, Orthodontics, Pediatric, Oral Surgery) derived from the existing data, result count ("Showing X of 15"), Clear Filters and a styled empty state.
+* **FAQ search** — live filtering across all 14 questions and answers with Clear Search and an empty state; accordion behaviour unchanged.
+* **Doctor profile modal** — every doctor card opens a modal showing only supplied information (name, role, focus line) with an appointment CTA wired to the shared flow. No degrees, years or affiliations are invented.
+* **Clinic gallery** — dedicated `/gallery` page with category filters (Clinic / Treatment / Facilities / Team), responsive grid, and a full-screen lightbox (close, previous/next, arrow-key navigation, focus handling, image titles/alt text, lazy-loaded images). Ships with copyright-safe placeholder illustrations; drop the client's real photos into `public/images/gallery/` (same filenames) to go live.
+* **Accessibility improvements** — skip-to-content link, `main` landmark id, labelled search inputs, `aria-pressed` filter chips, `aria-live` result counts, focus-visible outlines everywhere, Escape/focus-trap in all dialogs, and reduced-motion support via `MotionConfig reducedMotion="user"` plus CSS fallbacks.
+* **Performance improvements** — route-level code splitting (lazy pages), lazy-loaded gallery images and map iframe, shared icon map module for treatment cards, memoized filtering, and no new runtime dependencies added in Phase 2.
+
+## Current Routes
+
+| Route | Description |
+| --- | --- |
+| `/` | Home |
+| `/about` | About Dr. Anupriya + doctors |
+| `/treatments` | Treatment directory with search & filters |
+| `/faq` | FAQs with search |
+| `/contact` | Contact form + location/map section |
+| `/gallery` | Clinic gallery with lightbox |
+| `/privacy-policy` | Privacy policy |
+| `*` | 404 not-found page |
+
+## Project Status
+
+**Client-ready frontend implementation.** All features are complete and verified (lint, type-check, production build). The contact and appointment forms are frontend-only — submissions are not sent to a production backend and appointments are not auto-booked; the clinic team confirms requests by phone.
+
 ## Pages
 
 | Route | Description |

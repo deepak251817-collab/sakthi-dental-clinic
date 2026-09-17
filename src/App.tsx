@@ -7,6 +7,7 @@ import Footer from './components/layout/Footer'
 import ScrollToTop from './components/layout/ScrollToTop'
 import FloatingContactBar from './components/contact/FloatingContactBar'
 import CookieConsent from './components/common/CookieConsent'
+import ErrorBoundary from './components/common/ErrorBoundary'
 import { AppointmentProvider } from './components/appointment/AppointmentContext'
 import Home from './pages/Home'
 
@@ -37,6 +38,7 @@ export default function App() {
     <MotionConfig reducedMotion="user">
       <AppointmentProvider>
         <div className="flex min-h-screen flex-col bg-white font-sans text-slate-700 antialiased pb-16 lg:pb-0">
+          <ErrorBoundary>
           <a
             href="#main-content"
             className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[60] focus:rounded-full focus:bg-primary-600 focus:px-5 focus:py-2.5 focus:text-sm focus:font-semibold focus:text-white focus:shadow-lifted"
@@ -62,6 +64,7 @@ export default function App() {
           <Footer />
           <FloatingContactBar />
           <CookieConsent />
+          </ErrorBoundary>
         </div>
       </AppointmentProvider>
     </MotionConfig>

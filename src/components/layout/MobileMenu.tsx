@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { NavLink } from 'react-router-dom'
 import { X } from 'lucide-react'
@@ -16,6 +16,8 @@ interface MobileMenuProps {
  * body scroll lock and automatic close on route change.
  */
 export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
+  const dialogRef = useRef<HTMLDivElement>(null)
+
   // Lock page scroll while the menu is open.
   useEffect(() => {
     document.body.style.overflow = isOpen ? 'hidden' : ''
@@ -24,14 +26,36 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
     }
   }, [isOpen])
 
-  // Close on Escape for keyboard users.
+  // Close on Escape and keep keyboard focus inside the slide-in panel.
   useEffect(() => {
     if (!isOpen) return
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') onClose()
+      if (event.key === 'Tab' && dialogRef.current) {
+        const focusables = dialogRef.current.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
+        )
+        if (focusables.length === 0) return
+        const first = focusables[0]
+        const last = focusables[focusables.length - 1]
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault()
+          last.focus()
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault()
+          first.focus()
+        }
+      }
     }
     window.addEventListener('keydown', onKeyDown)
-    return () => window.removeEventListener('keydown', onKeyDown)
+    // Move focus into the panel once it opens.
+    const focusTimer = window.setTimeout(() => {
+      dialogRef.current?.querySelector<HTMLElement>('a, button')?.focus()
+    }, 80)
+    return () => {
+      window.removeEventListener('keydown', onKeyDown)
+      window.clearTimeout(focusTimer)
+    }
   }, [isOpen, onClose])
 
   return (
@@ -48,6 +72,7 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
             aria-hidden="true"
           />
           <motion.div
+            ref={dialogRef}
             id="mobile-menu"
             className="fixed inset-y-0 right-0 z-50 flex w-80 max-w-[85vw] flex-col bg-white shadow-lifted lg:hidden"
             initial={{ x: '100%' }}

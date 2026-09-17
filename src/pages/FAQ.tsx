@@ -7,6 +7,7 @@ import AppointmentButton from '../components/common/AppointmentButton'
 import FAQSearch from '../components/faq/FAQSearch'
 import FAQItem from '../components/faq/FAQItem'
 import { faqs } from '../data/faqs'
+import SEO from '../components/seo/SEO'
 
 export default function FAQ() {
   const [query, setQuery] = useState('')
@@ -25,6 +26,11 @@ export default function FAQ() {
 
   return (
     <>
+      <SEO
+        title="Dental FAQs | Sakthi Dental Clinic"
+        description="Find answers to common dental questions about scaling, fillings, braces, wisdom teeth, implants and oral hygiene."
+        path="/faq"
+      />
       <PageHero
         title="Frequently Asked Questions"
         subtitle="Clear answers to the questions patients ask us most often."

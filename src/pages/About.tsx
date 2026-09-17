@@ -8,6 +8,7 @@ import SectionHeading from '../components/common/SectionHeading'
 import DoctorCard from '../components/doctors/DoctorCard'
 import DoctorModal from '../components/doctors/DoctorModal'
 import { doctors, type Doctor } from '../data/doctors'
+import SEO from '../components/seo/SEO'
 
 const founderJourney = [
   {
@@ -37,6 +38,11 @@ export default function About() {
 
   return (
     <>
+      <SEO
+        title="About Sakthi Dental Clinic | Dr. Anupriya & Team"
+        description="Learn about Sakthi Dental Clinic, Dr. Anupriya, the dental team, mission and vision in Hosur."
+        path="/about"
+      />
       <PageHero
         title="Get to Know Dr. Anupriya"
         subtitle="Your Trusted Partner in Dental Care"

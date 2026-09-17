@@ -7,6 +7,7 @@ import TreatmentSearch from '../components/treatments/TreatmentSearch'
 import TreatmentFilters from '../components/treatments/TreatmentFilters'
 import TreatmentGrid from '../components/treatments/TreatmentGrid'
 import { treatments, type TreatmentCategory } from '../data/treatments'
+import SEO from '../components/seo/SEO'
 import { SearchX } from 'lucide-react'
 
 export default function Treatments() {
@@ -34,6 +35,11 @@ export default function Treatments() {
 
   return (
     <>
+      <SEO
+        title="Dental Treatments in Hosur | Sakthi Dental Clinic"
+        description="Explore dental treatments including cleaning, fillings, extraction, implants, orthodontics, pediatric care and more at Sakthi Dental Clinic."
+        path="/treatments"
+      />
       <PageHero
         title="Our Treatments"
         subtitle="From everyday preventive care to specialized procedures — everything your smile needs, under one roof."

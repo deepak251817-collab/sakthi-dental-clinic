@@ -1,10 +1,16 @@
 import { ArrowLeft } from 'lucide-react'
 import Button from '../components/common/Button'
 import Container from '../components/common/Container'
+import SEO from '../components/seo/SEO'
 
 export default function NotFound() {
   return (
     <section className="flex min-h-[70vh] items-center bg-gradient-to-b from-primary-50 to-white">
+      <SEO
+        title="Page Not Found | Sakthi Dental Clinic"
+        description="The page you're looking for doesn't exist or may have moved."
+        noindex
+      />
       <Container className="py-20 text-center">
         <p className="text-sm font-semibold uppercase tracking-widest text-primary-600">
           404 — Page not found

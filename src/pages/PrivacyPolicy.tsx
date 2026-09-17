@@ -1,6 +1,7 @@
 import Container from '../components/common/Container'
 import PageHero from '../components/common/PageHero'
 import { site } from '../lib/constants'
+import SEO from '../components/seo/SEO'
 
 const sections = [
   {
@@ -71,6 +72,11 @@ const sections = [
 export default function PrivacyPolicy() {
   return (
     <>
+      <SEO
+        title="Privacy Policy | Sakthi Dental Clinic"
+        description="Read the Sakthi Dental Clinic website privacy policy."
+        path="/privacy-policy"
+      />
       <PageHero
         title="Privacy Policy"
         subtitle="How Sakthi Dental Clinic collects, uses and protects your information."

@@ -6,12 +6,18 @@ import AppointmentButton from '../components/common/AppointmentButton'
 import GalleryGrid from '../components/gallery/GalleryGrid'
 import GalleryLightbox from '../components/gallery/GalleryLightbox'
 import { galleryItems, type GalleryItem } from '../data/gallery'
+import SEO from '../components/seo/SEO'
 
 export default function Gallery() {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
 
   return (
     <>
+      <SEO
+        title="Clinic Gallery | Sakthi Dental Clinic"
+        description="Explore the clinic environment, facilities and available dental care imagery."
+        path="/gallery"
+      />
       <PageHero
         title="Our Clinic Gallery"
         subtitle="A look inside Sakthi Dental Clinic — the spaces, technology and team that care for your smile."

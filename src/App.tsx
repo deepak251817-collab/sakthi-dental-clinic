@@ -6,6 +6,7 @@ import Navbar from './components/layout/Navbar'
 import Footer from './components/layout/Footer'
 import ScrollToTop from './components/layout/ScrollToTop'
 import FloatingContactBar from './components/contact/FloatingContactBar'
+import CookieConsent from './components/common/CookieConsent'
 import { AppointmentProvider } from './components/appointment/AppointmentContext'
 import Home from './pages/Home'
 
@@ -60,6 +61,7 @@ export default function App() {
           </main>
           <Footer />
           <FloatingContactBar />
+          <CookieConsent />
         </div>
       </AppointmentProvider>
     </MotionConfig>

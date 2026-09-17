@@ -12,6 +12,7 @@ const About = lazy(() => import('./pages/About'))
 const Treatments = lazy(() => import('./pages/Treatments'))
 const FAQ = lazy(() => import('./pages/FAQ'))
 const Contact = lazy(() => import('./pages/Contact'))
+const Gallery = lazy(() => import('./pages/Gallery'))
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'))
 const NotFound = lazy(() => import('./pages/NotFound'))
 
@@ -44,6 +45,7 @@ export default function App() {
                 <Route path="/treatments" element={<Treatments />} />
                 <Route path="/faq" element={<FAQ />} />
                 <Route path="/contact" element={<Contact />} />
+                <Route path="/gallery" element={<Gallery />} />
                 <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>

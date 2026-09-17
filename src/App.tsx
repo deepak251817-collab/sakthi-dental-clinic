@@ -1,6 +1,7 @@
-import { Suspense, lazy } from 'react'
+import { Suspense, lazy, useEffect } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { MotionConfig } from 'framer-motion'
+import { buildDentistSchema, upsertJsonLd } from './components/seo/structuredData'
 import Navbar from './components/layout/Navbar'
 import Footer from './components/layout/Footer'
 import ScrollToTop from './components/layout/ScrollToTop'
@@ -25,6 +26,12 @@ function RouteFallback() {
 }
 
 export default function App() {
+  // Clinic structured data (Dentist schema) — site-wide, facts from the client brief only.
+  useEffect(() => {
+    upsertJsonLd('dentist-structured-data', buildDentistSchema())
+    return () => upsertJsonLd('dentist-structured-data', null)
+  }, [])
+
   return (
     <MotionConfig reducedMotion="user">
       <AppointmentProvider>

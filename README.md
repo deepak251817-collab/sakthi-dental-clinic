@@ -18,7 +18,10 @@ The site presents the clinic's treatments, doctors, facilities and patient testi
 * FAQ accordion with semantic, accessible expand/collapse
 * Contact form with client-side validation and success state
 * Privacy Policy page
-* SEO-friendly structure (meta, Open Graph, robots.txt, sitemap.xml)
+* SEO metadata per route (unique titles/descriptions, canonical URLs, Open Graph, Twitter cards, robots.txt, sitemap.xml)
+* Local business structured data (Dentist JSON-LD with facts from the client brief only)
+* Privacy/cookie consent notice (preference stored locally; no analytics or tracking loaded)
+* Global error boundary with a branded fallback and recovery actions
 * Accessible UI (semantic HTML, focus states, aria attributes)
 * Animated mobile navigation (slide-in panel, scroll lock, Escape to close)
 * Subtle Framer Motion animations that respect `prefers-reduced-motion`
@@ -63,6 +66,28 @@ The site presents the clinic's treatments, doctors, facilities and patient testi
 
 **Client-ready frontend implementation.** All features are complete and verified (lint, type-check, production build). The contact and appointment forms are frontend-only — submissions are not sent to a production backend and appointments are not auto-booked; the clinic team confirms requests by phone.
 
+## Client Content Note
+
+The website content is based on the Sakthi Dental Clinic project brief supplied for the ShadowFox internship.
+
+Note that the brief contains two different references to clinic availability hours. The Contact page specifies:
+
+> Sunday to Saturday: 9 AM to 7 PM
+
+The implementation uses the Contact page timing for contact information and structured data, and keeps the Home amenities wording "Doctors available daily" instead of displaying a conflicting hour.
+
+## Performance
+
+Optimizations actually implemented:
+
+* Route-level code splitting — every page is its own lazy-loaded chunk
+* Lazy-loaded non-critical images and the map iframe; hero imagery eagerly loaded
+* Preconnected font delivery with `display=swap` to prevent layout shifts
+* Memoized appointment context and filtered lists; shared icon-map module for treatment cards
+* Compressed OG image and lightweight SVG brand assets (no heavy media)
+* Global `prefers-reduced-motion` support — entrance animations and carousel autoplay respect it
+* Zero new runtime dependencies added across Phases 2–3
+
 ## Pages
 
 | Route | Description |
@@ -72,6 +97,7 @@ The site presents the clinic's treatments, doctors, facilities and patient testi
 | `/treatments` | Complete treatment directory |
 | `/faq` | 14 accessible FAQ accordion items |
 | `/contact` | Contact form (validated) + reach-us information |
+| `/gallery` | Clinic gallery with lightbox |
 | `/privacy-policy` | Privacy policy |
 | `*` | 404 not-found page |
 
@@ -101,7 +127,8 @@ npm run preview
    * Build command: `npm run build`
    * Output directory: `dist`
 4. Click **Deploy**.
-5. For client-side routing, the SPA already falls back gracefully; if you ever see 404s on deep links, add a rewrite of all paths to `/index.html` (Vercel handles this automatically for Vite projects).
+5. Deep links are covered: the committed `vercel.json` rewrites all paths to `/index.html` for SPA routing.
+6. Optional: set the `VITE_SITE_URL` environment variable in Vercel (Project → Settings → Environment Variables) to the final domain (e.g. `https://sakthidentalclinic.in`). It drives canonical links and Open Graph/Twitter URLs via `src/lib/siteConfig.ts` — see `.env.example`. Before submitting `public/sitemap.xml` to search engines, confirm the domain listed there matches the live one.
 
 ### Netlify
 
@@ -123,14 +150,18 @@ sakthi-dental-clinic/
 ├── src/
 │   ├── components/
 │   │   ├── layout/       # Navbar, Footer, MobileMenu, ScrollToTop
-│   │   ├── common/       # Button, SectionHeading, PageHero, Container, AnimatedSection
+│   │   ├── common/       # Button, SectionHeading, PageHero, Container, AnimatedSection,
+│   │   │                 # Modal, AppointmentButton, CookieConsent, ErrorBoundary
+│   │   ├── seo/          # SEO (per-route metadata) + structuredData (Dentist JSON-LD)
+│   │   ├── appointment/  # AppointmentModal, AppointmentForm, appointment context
 │   │   ├── home/         # Hero, AssuranceBanner, WhyChooseUs, TreatmentsPreview,
 │   │   │                 # Facilities, Testimonials, FinalCTA
-│   │   ├── treatments/   # TreatmentCard, TreatmentGrid
-│   │   ├── doctors/      # DoctorCard
-│   │   ├── faq/          # FAQItem
-│   │   └── contact/      # ContactForm, ContactInfo
-│   ├── pages/            # Home, About, Treatments, FAQ, Contact, PrivacyPolicy, NotFound
+│   │   ├── treatments/   # TreatmentCard, TreatmentGrid, TreatmentSearch, TreatmentFilters
+│   │   ├── doctors/      # DoctorCard, DoctorModal
+│   │   ├── faq/          # FAQItem, FAQSearch
+│   │   ├── gallery/      # GalleryGrid, GalleryImage, GalleryLightbox
+│   │   └── contact/      # ContactForm, ContactInfo, FloatingContactBar, LocationSection
+│   ├── pages/            # Home, About, Treatments, FAQ, Contact, Gallery, PrivacyPolicy, NotFound
 │   ├── data/             # treatments, doctors, testimonials, faqs, facilities (typed data)
 │   ├── lib/              # constants (site info, nav/footer links), utils
 │   ├── App.tsx           # Routes + layout shell

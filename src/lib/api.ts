@@ -91,12 +91,14 @@ async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
   let response: Response
   try {
     response = await fetch(`${API_URL}${path}`, {
+      ...init,
+      // Merge AFTER the init spread so per-call headers (e.g. Authorization)
+      // extend rather than replace the JSON defaults.
       headers: {
         Accept: 'application/json',
         ...(init.body ? { 'Content-Type': 'application/json' } : {}),
         ...(init.headers ?? {}),
       },
-      ...init,
     })
   } catch {
     // fetch only throws here for network-level failures (offline, server down).
@@ -179,7 +181,17 @@ export function fetchAppointment(token: string, id: string): Promise<Appointment
 }
 
 export function fetchAppointmentStats(token: string): Promise<AppointmentStats> {
-  return request<AppointmentStats>('/appointments/stats', { headers: authHeader(token) })
+  return request<Record<string, number>>('/appointments/stats', { headers: authHeader(token) }).then(
+    (raw) => ({
+      total: raw.total ?? 0,
+      // Backend groups by the Prisma enum (PENDING/CONFIRMED/…); normalize so
+      // components can consume stable lowercase keys.
+      pending: raw.PENDING ?? 0,
+      confirmed: raw.CONFIRMED ?? 0,
+      completed: raw.COMPLETED ?? 0,
+      cancelled: raw.CANCELLED ?? 0,
+    }),
+  )
 }
 
 export function updateAppointmentStatus(

@@ -128,6 +128,26 @@ export async function updateAppointmentStatus(id: string, status: AppointmentSta
   })
 }
 
+export async function getAppointmentStats() {
+  const grouped = await prisma.appointment.groupBy({
+    by: ['status'],
+    _count: { _all: true },
+  })
+
+  const counts: Record<AppointmentStatus, number> = {
+    PENDING: 0,
+    CONFIRMED: 0,
+    COMPLETED: 0,
+    CANCELLED: 0,
+  }
+  for (const row of grouped) {
+    counts[row.status] = row._count._all
+  }
+  const total = Object.values(counts).reduce((sum, count) => sum + count, 0)
+
+  return { total, ...counts }
+}
+
 export async function deleteAppointment(id: string) {
   const existing = await prisma.appointment.findUnique({
     where: { id },

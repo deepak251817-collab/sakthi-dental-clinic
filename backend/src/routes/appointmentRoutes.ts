@@ -2,6 +2,7 @@ import { Router } from 'express'
 import {
   createAppointmentHandler,
   listAppointmentsHandler,
+  getAppointmentStatsHandler,
   getAppointmentHandler,
   updateStatusHandler,
   deleteAppointmentHandler,
@@ -23,6 +24,8 @@ router.post('/', appointmentLimiter, validateBody(createAppointmentSchema), crea
 // Admin only
 router.use(requireAuth)
 router.get('/', validateQuery(listAppointmentsQuerySchema), listAppointmentsHandler)
+// Declared before /:id so 'stats' is not captured as an id parameter.
+router.get('/stats', getAppointmentStatsHandler)
 router.get('/:id', getAppointmentHandler)
 router.patch('/:id/status', validateBody(updateAppointmentStatusSchema), updateStatusHandler)
 router.delete('/:id', deleteAppointmentHandler)

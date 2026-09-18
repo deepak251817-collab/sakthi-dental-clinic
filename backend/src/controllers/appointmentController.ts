@@ -5,6 +5,7 @@ import {
   createAppointment,
   listAppointments,
   getAppointmentById,
+  getAppointmentStats,
   updateAppointmentStatus,
   deleteAppointment,
 } from '../services/appointmentService'
@@ -32,6 +33,14 @@ export const listAppointmentsHandler = asyncHandler(
     const query = req.query as unknown as ListAppointmentsQuery
     const result = await listAppointments(query)
     res.json({ success: true, message: 'Appointments fetched', data: result })
+  },
+)
+
+/** GET /api/appointments/stats — admin only. Real counts per status. */
+export const getAppointmentStatsHandler = asyncHandler(
+  async (_req: Request, res: Response) => {
+    const stats = await getAppointmentStats()
+    res.json({ success: true, message: 'Appointment stats fetched', data: stats })
   },
 )
 

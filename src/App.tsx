@@ -2,12 +2,11 @@ import { Suspense, lazy, useEffect } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { MotionConfig } from 'framer-motion'
 import { buildDentistSchema, upsertJsonLd } from './components/seo/structuredData'
-import Navbar from './components/layout/Navbar'
-import Footer from './components/layout/Footer'
 import ScrollToTop from './components/layout/ScrollToTop'
-import FloatingContactBar from './components/contact/FloatingContactBar'
 import CookieConsent from './components/common/CookieConsent'
 import ErrorBoundary from './components/common/ErrorBoundary'
+import PublicLayout from './components/layout/PublicLayout'
+import RequireAdminAuth from './components/admin/RequireAdminAuth'
 import { AppointmentProvider } from './components/appointment/AppointmentContext'
 import Home from './pages/Home'
 
@@ -18,6 +17,8 @@ const Contact = lazy(() => import('./pages/Contact'))
 const Gallery = lazy(() => import('./pages/Gallery'))
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'))
 const NotFound = lazy(() => import('./pages/NotFound'))
+const AdminLogin = lazy(() => import('./pages/AdminLogin'))
+const AdminDashboard = lazy(() => import('./pages/AdminDashboard'))
 
 function RouteFallback() {
   return (
@@ -37,35 +38,48 @@ export default function App() {
   return (
     <MotionConfig reducedMotion="user">
       <AppointmentProvider>
-        <div className="flex min-h-screen flex-col bg-white font-sans text-slate-700 antialiased pb-16 lg:pb-0">
-          <ErrorBoundary>
-          <a
-            href="#main-content"
-            className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[60] focus:rounded-full focus:bg-primary-600 focus:px-5 focus:py-2.5 focus:text-sm focus:font-semibold focus:text-white focus:shadow-lifted"
-          >
-            Skip to main content
-          </a>
-          <ScrollToTop />
-          <Navbar />
-          <main id="main-content" className="flex-1 pt-[68px]">
+        <ScrollToTop />
+        <ErrorBoundary>
+          <div className="flex min-h-screen flex-col bg-white font-sans text-slate-700 antialiased pb-16 lg:pb-0">
             <Suspense fallback={<RouteFallback />}>
               <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/treatments" element={<Treatments />} />
-                <Route path="/faq" element={<FAQ />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="/gallery" element={<Gallery />} />
-                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-                <Route path="*" element={<NotFound />} />
+                <Route element={<PublicLayout />}>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/about" element={<About />} />
+                  <Route path="/treatments" element={<Treatments />} />
+                  <Route path="/faq" element={<FAQ />} />
+                  <Route path="/contact" element={<Contact />} />
+                  <Route path="/gallery" element={<Gallery />} />
+                  <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                  <Route path="*" element={<NotFound />} />
+                </Route>
+                <Route
+                  path="/admin/login"
+                  element={
+                    <div className="min-h-screen bg-white font-sans text-slate-700 antialiased">
+                      <Suspense fallback={<RouteFallback />}>
+                        <AdminLogin />
+                      </Suspense>
+                    </div>
+                  }
+                />
+                <Route
+                  path="/admin"
+                  element={
+                    <RequireAdminAuth>
+                      <div className="min-h-screen bg-white font-sans text-slate-700 antialiased">
+                        <Suspense fallback={<RouteFallback />}>
+                          <AdminDashboard />
+                        </Suspense>
+                      </div>
+                    </RequireAdminAuth>
+                  }
+                />
               </Routes>
             </Suspense>
-          </main>
-          <Footer />
-          <FloatingContactBar />
-          <CookieConsent />
-          </ErrorBoundary>
-        </div>
+            <CookieConsent />
+          </div>
+        </ErrorBoundary>
       </AppointmentProvider>
     </MotionConfig>
   )

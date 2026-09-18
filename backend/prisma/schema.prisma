@@ -1,0 +1,49 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum AppointmentStatus {
+  PENDING
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+}
+
+/// A guest appointment request submitted from the public website.
+/// Patients are not accounts — the admin team manages these requests.
+model Appointment {
+  id            String            @id @default(cuid())
+  name          String
+  phone         String
+  email         String
+  preferredDate DateTime?         @map("preferred_date") @db.Date
+  preferredTime String?           @map("preferred_time")
+  treatment     String?
+  message       String?
+  status        AppointmentStatus @default(PENDING)
+  createdAt     DateTime          @default(now()) @map("created_at")
+  updatedAt     DateTime          @updatedAt @map("updated_at")
+
+  @@index([status])
+  @@index([createdAt])
+  @@index([email])
+  @@map("appointments")
+}
+
+/// Internal admin who manages appointment requests. Passwords are only
+/// ever stored as bcrypt hashes.
+model AdminUser {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@map("admin_users")
+}

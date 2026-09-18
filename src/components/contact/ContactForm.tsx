@@ -64,7 +64,7 @@ export default function ContactForm() {
 
   return (
     <div className="rounded-3xl border border-primary-100 bg-white p-7 shadow-card sm:p-9">
-      <h2 className="text-xl font-bold text-slate-800">Send us a message</h2>
+      <h2 className="text-xl font-bold text-ink-800">Send us a message</h2>
       <p className="mt-1.5 text-sm text-slate-500">
         Fill in the form and our team will get back to you.
       </p>

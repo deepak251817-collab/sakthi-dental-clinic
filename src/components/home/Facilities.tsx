@@ -18,7 +18,6 @@ export default function Facilities() {
       <Container>
         <AnimatedSection>
           <SectionHeading
-            eyebrow="Amenities"
             title="Clinic Facilities"
             description="Thoughtful conveniences that make every visit easier for you and your family."
           />
@@ -28,12 +27,12 @@ export default function Facilities() {
           {facilities.map((facility, index) => {
             const Icon = facilityIcons[index % facilityIcons.length]
             return (
-              <AnimatedSection key={facility.title} delay={index * 0.06}>
+              <AnimatedSection key={facility.title}>
                 <div className="flex h-full flex-col items-center rounded-3xl border border-primary-100 bg-white p-6 text-center shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-card">
                   <span className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-primary-100 text-primary-700">
                     <Icon className="h-6 w-6" aria-hidden="true" />
                   </span>
-                  <h3 className="mt-4 text-base font-semibold text-slate-800">{facility.title}</h3>
+                  <h3 className="mt-4 text-base font-semibold text-ink-800">{facility.title}</h3>
                   <p className="mt-1.5 text-sm leading-relaxed text-slate-500">
                     {facility.description}
                   </p>

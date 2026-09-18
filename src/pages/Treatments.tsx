@@ -80,7 +80,7 @@ export default function Treatments() {
                 <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-primary-100 text-primary-700">
                   <SearchX className="h-7 w-7" aria-hidden="true" />
                 </span>
-                <h2 className="mt-5 text-xl font-bold text-slate-800">No treatments found</h2>
+                <h2 className="mt-5 text-xl font-bold text-ink-800">No treatments found</h2>
                 <p className="mt-2 text-sm text-slate-500">
                   Try another search or clear the filters.
                 </p>

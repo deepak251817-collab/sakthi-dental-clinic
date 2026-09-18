@@ -42,7 +42,7 @@ export default function AppointmentButton({
       type="button"
       onClick={() => openAppointment(source)}
       className={cn(
-        'inline-flex items-center justify-center gap-2 rounded-full font-semibold transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2',
+        'inline-flex items-center justify-center gap-2 rounded-xl font-semibold transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2',
         variantClasses[variant],
         sizeClasses[size],
         className,

@@ -44,7 +44,6 @@ export default function Testimonials() {
       <Container>
         <AnimatedSection>
           <SectionHeading
-            eyebrow="Testimonials"
             title="What Our Patients Say"
             description="Kind words from the families we care for."
           />

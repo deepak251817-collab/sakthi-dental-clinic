@@ -21,7 +21,7 @@ export default function TreatmentCard({ treatment, Icon }: TreatmentCardProps) {
       <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-100 text-primary-700">
         <Icon className="h-6 w-6" aria-hidden />
       </span>
-      <h3 className="mt-5 text-lg font-semibold text-slate-800">{treatment.title}</h3>
+      <h3 className="mt-5 text-lg font-semibold text-ink-800">{treatment.title}</h3>
       <p
         className={cn(
           'mt-2 text-sm leading-relaxed text-slate-500',

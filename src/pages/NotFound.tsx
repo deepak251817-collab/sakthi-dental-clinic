@@ -12,12 +12,7 @@ export default function NotFound() {
         noindex
       />
       <Container className="py-20 text-center">
-        <p className="text-sm font-semibold uppercase tracking-widest text-primary-600">
-          404 — Page not found
-        </p>
-        <h1 className="mt-4 text-4xl font-extrabold tracking-tight text-slate-800 sm:text-5xl">
-          Page Not Found
-        </h1>
+        <h1 className="text-4xl font-bold text-ink-800 sm:text-5xl">Page Not Found</h1>
         <p className="mx-auto mt-4 max-w-md text-lg text-slate-500">
           The page you're looking for doesn't exist or may have moved.
         </p>

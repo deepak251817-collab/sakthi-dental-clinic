@@ -183,7 +183,9 @@ export default function AppointmentTable({
               <div>
                 <dt className="font-medium text-slate-400">Preferred</dt>
                 <dd>
-                  {formatDate(appointment.preferredDate)} · {formatTime(appointment.preferredTime)}
+                  {formatDate(appointment.preferredDate)}
+                  <br />
+                  {formatTime(appointment.preferredTime)}
                 </dd>
               </div>
             </dl>

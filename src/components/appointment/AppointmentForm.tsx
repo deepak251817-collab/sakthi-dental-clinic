@@ -123,7 +123,7 @@ export default function AppointmentForm({ onReset }: AppointmentFormProps) {
         <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
           <CheckCircle2 className="h-8 w-8 text-green-600" aria-hidden="true" />
         </span>
-        <h3 className="mt-5 text-xl font-bold text-slate-800">Appointment Request Received</h3>
+        <h3 className="mt-5 text-xl font-bold text-ink-800">Appointment Request Received</h3>
         <p className="mx-auto mt-2 max-w-sm text-sm leading-relaxed text-slate-500">
           Thank you. Your request has been submitted successfully. Our team will contact you to
           confirm your appointment.

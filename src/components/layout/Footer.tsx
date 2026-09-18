@@ -20,7 +20,7 @@ export default function Footer() {
           <div>
             <div className="flex items-center gap-2.5">
               <img src="/images/icons/logo.svg" alt="" className="h-9 w-9" width={36} height={36} />
-              <span className="text-lg font-bold tracking-tight text-slate-800">
+              <span className="text-lg font-bold text-ink-800">
                 Sakthi <span className="text-primary-600">Dental</span>
               </span>
             </div>
@@ -52,9 +52,8 @@ export default function Footer() {
 
           {/* Quick links */}
           <nav aria-label="Footer quick links">
-            <h2 className="text-sm font-semibold uppercase tracking-widest text-slate-800">
-              Quick Links
-            </h2>
+            <h2 className="text-base font-semibold text-ink-800">Quick links</h2>
+            <div aria-hidden="true" className="mt-2 h-px w-8 bg-primary-300" />
             <ul className="mt-4 space-y-2.5">
               {footerLinks.quickLinks.map((link) => (
                 <li key={link.label}>
@@ -71,9 +70,8 @@ export default function Footer() {
 
           {/* Key treatments */}
           <nav aria-label="Footer key treatments">
-            <h2 className="text-sm font-semibold uppercase tracking-widest text-slate-800">
-              Key Treatments
-            </h2>
+            <h2 className="text-base font-semibold text-ink-800">Key treatments</h2>
+            <div aria-hidden="true" className="mt-2 h-px w-8 bg-primary-300" />
             <ul className="mt-4 space-y-2.5">
               {footerLinks.keyTreatments.map((link) => (
                 <li key={link.label}>
@@ -90,9 +88,8 @@ export default function Footer() {
 
           {/* Social */}
           <div>
-            <h2 className="text-sm font-semibold uppercase tracking-widest text-slate-800">
-              Follow Us
-            </h2>
+            <h2 className="text-base font-semibold text-ink-800">Follow us</h2>
+            <div aria-hidden="true" className="mt-2 h-px w-8 bg-primary-300" />
             <ul className="mt-4 flex gap-3">
               {socialLinks.map(({ label, href, Icon }) => (
                 <li key={label}>

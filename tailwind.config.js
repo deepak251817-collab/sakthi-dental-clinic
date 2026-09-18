@@ -29,6 +29,11 @@ export default {
           900: '#3c4bab',
           950: '#232c66',
         },
+        ink: {
+          700: '#5B4A9E',
+          800: '#47347F',
+          900: '#3A2B6B',
+        },
       },
       fontFamily: {
         sans: ['"Plus Jakarta Sans"', 'Inter', 'system-ui', 'sans-serif'],

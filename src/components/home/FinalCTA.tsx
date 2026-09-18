@@ -16,7 +16,7 @@ export default function FinalCTA() {
             />
             <h2
               id="final-cta-heading"
-              className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl"
+              className="text-3xl font-bold text-white sm:text-4xl"
             >
               Your Smile Deserves the Best Care
             </h2>

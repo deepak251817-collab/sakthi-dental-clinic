@@ -54,11 +54,11 @@ export default function About() {
           <div className="grid items-start gap-12 lg:grid-cols-5">
             <AnimatedSection className="lg:col-span-2">
               <div className="rounded-3xl border border-primary-100 bg-white p-8 text-center shadow-card">
-                <div className="mx-auto flex h-40 w-40 items-center justify-center rounded-full bg-primary-100 text-4xl font-extrabold text-primary-700">
+                <div className="mx-auto flex h-40 w-40 items-center justify-center rounded-full bg-primary-100 text-4xl font-bold text-primary-700">
                   A
                 </div>
-                <h2 className="mt-5 text-xl font-bold text-slate-800">Dr. Anupriya</h2>
-                <p className="mt-1 text-sm font-semibold uppercase tracking-wide text-primary-700">
+                <h2 className="mt-5 text-xl font-bold text-ink-800">Dr. Anupriya</h2>
+                <p className="mt-1 text-sm font-semibold text-primary-700">
                   Founder, Sakthi Dental Clinic
                 </p>
                 <p className="mt-4 text-sm leading-relaxed text-slate-500">
@@ -69,7 +69,7 @@ export default function About() {
             </AnimatedSection>
 
             <AnimatedSection className="lg:col-span-3" delay={0.1}>
-              <h2 id="founder-story" className="text-2xl font-bold text-slate-800 sm:text-3xl">
+              <h2 id="founder-story" className="text-2xl font-bold text-ink-800 sm:text-3xl">
                 A Journey of Care Since 2000
               </h2>
               <p className="mt-4 leading-relaxed text-slate-500">
@@ -88,7 +88,7 @@ export default function About() {
                       {index + 1}
                     </span>
                     <div>
-                      <h3 className="font-semibold text-slate-800">{step.title}</h3>
+                      <h3 className="font-semibold text-ink-800">{step.title}</h3>
                       <p className="mt-1 text-sm leading-relaxed text-slate-500">
                         {step.description}
                       </p>
@@ -110,7 +110,7 @@ export default function About() {
                 <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-100 text-primary-700">
                   <Target className="h-6 w-6" aria-hidden="true" />
                 </span>
-                <h2 className="mt-5 text-2xl font-bold text-slate-800">Our Mission</h2>
+                <h2 className="mt-5 text-2xl font-bold text-ink-800">Our Mission</h2>
                 <ul className="mt-4 space-y-2.5 text-sm leading-relaxed text-slate-500">
                   <li className="flex gap-2.5">
                     <HeartPulse className="mt-0.5 h-4 w-4 shrink-0 text-primary-500" aria-hidden="true" />
@@ -135,7 +135,7 @@ export default function About() {
                 <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-100 text-primary-700">
                   <Eye className="h-6 w-6" aria-hidden="true" />
                 </span>
-                <h2 className="mt-5 text-2xl font-bold text-slate-800">Our Vision</h2>
+                <h2 className="mt-5 text-2xl font-bold text-ink-800">Our Vision</h2>
                 <ul className="mt-4 space-y-2.5 text-sm leading-relaxed text-slate-500">
                   <li className="flex gap-2.5">
                     <Eye className="mt-0.5 h-4 w-4 shrink-0 text-primary-500" aria-hidden="true" />
@@ -162,7 +162,6 @@ export default function About() {
         <Container>
           <AnimatedSection>
             <SectionHeading
-              eyebrow="Our Team"
               title="Meet Our Doctors"
               description="A dedicated team of dental professionals here to care for your smile."
             />

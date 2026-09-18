@@ -46,7 +46,7 @@ export default function Navbar() {
               aria-label="Sakthi Dental Clinic — Home"
             >
               <img src="/images/icons/logo.svg" alt="" className="h-9 w-9" width={36} height={36} />
-              <span className="text-lg font-bold tracking-tight text-slate-800">
+              <span className="text-lg font-bold text-ink-800">
                 Sakthi <span className="text-primary-600">Dental</span>
               </span>
             </Link>

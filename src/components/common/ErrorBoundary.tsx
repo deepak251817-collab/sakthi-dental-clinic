@@ -31,10 +31,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
       return (
         <div className="flex min-h-[70vh] items-center bg-gradient-to-b from-primary-50 to-white">
           <div className="mx-auto w-full max-w-xl px-6 py-20 text-center">
-            <p className="text-sm font-semibold uppercase tracking-widest text-primary-600">
-              Something went wrong
-            </p>
-            <h1 className="mt-4 text-4xl font-extrabold tracking-tight text-slate-800">
+            <h1 className="text-4xl font-bold text-ink-800">
               We're sorry for the interruption
             </h1>
             <p className="mx-auto mt-4 text-lg text-slate-500">

@@ -62,7 +62,7 @@ export default function CookieConsent() {
                 <Cookie className="h-5 w-5" aria-hidden="true" />
               </span>
               <div>
-                <h2 className="text-sm font-bold text-slate-800">We value your privacy</h2>
+                <h2 className="text-sm font-bold text-ink-800">We value your privacy</h2>
                 <p className="mt-1 text-sm leading-relaxed text-slate-500">
                   We use cookies to improve your browsing experience. See our{' '}
                   <Link

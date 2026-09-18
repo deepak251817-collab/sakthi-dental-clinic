@@ -87,7 +87,7 @@ export default function PrivacyPolicy() {
           <div className="mx-auto max-w-3xl space-y-10">
             {sections.map((section) => (
               <article key={section.title}>
-                <h2 className="text-xl font-bold text-slate-800">{section.title}</h2>
+                <h2 className="text-xl font-bold text-ink-800">{section.title}</h2>
                 <div className="mt-3 space-y-3">
                   {section.body.map((paragraph) => (
                     <p key={paragraph} className="text-sm leading-relaxed text-slate-500">

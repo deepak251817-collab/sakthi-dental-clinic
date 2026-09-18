@@ -87,7 +87,7 @@ export default function Modal({ isOpen, onClose, label, description, children }:
           >
             <div className="flex items-start justify-between gap-4 border-b border-primary-100 px-6 py-5">
               <div>
-                <h2 id={titleId} className="text-lg font-bold text-slate-800">
+                <h2 id={titleId} className="text-lg font-bold text-ink-800">
                   {label}
                 </h2>
                 {description && (

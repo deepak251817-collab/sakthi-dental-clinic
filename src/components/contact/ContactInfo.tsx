@@ -46,9 +46,7 @@ export default function ContactInfo() {
                 <Icon className="h-5 w-5 text-white" aria-hidden="true" />
               </span>
               <div>
-                <h3 className="text-sm font-semibold uppercase tracking-wide text-primary-100">
-                  {label}
-                </h3>
+                <h3 className="text-sm font-semibold text-primary-100">{label}</h3>
                 {lines.map((line) => (
                   <p key={line} className="mt-0.5 text-sm leading-relaxed text-white">
                     {href ? (
@@ -72,7 +70,7 @@ export default function ContactInfo() {
       </div>
 
       <div className="rounded-3xl border border-primary-100 bg-white p-6 shadow-soft">
-        <h3 className="text-sm font-semibold text-slate-800">Find us on the map</h3>
+        <h3 className="text-sm font-semibold text-ink-800">Find us on the map</h3>
         <p className="mt-1 text-sm leading-relaxed text-slate-500">
           We are located in SBM Layout, Anthivadi — easy to reach from anywhere in Hosur, with
           hassle-free parking and wheelchair access.

@@ -1,7 +1,6 @@
 import { cn } from '../../lib/utils'
 
 interface SectionHeadingProps {
-  eyebrow?: string
   title: string
   description?: string
   align?: 'left' | 'center'
@@ -9,10 +8,11 @@ interface SectionHeadingProps {
 }
 
 /**
- * Consistent section heading with optional eyebrow label and description.
+ * Section heading. Deliberately has no eyebrow/label slot: labels above
+ * headings repeated what the heading already said, so they were removed
+ * rather than restyled.
  */
 export default function SectionHeading({
-  eyebrow,
   title,
   description,
   align = 'center',
@@ -26,14 +26,7 @@ export default function SectionHeading({
         className,
       )}
     >
-      {eyebrow && (
-        <p className="mb-3 text-sm font-semibold uppercase tracking-widest text-primary-600">
-          {eyebrow}
-        </p>
-      )}
-      <h2 className="text-3xl font-bold tracking-tight text-slate-800 sm:text-4xl">
-        {title}
-      </h2>
+      <h2 className="text-3xl font-bold text-ink-700 sm:text-4xl">{title}</h2>
       {description && (
         <p className="mt-4 text-base leading-relaxed text-slate-500">{description}</p>
       )}

@@ -27,7 +27,6 @@ export default function LocationSection() {
       <AnimatedSection>
         <Container>
           <SectionHeading
-            eyebrow="Visit Us"
             title="Finding the Clinic"
             description="Located in SBM Layout, Anthivadi — central, easy to reach, with hassle-free parking and wheelchair access."
           />
@@ -39,7 +38,7 @@ export default function LocationSection() {
                 <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-100 text-primary-700">
                   <MapPin className="h-6 w-6" aria-hidden="true" />
                 </span>
-                <h3 id="location-heading" className="mt-5 text-xl font-bold text-slate-800">
+                <h3 id="location-heading" className="mt-5 text-xl font-bold text-ink-800">
                   Sakthi Dental Clinic
                 </h3>
                 <address className="mt-3 space-y-1 text-sm not-italic leading-relaxed text-slate-500">

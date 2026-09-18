@@ -34,10 +34,8 @@ export default function DoctorCard({ doctor, onOpen }: DoctorCardProps) {
         </span>
       </div>
 
-      <h3 className="mt-4 text-base font-semibold text-slate-800">{doctor.name}</h3>
-      <p className="mt-1 inline-block rounded-full bg-primary-50 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-primary-700">
-        {doctor.role}
-      </p>
+      <h3 className="mt-4 text-base font-semibold text-ink-800">{doctor.name}</h3>
+      <p className="mt-1 text-sm font-medium text-primary-700">{doctor.role}</p>
       <p className="mt-3 text-sm leading-relaxed text-slate-500">{doctor.focus}</p>
       <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-primary-700 transition-colors group-hover:text-primary-800">
         View Profile

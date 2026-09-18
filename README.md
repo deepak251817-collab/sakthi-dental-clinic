@@ -37,9 +37,18 @@ The site presents the clinic's treatments, doctors, facilities and patient testi
 * [Framer Motion](https://www.framer.com/motion/)
 * [Lucide React](https://lucide.dev) icons
 
+### Backend
+
+* Node.js + Express + TypeScript (REST API)
+* PostgreSQL via Prisma ORM
+* JWT authentication (8 h tokens) + bcrypt password hashing
+* Zod request validation
+* helmet / CORS / express-rate-limit security middleware
+* Vitest + supertest API test suite
+
 ## Advanced Features
 
-* **Appointment request flow** — one site-wide modal (keyboard accessible, Escape to close, focus handling, inline validation, submitting + success states). Every "Fix an Appointment" CTA on the site opens this same flow. This is a frontend request flow only — no booking backend is connected; submissions are simulated and the success message asks the clinic team to confirm by phone.
+* **Appointment request flow** — one site-wide modal (keyboard accessible, Escape to close, focus handling, inline validation, submitting + success states). Every "Fix an Appointment" CTA on the site opens this same flow. Valid submissions are sent to the real backend (`POST /api/appointments`), stored in PostgreSQL, and reviewed by the clinic team in the admin dashboard — submission is a request, not an automatic booking. If the API is unreachable the form shows an offline state with the clinic phone number.
 * **Floating quick contact actions** — desktop floating action group with tooltips and a mobile fixed bottom bar (Call `tel:+919862890897`, WhatsApp chat with a prefilled message, and Appointment). These are direct contact actions, not automated booking.
 * **Location / directions section** — address card with a Google Maps **Get Directions** link built from the supplied address, plus a keyless Google Maps embed (no API key used or exposed).
 * **Treatment search and filtering** — live search across treatment titles and descriptions, category filter chips (General, Restorative, Cosmetic, Orthodontics, Pediatric, Oral Surgery) derived from the existing data, result count ("Showing X of 15"), Clear Filters and a styled empty state.
@@ -60,11 +69,13 @@ The site presents the clinic's treatments, doctors, facilities and patient testi
 | `/contact` | Contact form + location/map section |
 | `/gallery` | Clinic gallery with lightbox |
 | `/privacy-policy` | Privacy policy |
+| `/admin/login` | Admin sign-in |
+| `/admin` | Protected appointment dashboard |
 | `*` | 404 not-found page |
 
 ## Project Status
 
-**Client-ready frontend implementation.** All features are complete and verified (lint, type-check, production build). The contact and appointment forms are frontend-only — submissions are not sent to a production backend and appointments are not auto-booked; the clinic team confirms requests by phone.
+**Full-stack implementation.** Public site, appointment API, PostgreSQL storage and the admin dashboard are complete and verified (lint, type-check, builds, API test suite). The contact form remains frontend-only; appointment requests are stored and must be confirmed by the clinic team — nothing is auto-booked.
 
 ## Client Content Note
 
@@ -75,6 +86,17 @@ Note that the brief contains two different references to clinic availability hou
 > Sunday to Saturday: 9 AM to 7 PM
 
 The implementation uses the Contact page timing for contact information and structured data, and keeps the Home amenities wording "Doctors available daily" instead of displaying a conflicting hour.
+
+## Full-Stack Architecture
+
+Public Website → Appointment Form → REST API → PostgreSQL → Admin Dashboard → Status Management.
+
+* **Frontend:** React + Vite + TypeScript (public site + admin dashboard under `/admin`)
+* **Backend:** Node.js + Express + TypeScript — controllers, services, routes and Zod schemas kept in separate layers (`backend/README.md`)
+* **Database:** PostgreSQL via Prisma (`Appointment`, `AdminUser` models; migration history in `backend/prisma/migrations`)
+* **Authentication:** JWT bearer tokens (8 h) + bcrypt-hashed admin passwords
+* **Validation:** Zod on every request body/query; strict schemas reject unknown properties
+* **API reference:** [docs/API.md](docs/API.md)
 
 ## Performance
 
@@ -99,16 +121,51 @@ Optimizations actually implemented:
 | `/contact` | Contact form (validated) + reach-us information |
 | `/gallery` | Clinic gallery with lightbox |
 | `/privacy-policy` | Privacy policy |
-| `*` | 404 not-found page |
+| `*` | 404 not-found page |## Local Setup
 
-## Local Setup
+**Frontend** (port 5173):
 
 ```bash
 npm install
 npm run dev
 ```
 
-Then open http://localhost:5173.
+**Backend** (port 5000) — requires a local PostgreSQL on port 5432:
+
+```bash
+cd backend
+npm install
+# create backend/.env from backend/.env.example (DATABASE_URL, JWT_SECRET,
+# ADMIN_NAME / ADMIN_EMAIL / ADMIN_PASSWORD for the dev seed)
+npx prisma generate
+npx prisma migrate dev
+npm run db:seed
+npm run dev
+```
+
+Then open http://localhost:5173 and sign in at http://localhost:5173/admin/login with the seeded dev admin.
+
+**Tests** (backend, against the local database):
+
+```bash
+cd backend
+npm test
+```
+
+### Environment variables
+
+Frontend (`.env`, see `.env.example`):
+
+* `VITE_API_URL` — backend base URL, defaults to `http://localhost:5000/api`
+* `VITE_SITE_URL` — canonical site URL for SEO metadata
+
+Backend (`backend/.env`, see `backend/.env.example`):
+
+* `DATABASE_URL` — PostgreSQL connection string
+* `JWT_SECRET` — random string, at least 32 characters
+* `PORT` — API port (default 5000)
+* `FRONTEND_URL` — allowed CORS origin (default `http://localhost:5173`)
+* `ADMIN_NAME` / `ADMIN_EMAIL` / `ADMIN_PASSWORD` — credentials used by `npm run db:seed` (development only)
 
 ## Production Build
 
@@ -146,6 +203,13 @@ npm run preview
 
 ```
 sakthi-dental-clinic/
+├── backend/              # Express + Prisma API (see backend/README.md)
+│   ├── prisma/           # Schema, migrations, seed
+│   ├── src/              # config, controllers, middleware, routes, schemas, services, utils
+│   ├── tests/            # Vitest + supertest API suite
+│   └── .env.example      # Documented backend variables (real .env is git-ignored)
+├── docs/
+│   └── API.md            # Full REST API reference
 ├── public/               # Static assets, favicon, robots.txt, sitemap.xml, images
 ├── src/
 │   ├── components/
@@ -160,10 +224,12 @@ sakthi-dental-clinic/
 │   │   ├── doctors/      # DoctorCard, DoctorModal
 │   │   ├── faq/          # FAQItem, FAQSearch
 │   │   ├── gallery/      # GalleryGrid, GalleryImage, GalleryLightbox
-│   │   └── contact/      # ContactForm, ContactInfo, FloatingContactBar, LocationSection
-│   ├── pages/            # Home, About, Treatments, FAQ, Contact, Gallery, PrivacyPolicy, NotFound
+│   │   │   └── contact/      # ContactForm, ContactInfo, FloatingContactBar, LocationSection
+│   │   └── admin/        # AdminHeader, AdminSidebar, DashboardStats, AppointmentTable,
+│   │                     # AppointmentFilters, AppointmentDetails, StatusChip, RequireAdminAuth
 │   ├── data/             # treatments, doctors, testimonials, faqs, facilities (typed data)
-│   ├── lib/              # constants (site info, nav/footer links), utils
+│   ├── lib/              # constants, utils, api client, auth token handling
+│   ├── pages/            # …, AdminLogin, AdminDashboard
 │   ├── App.tsx           # Routes + layout shell
 │   ├── main.tsx          # Entry point
 │   └── index.css         # Tailwind layers + base styles
@@ -191,4 +257,4 @@ ShadowFox Internship — Intermediate Level
 
 ## Disclaimer
 
-This project is created as a frontend internship/client-style implementation based on the supplied project brief. All content shown is sourced from the brief; the appointment action is handled by the clinic team.
+This project is created as an internship/client-style implementation based on the supplied project brief. All content shown is sourced from the brief; the appointment action is handled by the clinic team. The system stores only the information patients knowingly submit in the appointment form — no payment data, medical history or diagnosis features. Token handling in the admin area uses localStorage and is appropriate for a prototype, not enterprise-grade authentication.

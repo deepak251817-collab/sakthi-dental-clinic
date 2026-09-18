@@ -1,7 +1,9 @@
 import { useState, type ChangeEvent, type FormEvent } from 'react'
-import { CheckCircle2, Loader2 } from 'lucide-react'
+import { AlertCircle, CheckCircle2, Loader2, Phone } from 'lucide-react'
 import Button from '../common/Button'
 import { treatments } from '../../data/treatments'
+import { ApiError, submitAppointment } from '../../lib/api'
+import { site } from '../../lib/constants'
 import type {
   AppointmentFormErrors,
   AppointmentRequest,
@@ -16,9 +18,11 @@ interface AppointmentFormProps {
 }
 
 /**
- * Appointment REQUEST form (frontend-only). Validation covers name, phone,
- * email and a not-in-the-past date. A valid submit shows the success state;
- * no real booking backend is connected.
+ * Appointment REQUEST form. Client-side validation covers name, phone, email
+ * and a not-in-the-past date; a valid submit is sent to the clinic API
+ * (POST /api/appointments). A success state confirms the REQUEST was received
+ * — it is not a confirmed booking. Network failures show an offline state
+ * with the clinic phone number as fallback.
  */
 export default function AppointmentForm({ onReset }: AppointmentFormProps) {
   const [values, setValues] = useState<AppointmentRequest>({
@@ -28,6 +32,7 @@ export default function AppointmentForm({ onReset }: AppointmentFormProps) {
   })
   const [errors, setErrors] = useState<AppointmentFormErrors>({})
   const [status, setStatus] = useState<SubmissionStatus>('idle')
+  const [serverError, setServerError] = useState<string | null>(null)
 
   const validate = (): AppointmentFormErrors => {
     const next: AppointmentFormErrors = {}
@@ -60,18 +65,47 @@ export default function AppointmentForm({ onReset }: AppointmentFormProps) {
       setValues((current) => ({ ...current, [field]: value }))
     }
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     if (status === 'submitting') return
+    setServerError(null)
     const nextErrors = validate()
     setErrors(nextErrors)
     if (Object.keys(nextErrors).length > 0) return
 
-    // No backend is connected — simulate a short submit and show success.
     setStatus('submitting')
-    window.setTimeout(() => {
+    try {
+      await submitAppointment({
+        name: values.name.trim(),
+        phone: values.phone.trim(),
+        email: values.email.trim(),
+        preferredDate: values.preferredDate || undefined,
+        preferredTime: values.preferredTime || undefined,
+        treatment: values.treatment || undefined,
+        message: values.message?.trim() || undefined,
+      })
       setStatus('success')
-    }, 700)
+    } catch (err) {
+      setStatus('idle')
+      if (err instanceof ApiError) {
+        // Surface server-side field errors beneath the matching inputs.
+        if (err.fieldErrors) {
+          setErrors((current) => ({
+            ...current,
+            ...err.fieldErrors,
+          }))
+        }
+        setServerError(
+          err.isNetworkError
+            ? 'Appointment services are temporarily unavailable. Please call the clinic directly.'
+            : err.message,
+        )
+      } else {
+        setServerError(
+          'Unable to submit your request right now. Please try again or contact the clinic directly.',
+        )
+      }
+    }
   }
 
   const inputClasses = (hasError: boolean) =>
@@ -106,7 +140,6 @@ export default function AppointmentForm({ onReset }: AppointmentFormProps) {
       </div>
     )
   }
-
   return (
     <form onSubmit={handleSubmit} noValidate className="space-y-5 px-6 py-6 sm:px-8">
       <div>
@@ -249,6 +282,30 @@ export default function AppointmentForm({ onReset }: AppointmentFormProps) {
           className={`${inputClasses(false)} resize-y`}
         />
       </div>
+
+      {serverError && (
+        <div
+          role="alert"
+          className="flex items-start gap-2.5 rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700"
+        >
+          <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
+          <span>
+            {serverError}
+            {serverError.includes('temporarily unavailable') && (
+              <>
+                {' '}
+                <a
+                  href={`tel:${site.phones[0].replace(/\s/g, '')}`}
+                  className="inline-flex items-center gap-1 font-semibold underline underline-offset-2"
+                >
+                  <Phone className="inline h-3.5 w-3.5" aria-hidden="true" />
+                  {site.phones[0]}
+                </a>
+              </>
+            )}
+          </span>
+        </div>
+      )}
 
       <Button
         type="submit"

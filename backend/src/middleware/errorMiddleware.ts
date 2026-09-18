@@ -29,6 +29,18 @@ export function errorHandler(
   res: Response,
   _next: NextFunction,
 ): void {
+  // Malformed JSON bodies from express.json() carry a 400 status — report them
+  // as client errors instead of leaking a 500 for bad client input.
+  if (
+    typeof error === 'object' &&
+    error !== null &&
+    'type' in error &&
+    (error as { type?: string }).type === 'entity.parse.failed'
+  ) {
+    res.status(400).json({ success: false, message: 'Malformed JSON body' })
+    return
+  }
+
   if (error instanceof ZodError) {
     res.status(400).json({
       success: false,

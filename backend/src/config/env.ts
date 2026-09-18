@@ -11,7 +11,14 @@ import { z } from 'zod'
  * documented file is the local source of truth. In production deployments
  * there is no .env file, so platform-provided variables simply apply.
  */
+// NODE_ENV describes the execution context the launcher chose for THIS process
+// (e.g. vitest sets 'test'), so it must win over any value in .env. Capture it
+// before dotenv runs, then restore it.
+const shellNodeEnv = process.env.NODE_ENV
 dotenv.config({ override: true })
+if (shellNodeEnv !== undefined) {
+  process.env.NODE_ENV = shellNodeEnv
+}
 
 const envSchema = z.object({
   DATABASE_URL: z.string().min(1, 'DATABASE_URL is required'),

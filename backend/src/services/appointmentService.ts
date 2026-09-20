@@ -2,6 +2,7 @@ import type { AppointmentStatus } from '@prisma/client'
 import { prisma } from '../lib/prisma'
 import type { CreateAppointmentInput, ListAppointmentsQuery } from '../schemas/appointmentSchema'
 import { throwApiError } from '../middleware/errorMiddleware'
+import { notifyAppointmentEvent, type NotificationEventType } from './notificationService'
 
 /** Sensible status workflow: PENDING → CONFIRMED → COMPLETED, with cancellation. */
 const ALLOWED_TRANSITIONS: Record<AppointmentStatus, AppointmentStatus[]> = {
@@ -34,7 +35,7 @@ const LIST_SELECT = {
 } as const
 
 export async function createAppointment(input: CreateAppointmentInput) {
-  return prisma.appointment.create({
+  const appointment = await prisma.appointment.create({
     data: {
       name: input.name,
       phone: input.phone,
@@ -47,6 +48,18 @@ export async function createAppointment(input: CreateAppointmentInput) {
     },
     select: { id: true, status: true, createdAt: true },
   })
+
+  // Best-effort notifications fire after the record is safely stored; they are
+  // not awaited and can never fail the request (see notificationService).
+  notifyAppointmentEvent('APPOINTMENT_CREATED', {
+    patientName: input.name,
+    patientEmail: input.email,
+    treatment: input.treatment,
+    preferredDate: input.preferredDate ? new Date(`${input.preferredDate}T00:00:00Z`) : null,
+    preferredTime: input.preferredTime,
+  })
+
+  return appointment
 }
 
 export async function listAppointments(
@@ -102,6 +115,12 @@ export async function getAppointmentById(id: string) {
   return appointment
 }
 
+const EVENT_BY_NEW_STATUS: Partial<Record<AppointmentStatus, NotificationEventType>> = {
+  CONFIRMED: 'APPOINTMENT_CONFIRMED',
+  CANCELLED: 'APPOINTMENT_CANCELLED',
+  COMPLETED: 'APPOINTMENT_COMPLETED',
+}
+
 export async function updateAppointmentStatus(id: string, status: AppointmentStatus) {
   const existing = await prisma.appointment.findUnique({
     where: { id },
@@ -121,11 +140,24 @@ export async function updateAppointmentStatus(id: string, status: AppointmentSta
     )
   }
 
-  return prisma.appointment.update({
+  const appointment = await prisma.appointment.update({
     where: { id },
     data: { status },
     select: LIST_SELECT,
   })
+
+  const event = EVENT_BY_NEW_STATUS[status]
+  if (event) {
+    notifyAppointmentEvent(event, {
+      patientName: appointment.name,
+      patientEmail: appointment.email,
+      treatment: appointment.treatment,
+      preferredDate: appointment.preferredDate,
+      preferredTime: appointment.preferredTime,
+    })
+  }
+
+  return appointment
 }
 
 export async function getAppointmentStats() {

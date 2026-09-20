@@ -35,6 +35,25 @@ Who benefits and how.
 
 Entries are appended as work lands.
 
+## feat: add appointment notification service
+
+Date: 2026-09-20 · Phase: 5
+
+### Purpose
+Close the loop between the clinic and the patient: when a request is created or its status changes, the patient (and, for new requests, the clinic team) is notified — without any external email provider being required to run the system.
+
+### Changes
+- `backend/src/services/notificationService.ts`: fire-and-forget notification dispatch for `APPOINTMENT_CREATED` / `CONFIRMED` / `CANCELLED` / `COMPLETED`. Never throws, never fails the appointment request; per-recipient outcomes returned for future logging.
+- Pluggable transport: default `logger` provider writes notifications to the server log; `EMAIL_PROVIDER=resend` switches to the Resend HTTP API (no SDK). Credentials only from env vars.
+- `backend/src/templates/`: plain-text + inline-styled HTML templates for the four events with professional, non-confirming patient wording.
+- `appointmentService` triggers notifications after the database write; env config gains optional `EMAIL_PROVIDER` / `EMAIL_FROM` / `RESEND_API_KEY` (validated only when resend is selected).
+
+### Validation
+`tsc` build clean; existing backend suite 21/21 (notification paths fire-and-forget, so no HTTP behaviour change); resend requirement validated via config schema.
+
+### Impact
+Patients get clear status feedback and the clinic team learns of new requests the moment they arrive — as soon as a real provider is configured; until then everything is observable in the server log.
+
 ---
 
 ## Phase 4 (backfilled from history)

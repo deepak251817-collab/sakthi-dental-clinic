@@ -7,6 +7,7 @@ import CookieConsent from './components/common/CookieConsent'
 import ErrorBoundary from './components/common/ErrorBoundary'
 import PublicLayout from './components/layout/PublicLayout'
 import RequireAdminAuth from './components/admin/RequireAdminAuth'
+import { ToastProvider } from './components/admin/Toast'
 import { AppointmentProvider } from './components/appointment/AppointmentContext'
 import Home from './pages/Home'
 
@@ -42,6 +43,7 @@ export default function App() {
         <ErrorBoundary>
           <div className="flex min-h-screen flex-col bg-white font-sans text-slate-700 antialiased pb-16 lg:pb-0">
             <Suspense fallback={<RouteFallback />}>
+              <ToastProvider>
               <Routes>
                 <Route element={<PublicLayout />}>
                   <Route path="/" element={<Home />} />
@@ -76,6 +78,7 @@ export default function App() {
                   }
                 />
               </Routes>
+              </ToastProvider>
             </Suspense>
             <CookieConsent />
           </div>

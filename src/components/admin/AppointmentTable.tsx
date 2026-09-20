@@ -1,4 +1,5 @@
-import { Eye } from 'lucide-react'
+import { useState } from 'react'
+import { ArrowDown, ArrowUp, ArrowUpDown, Eye } from 'lucide-react'
 import type { AppointmentRecord, AppointmentStatus } from '../../lib/api'
 import { StatusChip } from './StatusChip'
 
@@ -11,6 +12,10 @@ interface AppointmentTableProps {
   /** Which row has an in-flight status change (disables its action buttons). */
   busyId: string | null
 }
+
+export type SortKey = 'createdAt' | 'name' | 'preferredDate'
+
+type SortDirection = 'asc' | 'desc'
 
 /** Sensible workflow: PENDING → CONFIRMED → COMPLETED; cancellation from pending/confirmed. */
 const NEXT_STATUSES: Record<AppointmentStatus, Array<{ status: AppointmentStatus; label: string }>> = {
@@ -73,6 +78,8 @@ function ActionButtons({ appointment, onStatusChange, busyId }: Pick<Appointment
 /**
  * Appointment list: semantic table on desktop, stacked cards on mobile.
  * Both views expose view + workflow actions for the same records.
+ * Column sorting is a display concern (the backend returns the newest page),
+ * so it sorts the current page client-side.
  */
 export default function AppointmentTable({
   appointments,
@@ -82,6 +89,40 @@ export default function AppointmentTable({
   onStatusChange,
   busyId,
 }: AppointmentTableProps) {
+  const [sortKey, setSortKey] = useState<SortKey>('createdAt')
+  const [sortDir, setSortDir] = useState<SortDirection>('desc')
+
+  const handleSort = (key: SortKey) => {
+    if (key === sortKey) {
+      setSortDir((current) => (current === 'asc' ? 'desc' : 'asc'))
+    } else {
+      setSortKey(key)
+      setSortDir(key === 'createdAt' ? 'desc' : 'asc')
+    }
+  }
+
+  const sorted = [...appointments].sort((a, b) => {
+    let result = 0
+    if (sortKey === 'name') {
+      result = a.name.localeCompare(b.name)
+    } else {
+      const av = sortKey === 'preferredDate' ? (a.preferredDate ?? '') : a.createdAt
+      const bv = sortKey === 'preferredDate' ? (b.preferredDate ?? '') : b.createdAt
+      result = av.localeCompare(bv)
+    }
+    return sortDir === 'asc' ? result : -result
+  })
+  const sortIcon = (key: SortKey) =>
+    sortKey === key ? (
+      sortDir === 'asc' ? (
+        <ArrowUp className="h-3 w-3" aria-hidden="true" />
+      ) : (
+        <ArrowDown className="h-3 w-3" aria-hidden="true" />
+      )
+    ) : (
+      <ArrowUpDown className="h-3 w-3 opacity-40" aria-hidden="true" />
+    )
+
   if (error) {
     return (
       <div role="alert" className="rounded-2xl border border-red-100 bg-red-50 p-6 text-sm text-red-700">
@@ -119,17 +160,41 @@ export default function AppointmentTable({
           <caption className="sr-only">Appointment requests</caption>
           <thead>
             <tr className="border-b border-primary-100 bg-primary-50/60 text-xs uppercase tracking-wide text-slate-500">
-              <th scope="col" className="px-4 py-3 font-semibold">Patient</th>
+              <th scope="col" aria-sort={sortKey === 'name' ? (sortDir === 'asc' ? 'ascending' : 'descending') : 'none'} className="px-4 py-3 font-semibold">
+                <button
+                  type="button"
+                  onClick={() => handleSort('name')}
+                  className="inline-flex items-center gap-1 uppercase tracking-wide hover:text-primary-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
+                >
+                  Patient {sortIcon('name')}
+                </button>
+              </th>
               <th scope="col" className="px-4 py-3 font-semibold">Contact</th>
               <th scope="col" className="px-4 py-3 font-semibold">Treatment</th>
-              <th scope="col" className="px-4 py-3 font-semibold">Preferred</th>
+              <th scope="col" aria-sort={sortKey === 'preferredDate' ? (sortDir === 'asc' ? 'ascending' : 'descending') : 'none'} className="px-4 py-3 font-semibold">
+                <button
+                  type="button"
+                  onClick={() => handleSort('preferredDate')}
+                  className="inline-flex items-center gap-1 uppercase tracking-wide hover:text-primary-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
+                >
+                  Preferred {sortIcon('preferredDate')}
+                </button>
+              </th>
               <th scope="col" className="px-4 py-3 font-semibold">Status</th>
-              <th scope="col" className="px-4 py-3 font-semibold">Created</th>
+              <th scope="col" aria-sort={sortKey === 'createdAt' ? (sortDir === 'asc' ? 'ascending' : 'descending') : 'none'} className="px-4 py-3 font-semibold">
+                <button
+                  type="button"
+                  onClick={() => handleSort('createdAt')}
+                  className="inline-flex items-center gap-1 uppercase tracking-wide hover:text-primary-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
+                >
+                  Created {sortIcon('createdAt')}
+                </button>
+              </th>
               <th scope="col" className="px-4 py-3 font-semibold">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {appointments.map((appointment) => (
+            {sorted.map((appointment) => (
               <tr key={appointment.id} className="border-b border-primary-50 last:border-0 hover:bg-primary-50/40">
                 <td className="px-4 py-3 font-semibold text-slate-800">{appointment.name}</td>
                 <td className="px-4 py-3 text-slate-600">
@@ -166,7 +231,7 @@ export default function AppointmentTable({
 
       {/* Mobile cards */}
       <ul className="space-y-3 md:hidden">
-        {appointments.map((appointment) => (
+        {sorted.map((appointment) => (
           <li key={appointment.id} className="rounded-2xl border border-primary-100 bg-white p-4">
             <div className="flex items-start justify-between gap-3">
               <div>

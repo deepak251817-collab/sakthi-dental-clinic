@@ -3,6 +3,7 @@ import { useNavigate, useLocation, Link } from 'react-router-dom'
 import { Loader2, Lock, ShieldCheck } from 'lucide-react'
 import { ApiError, loginAdmin } from '../lib/api'
 import { setSession } from '../lib/auth'
+import { useToast } from '../components/admin/Toast'
 
 /**
  * Admin sign-in page (/admin/login).
@@ -16,6 +17,7 @@ export default function AdminLogin() {
   const location = useLocation() as { state?: { from?: string } }
   const redirectTo = location.state?.from ?? '/admin'
 
+  const notify = useToast()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
@@ -29,6 +31,7 @@ export default function AdminLogin() {
     try {
       const { token, admin } = await loginAdmin(email.trim(), password)
       setSession(token, admin.email)
+      notify('Signed in successfully')
       navigate(redirectTo, { replace: true })
     } catch (err) {
       if (err instanceof ApiError && err.isNetworkError) {

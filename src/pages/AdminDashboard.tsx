@@ -24,6 +24,7 @@ import {
   type ActivityEntry,
 } from '../lib/api'
 import { clearSession, getAdminEmail, getToken } from '../lib/auth'
+import { useToast } from '../components/admin/Toast'
 
 const SEARCH_DEBOUNCE_MS = 350
 
@@ -34,6 +35,7 @@ const SEARCH_DEBOUNCE_MS = 350
 export default function AdminDashboard() {
   const navigate = useNavigate()
   const token = getToken()
+  const notify = useToast()
 
   const [list, setList] = useState<AppointmentListResult | null>(null)
   const [stats, setStats] = useState<AppointmentStats | null>(null)
@@ -119,6 +121,13 @@ export default function AdminDashboard() {
       const updated = await updateAppointmentStatus(token, appointment.id, status)
       setConfirmTarget(null)
       setDetails((current) => (current?.id === updated.id ? updated : current))
+      const label =
+        status === 'CONFIRMED'
+          ? 'Appointment confirmed'
+          : status === 'COMPLETED'
+            ? 'Appointment completed'
+            : 'Appointment cancelled'
+      notify(label)
       await loadData()
     } catch (err) {
       if (err instanceof ApiError && err.status === 401) {
@@ -126,10 +135,11 @@ export default function AdminDashboard() {
         return
       }
       setConfirmTarget(null)
-      setActionError(
+      notify(
         err instanceof ApiError && err.isNetworkError
           ? 'Cannot reach the server. The status was not changed — please retry.'
           : 'The status could not be updated. Please try again.',
+        'error',
       )
     } finally {
       setBusyId(null)
@@ -152,13 +162,14 @@ export default function AdminDashboard() {
     try {
       await deleteAppointment(token, appointment.id)
       setDetails(null)
+      notify('Appointment request deleted')
       await loadData()
     } catch (err) {
       if (err instanceof ApiError && err.status === 401) {
         handleAuthFailure()
         return
       }
-      setActionError('The request could not be deleted. Please try again.')
+      notify('The request could not be deleted. Please try again.', 'error')
     } finally {
       setBusyId(null)
     }
@@ -166,6 +177,7 @@ export default function AdminDashboard() {
 
   const handleLogout = () => {
     clearSession()
+    notify('Signed out')
     navigate('/admin/login', { replace: true })
   }
 

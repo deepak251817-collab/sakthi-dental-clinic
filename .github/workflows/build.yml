@@ -1,0 +1,32 @@
+name: Build
+
+# Scheduled build verification: catches dependency drift and breakage that
+# only appears with newer package resolutions, independent of pushes.
+# (A separate deploy workflow would run on version tags once the project
+# has a configured production target.)
+
+on:
+  schedule:
+    - cron: "0 3 * * 1" # Mondays 03:00 UTC
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Verify builds (Node ${{ matrix.node-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [20, 22]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install frontend dependencies and build
+        run: npm ci && npm run build
+
+      - name: Install backend dependencies and build
+        run: cd backend && npm ci && npx prisma generate && npm run build

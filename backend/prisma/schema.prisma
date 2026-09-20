@@ -29,6 +29,8 @@ model Appointment {
   createdAt     DateTime          @default(now()) @map("created_at")
   updatedAt     DateTime          @updatedAt @map("updated_at")
 
+  notifications NotificationLog[]
+
   @@index([status])
   @@index([createdAt])
   @@index([email])
@@ -46,4 +48,40 @@ model AdminUser {
   updatedAt    DateTime @updatedAt @map("updated_at")
 
   @@map("admin_users")
+}
+
+enum NotificationType {
+  APPOINTMENT_CREATED
+  APPOINTMENT_CONFIRMED
+  APPOINTMENT_CANCELLED
+  APPOINTMENT_COMPLETED
+}
+
+enum NotificationChannel {
+  EMAIL
+}
+
+enum NotificationStatus {
+  SENT
+  FAILED
+}
+
+/// One row per attempted notification delivery. Kept for operational
+/// visibility — a FAILED row never affects the appointment itself.
+/// Logs are meaningless without their appointment, so they cascade on delete.
+model NotificationLog {
+  id            String              @id @default(cuid())
+  appointmentId String              @map("appointment_id")
+  type          NotificationType
+  channel       NotificationChannel @default(EMAIL)
+  recipient     String
+  status        NotificationStatus
+  errorMessage  String?             @map("error_message")
+  createdAt     DateTime            @default(now()) @map("created_at")
+
+  appointment Appointment @relation(fields: [appointmentId], references: [id], onDelete: Cascade)
+
+  @@index([appointmentId])
+  @@index([createdAt])
+  @@map("notification_logs")
 }

@@ -52,6 +52,7 @@ export async function createAppointment(input: CreateAppointmentInput) {
   // Best-effort notifications fire after the record is safely stored; they are
   // not awaited and can never fail the request (see notificationService).
   notifyAppointmentEvent('APPOINTMENT_CREATED', {
+    appointmentId: appointment.id,
     patientName: input.name,
     patientEmail: input.email,
     treatment: input.treatment,
@@ -149,6 +150,7 @@ export async function updateAppointmentStatus(id: string, status: AppointmentSta
   const event = EVENT_BY_NEW_STATUS[status]
   if (event) {
     notifyAppointmentEvent(event, {
+      appointmentId: id,
       patientName: appointment.name,
       patientEmail: appointment.email,
       treatment: appointment.treatment,

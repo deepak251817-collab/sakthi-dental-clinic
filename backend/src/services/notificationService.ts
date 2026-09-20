@@ -29,8 +29,9 @@ export type NotificationEventType =
   | 'APPOINTMENT_CANCELLED'
   | 'APPOINTMENT_COMPLETED'
 
-/** Minimal appointment data the templates need. */
+/** Minimal appointment data the templates and log rows need. */
 export interface AppointmentNotificationData extends AppointmentEmailData {
+  appointmentId: string
   patientEmail: string
 }
 
@@ -102,8 +103,9 @@ async function resolveRecipients(event: NotificationEventType, data: Appointment
 }
 
 /**
- * Send one notification, returning a per-recipient outcome instead of
- * throwing. Used internally and by tests.
+ * Send one notification and persist a NotificationLog row per recipient.
+ * Never throws: a provider or log-write failure is returned/contained so the
+ * appointment request that triggered it is always safe.
  */
 export async function deliverNotification(
   event: NotificationEventType,
@@ -114,7 +116,7 @@ export async function deliverNotification(
   const transport = options.transport ?? getEmailTransport()
   const recipients = await resolveRecipients(event, data)
 
-  return Promise.all(
+  const outcomes = await Promise.all(
     recipients.map(async (recipient): Promise<DeliveryOutcome> => {
       try {
         await transport({ to: recipient, subject: content.subject, text: content.text, html: content.html })
@@ -128,6 +130,26 @@ export async function deliverNotification(
       }
     }),
   )
+
+  try {
+    await prisma.notificationLog.createMany({
+      data: outcomes.map((outcome) => ({
+        appointmentId: data.appointmentId,
+        type: event,
+        channel: 'EMAIL',
+        recipient: outcome.recipient,
+        status: outcome.ok ? 'SENT' : 'FAILED',
+        errorMessage: outcome.ok ? null : outcome.error.slice(0, 500),
+      })),
+    })
+  } catch (error) {
+    // A log-write failure is an operational problem, not a delivery failure —
+    // surface it in the server log and keep the outcomes intact.
+    // eslint-disable-next-line no-console -- failures must be visible server-side
+    console.error(`[notification] could not write ${event} log rows:`, error)
+  }
+
+  return outcomes
 }
 
 /**
@@ -146,10 +168,7 @@ export function notifyAppointmentEvent(
     try {
       const outcomes = await deliverNotification(event, data, options)
       for (const outcome of outcomes) {
-        if (outcome.ok) {
-          // eslint-disable-next-line no-console -- operational visibility until EMAIL_PROVIDER is configured
-          console.info(`[notification] ${event} email accepted for ${outcome.recipient}`)
-        } else {
+        if (!outcome.ok) {
           // eslint-disable-next-line no-console -- failures must be visible server-side
           console.error(`[notification] ${event} email failed for ${outcome.recipient}: ${outcome.error}`)
         }

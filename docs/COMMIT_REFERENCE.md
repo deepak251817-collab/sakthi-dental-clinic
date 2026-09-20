@@ -35,6 +35,24 @@ Who benefits and how.
 
 Entries are appended as work lands.
 
+## feat: add appointment notification logs
+
+Date: 2026-09-20 · Phase: 5
+
+### Purpose
+Make notification delivery observable and debuggable: every attempted delivery is recorded, so the clinic can see what was sent, to whom, and what failed — without touching the appointment itself.
+
+### Changes
+- Prisma: `NotificationLog` model (type/channel/recipient/status/errorMessage) with `SENT`/`FAILED` statuses and cascade delete alongside its appointment; migration `add_notification_logs` applied.
+- `notificationService.deliverNotification` now persists one log row per recipient after sending; log-write failures are contained and logged server-side.
+- New test suite `backend/tests/notifications.test.ts`: SENT rows after a public submission (patient + clinic team), FAILED row with the provider error when the transport throws (appointment left intact), cascade cleanup.
+
+### Validation
+`npx prisma migrate dev` applied cleanly; backend suite 24/24 (21 prior + 3 new).
+
+### Impact
+Notification failures are diagnosable from the database instead of only the console, and the guarantee that a notification problem can never invalidate an appointment is now tested.
+
 ## feat: add appointment notification service
 
 Date: 2026-09-20 · Phase: 5

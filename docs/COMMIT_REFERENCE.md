@@ -54,6 +54,38 @@ Give the clinic real, database-backed analytics — appointment request trends a
 ### Impact
 Administrators can see demand over time and which treatments patients actually ask for, with no per-row API calls and no fabricated numbers.
 
+## feat: add appointment analytics to the admin dashboard
+
+Date:
+2026-09-20
+
+Phase:
+Phase 5
+
+### Purpose
+
+Give clinic administrators a live view of appointment demand — requests over time, status distribution and most-requested treatments — so staffing and follow-up decisions are based on real data instead of memory.
+
+### Changes
+
+* Added analytics fetchers and types to the frontend API client (`fetchAppointmentTrends`, `fetchTopTreatments`)
+* Added `AnalyticsPanel` with Today / 7 / 30 / 90-day range chips, retry on failure and auth-failure handling
+* Added `TrendChart` — CSS bar chart with an sr-only data table as the accessible alternative
+* Added `StatusDistribution` — stacked bar whose legend always states each count in text
+* Added `TopTreatments` — ranked table that always shows its sample size ("Based on N requests in this period")
+* Wired the panel into `AdminDashboard` below the summary cards
+
+### Validation
+
+* `npx tsc -b` — clean
+* `npm run lint` — no errors or warnings
+* `npm run build` — passes; AdminDashboard chunk 31.8 kB (7.5 kB gzip)
+* Live UI verification in the preview (renders with real database data, range switching refetches)
+
+### Impact
+
+Administrators can see demand patterns at a glance without exporting or counting rows manually. Charts degrade gracefully: empty periods say so in words, and every chart has a text equivalent for screen readers.
+
 ## feat: add appointment notification logs
 
 Date: 2026-09-20 · Phase: 5

@@ -209,3 +209,34 @@ export function updateAppointmentStatus(
 export function deleteAppointment(token: string, id: string): Promise<void> {
   return request<void>(`/appointments/${id}`, { method: 'DELETE', headers: authHeader(token) })
 }
+
+export interface TrendPoint {
+  /** ISO calendar day (YYYY-MM-DD, IST) the count belongs to. */
+  day: string
+  count: number
+}
+
+export interface TreatmentCount {
+  treatment: string
+  count: number
+}
+
+export type AnalyticsRange = 1 | 7 | 30 | 90
+
+export function fetchAppointmentTrends(
+  token: string,
+  days: AnalyticsRange,
+): Promise<TrendPoint[]> {
+  return request<TrendPoint[]>(`/appointments/analytics/trends?days=${days}`, {
+    headers: authHeader(token),
+  })
+}
+
+export function fetchTopTreatments(
+  token: string,
+  days: AnalyticsRange,
+): Promise<TreatmentCount[]> {
+  return request<TreatmentCount[]>(`/appointments/analytics/treatments?days=${days}`, {
+    headers: authHeader(token),
+  })
+}

@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react'
 import AdminSidebar from '../components/admin/AdminSidebar'
 import AdminHeader from '../components/admin/AdminHeader'
 import DashboardStats from '../components/admin/DashboardStats'
+import AnalyticsPanel from '../components/admin/AnalyticsPanel'
 import AppointmentFilters from '../components/admin/AppointmentFilters'
 import AppointmentTable from '../components/admin/AppointmentTable'
 import AppointmentDetails from '../components/admin/AppointmentDetails'
@@ -179,6 +180,7 @@ export default function AdminDashboard() {
       <div className="mx-auto max-w-7xl space-y-4 px-4 py-6 sm:px-6">
         <AdminHeader adminEmail={getAdminEmail()} onLogout={handleLogout} />
         <DashboardStats stats={stats} loading={loading} />
+        <AnalyticsPanel stats={stats} onAuthFailure={handleAuthFailure} />
 
         <div className="flex flex-col gap-4 lg:flex-row">
           <AdminSidebar />

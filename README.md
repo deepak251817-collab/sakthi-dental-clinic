@@ -1,10 +1,21 @@
 # Sakthi Dental Clinic
 
-## Project Overview
+![TypeScript](https://img.shields.io/badge/TypeScript-5.6-3178C6?logo=typescript&logoColor=white)
+![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-5-646CFF?logo=vite&logoColor=white)
+![Node.js](https://img.shields.io/badge/Node.js-20-339933?logo=node.js&logoColor=white)
+![Express](https://img.shields.io/badge/Express-4-000000?logo=express&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-4169E1?logo=postgresql&logoColor=white)
+![Prisma](https://img.shields.io/badge/Prisma-6-2D3748?logo=prisma&logoColor=white)
+![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-CI-2088FF?logo=githubactions&logoColor=white)
 
-A modern, responsive dental clinic website created for **Sakthi Dental Clinic, Hosur**, as part of the **ShadowFox Intermediate Level Internship Project**.
+**Sakthi Dental Clinic** is a modern full-stack healthcare web application developed for Sakthi Dental Clinic in Hosur. The project combines a responsive public-facing dental clinic website with an appointment request system, secure admin dashboard, analytics, notifications and operational management features.
 
-The site presents the clinic's treatments, doctors, facilities and patient testimonials with a warm, trustworthy healthcare aesthetic — lavender/white pastel palette, generous whitespace and clean typography — and drives every page toward a single conversion action: **Fix an Appointment**.
+## Overview
+
+Built for **Sakthi Dental Clinic, Hosur** as part of the **ShadowFox Intermediate Level Internship Project**.
+
+The site presents the clinic's treatments, doctors, facilities and patient testimonials with a warm, trustworthy healthcare aesthetic — lavender/white pastel palette, generous whitespace and clean typography — and drives every page toward a single conversion action: **Fix an Appointment**. Appointment requests are stored in PostgreSQL, reviewed by clinic staff in a protected admin dashboard, tracked through a status workflow, and accompanied by patient notifications, analytics and an audit trail.
 
 ## Features
 
@@ -57,6 +68,107 @@ The site presents the clinic's treatments, doctors, facilities and patient testi
 * **Clinic gallery** — dedicated `/gallery` page with category filters (Clinic / Treatment / Facilities / Team), responsive grid, and a full-screen lightbox (close, previous/next, arrow-key navigation, focus handling, image titles/alt text, lazy-loaded images). Ships with copyright-safe placeholder illustrations; drop the client's real photos into `public/images/gallery/` (same filenames) to go live.
 * **Accessibility improvements** — skip-to-content link, `main` landmark id, labelled search inputs, `aria-pressed` filter chips, `aria-live` result counts, focus-visible outlines everywhere, Escape/focus-trap in all dialogs, and reduced-motion support via `MotionConfig reducedMotion="user"` plus CSS fallbacks.
 * **Performance improvements** — route-level code splitting (lazy pages), lazy-loaded gallery images and map iframe, shared icon map module for treatment cards, memoized filtering, and no new runtime dependencies added in Phase 2.
+
+## Architecture
+
+```
+Patient
+  ↓
+React Frontend (Vite, :5173)
+  ↓  HTTPS / JSON
+REST API  ← →  React Admin Dashboard (:5173/admin)
+  ↓
+Express Backend (Node.js, :5000)
+  ↓
+Prisma ORM
+  ↓
+PostgreSQL
+
+Admin
+  ↓
+Admin Login (/admin/login)
+  ↓
+JWT Authentication (8 h, HS256, bcrypt-hashed credentials)
+  ↓
+Admin Dashboard
+  ↓
+Protected APIs (requireAuth)
+
+Notification flow (optional, environment-dependent)
+Appointment event → Appointment Service → Notification Service
+                                          → logger (default, always on)
+                                          → email provider (only when EMAIL_PROVIDER is set)
+```
+
+Every layer above is implemented exactly as shown; the email provider box is the only optional component.
+
+## Appointment System
+
+* Site-wide accessible modal (keyboard support, inline validation, submitting + success states); every "Fix an Appointment" CTA opens the same flow
+* `POST /api/appointments` with Zod server-side validation, Indian phone/date/time rules, and rate limiting (10 requests / 15 min per IP)
+* Submissions are **requests, not bookings** — stored as `PENDING` and confirmed by clinic staff
+* Offline-safe: if the API is unreachable the form says so and offers the clinic phone number
+
+## Admin Dashboard
+
+* Protected SPA routes (`/admin/login`, `/admin`) outside the public site chrome
+* Paginated, searchable, sortable appointment table (desktop table / mobile cards) with status chips communicating status through text, not color alone
+* Workflow-guarded status transitions (PENDING → CONFIRMED → COMPLETED, CANCELLED from pending/confirmed) with confirm-then-act dialogs
+* Toast feedback on login, logout and every status change
+* Loading, error (with retry), and empty states throughout
+
+## Notifications
+
+Every appointment event (created, confirmed, completed, cancelled) triggers a best-effort notification with a status-accurate message. The default `logger` transport writes deliveries to the server log; setting `EMAIL_PROVIDER=resend` plus `RESEND_API_KEY` and `EMAIL_FROM` enables real email with zero code changes. Every attempt is recorded in the `NotificationLog` table (SENT/FAILED), and a notification failure never fails the appointment itself.
+
+## Analytics
+
+Dashboard analytics computed server-side with Prisma aggregation — real database data only, never fake numbers:
+
+* Request trends (7/30/90-day ranges, Asia/Kolkata day buckets)
+* Status distribution (pending / confirmed / completed / cancelled)
+* Most-requested treatments (top 8, with a small-sample note when data is thin)
+* Status count cards for the whole table
+
+## Audit Trail
+
+Every appointment creation and status transition writes an `AppointmentActivity` row: what changed, from which status to which, by which administrator, and when. The dashboard's activity panel lists the newest entries.
+
+## Authentication
+
+* JWT bearer tokens (8 h expiry, HS256 pinned on verify, ≥32-char secret enforced at boot)
+* bcrypt (cost 12) password hashing; hashes never leave the database
+* Identical error for unknown email and wrong password (no user enumeration)
+* All admin data endpoints behind `requireAuth`; analytics, audit logs and patient data are never public
+
+## Database
+
+PostgreSQL via Prisma with a versioned migration history:
+
+| Model | Purpose |
+| --- | --- |
+| `Appointment` | Patient requests — contact, treatment, preferred date/time, status workflow; indexed on status, createdAt, email, preferredDate |
+| `AdminUser` | Clinic staff accounts (bcrypt hashes, unique email) |
+| `NotificationLog` | One row per notification attempt (type, channel, SENT/FAILED) |
+| `AppointmentActivity` | Audit trail for creations and status transitions |
+
+## API
+
+Full reference in [docs/API.md](docs/API.md). Summary:
+
+| Method | Path | Auth |
+| --- | --- | --- |
+| POST | `/api/auth/login` | Public (rate-limited) |
+| POST | `/api/appointments` | Public (rate-limited) |
+| GET | `/api/appointments` (paginated, filterable) | Admin |
+| GET | `/api/appointments/stats` | Admin |
+| GET | `/api/appointments/trends` | Admin |
+| GET | `/api/appointments/treatments` | Admin |
+| GET | `/api/appointments/activity` | Admin |
+| GET | `/api/appointments/:id` | Admin |
+| PATCH | `/api/appointments/:id/status` | Admin |
+| DELETE | `/api/appointments/:id` | Admin |
+| GET | `/api/health` | Public |
 
 ## Current Routes
 
@@ -145,12 +257,15 @@ npm run dev
 
 Then open http://localhost:5173 and sign in at http://localhost:5173/admin/login with the seeded dev admin.
 
-**Tests** (backend, against the local database):
+**Tests** (39 total):
 
 ```bash
+npm test          # frontend: 8 Vitest unit/component tests (jsdom, no server needed)
 cd backend
-npm test
+npm test          # backend: 31 Vitest + supertest API tests (needs local PostgreSQL + backend/.env)
 ```
+
+Backend tests run against the local development database and clean up only the rows they create; CI (below) uses an ephemeral throwaway database instead.
 
 ### Environment variables
 
@@ -170,9 +285,24 @@ Backend (`backend/.env`, see `backend/.env.example`):
 ## Production Build
 
 ```bash
-npm run build
+npm run build          # frontend: tsc -b && vite build
 npm run preview
+
+cd backend
+npm run build          # backend: tsc → dist/
 ```
+
+## CI/CD
+
+GitHub Actions (`.github/workflows/`) runs on every push and PR to `main`:
+
+* **Frontend job** — `npm ci`, lint, typecheck + build, unit/component tests
+* **Backend job** — ephemeral PostgreSQL 16 service container, `prisma generate`, `prisma migrate deploy`, seed, build, all 31 API tests. CI-only credentials exist solely inside the throwaway container; no repository secrets are used.
+* **Scheduled build check** — weekly multi-Node (20/22) build verification to catch dependency drift
+
+## Screenshots
+
+Not committed yet. Run locally (`npm run dev`) or open the deployed URL to see the site; screenshots to be added once the production domain is live.
 
 ## Deployment
 
@@ -208,8 +338,17 @@ sakthi-dental-clinic/
 │   ├── src/              # config, controllers, middleware, routes, schemas, services, utils
 │   ├── tests/            # Vitest + supertest API suite
 │   └── .env.example      # Documented backend variables (real .env is git-ignored)
+├── .github/
+│   ├── workflows/        # ci.yml (push/PR) + build.yml (scheduled)
+│   ├── ISSUE_TEMPLATE/   # bug_report.md, feature_request.md
+│   └── pull_request_template.md
 ├── docs/
-│   └── API.md            # Full REST API reference
+│   ├── API.md            # Full REST API reference
+│   ├── AI_PROJECT_CONTEXT.md  # Canonical context for AI coding agents
+│   ├── PROJECT_PHASES.md      # Phase tracker
+│   ├── COMMIT_REFERENCE.md    # Per-commit purpose/changes/validation record
+│   ├── SECURITY_AUDIT.md      # Findings, fixes and accepted risks
+│   └── ROADMAP.md             # Completed work vs. unimplemented future items
 ├── public/               # Static assets, favicon, robots.txt, sitemap.xml, images
 ├── src/
 │   ├── components/
@@ -225,8 +364,9 @@ sakthi-dental-clinic/
 │   │   ├── faq/          # FAQItem, FAQSearch
 │   │   ├── gallery/      # GalleryGrid, GalleryImage, GalleryLightbox
 │   │   │   └── contact/      # ContactForm, ContactInfo, FloatingContactBar, LocationSection
-│   │   └── admin/        # AdminHeader, AdminSidebar, DashboardStats, AppointmentTable,
-│   │                     # AppointmentFilters, AppointmentDetails, StatusChip, RequireAdminAuth
+│   │   └── admin/        # AdminHeader, AdminSidebar, DashboardStats, AnalyticsPanel, ActivityFeed,
+│   │                     # AppointmentTable, AppointmentFilters, AppointmentDetails, StatusChip,
+│   │                     # Toast, RequireAdminAuth
 │   ├── data/             # treatments, doctors, testimonials, faqs, facilities (typed data)
 │   ├── lib/              # constants, utils, api client, auth token handling
 │   ├── pages/            # …, AdminLogin, AdminDashboard
@@ -239,11 +379,28 @@ sakthi-dental-clinic/
 
 All clinic content (treatments, doctors, testimonials, FAQs, facilities, contact details) lives in typed files under `src/data/` and `src/lib/constants.ts`, so text can be updated without touching components.
 
+## Project Phases
+
+| Phase | Scope | Status |
+| --- | --- | --- |
+| 1 | Public responsive website | Complete |
+| 2 | Interactive UX (search, filters, modals, gallery, floating contact) | Complete |
+| 3 | SEO, accessibility, performance, deployment prep | Complete |
+| 4 | Full-stack appointment management (API, PostgreSQL, admin auth + dashboard) | Complete |
+| 5 | Notifications, analytics, audit trail, admin UX | Complete |
+| 6 | Testing, CI/CD, security audit, GitHub polish | Complete |
+
+Details: [docs/PROJECT_PHASES.md](docs/PROJECT_PHASES.md) · per-commit record: [docs/COMMIT_REFERENCE.md](docs/COMMIT_REFERENCE.md) · future work: [docs/ROADMAP.md](docs/ROADMAP.md) · security posture: [docs/SECURITY_AUDIT.md](docs/SECURITY_AUDIT.md)
+
+## Development Note
+
+AI-assisted development tools were used during implementation, with project architecture, requirements, testing and final integration reviewed as part of the development workflow. Commits are authored by the repository owner; see `docs/AI_PROJECT_CONTEXT.md` for the maintenance rules future contributors (human or AI) are expected to follow.
+
 ## GitHub
 
-Repository: https://github.com/<YOUR_GITHUB_USERNAME>/sakthi-dental-clinic
+Repository: https://github.com/deepak251817-collab/sakthi-dental-clinic
 
-Suggested topics: `react` `vite` `typescript` `tailwindcss` `healthcare` `dental-clinic` `frontend` `responsive-design` `shadowfox` `website`
+Topics: `react` `typescript` `vite` `tailwindcss` `nodejs` `express` `postgresql` `prisma` `healthcare` `dental-clinic` `appointment-system` `full-stack` `responsive-design` `shadowfox` `frontend` `backend`
 
 ## Client
 

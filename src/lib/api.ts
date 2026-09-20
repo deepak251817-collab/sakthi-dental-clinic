@@ -240,3 +240,17 @@ export function fetchTopTreatments(
     headers: authHeader(token),
   })
 }
+
+export interface ActivityEntry {
+  id: string
+  action: 'REQUEST_CREATED' | 'STATUS_CHANGED' | 'APPOINTMENT_DELETED'
+  actorName: string | null
+  previousStatus: AppointmentStatus | null
+  newStatus: AppointmentStatus | null
+  createdAt: string
+  appointment: { id: string; name: string; phone: string }
+}
+
+export function fetchActivity(token: string): Promise<ActivityEntry[]> {
+  return request<ActivityEntry[]>('/appointments/activity', { headers: authHeader(token) })
+}

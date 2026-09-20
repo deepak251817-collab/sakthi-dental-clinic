@@ -86,6 +86,36 @@ Give clinic administrators a live view of appointment demand — requests over t
 
 Administrators can see demand patterns at a glance without exporting or counting rows manually. Charts degrade gracefully: empty periods say so in words, and every chart has a text equivalent for screen readers.
 
+## feat: add appointment activity audit trail
+
+Date:
+2026-09-20
+
+Phase:
+Phase 5
+
+### Purpose
+
+Give the clinic a verifiable record of every appointment lifecycle event — creation, status changes and deletions — with the responsible administrator, so disputed changes can be traced.
+
+### Changes
+
+* Added `AppointmentActivity` model (action, actor, previous/new status) with a migration
+* Activity rows are written in the same transaction as the change they describe, so the trail cannot drift from reality
+* Delete writes its `APPOINTMENT_DELETED` entry inside the deleting transaction before cascade cleanup
+* Added authenticated `GET /api/appointments/activity` endpoint (declared before `/:id`)
+* Status-change and delete handlers now pass the authenticated admin as the audit actor
+* Added `ActivityFeed` dashboard component and activity fetcher to the API client
+
+### Validation
+
+* Backend build + **31/31 tests** (3 new: endpoint auth, REQUEST_CREATED recording, STATUS_CHANGED actor/statuses)
+* Frontend `tsc -b`, lint and production build clean
+
+### Impact
+
+Administrators get an accountable history of who changed what and when, directly in the dashboard sidebar. Patients are unaffected; the trail is internal and never exposed publicly.
+
 ## feat: add appointment notification logs
 
 Date: 2026-09-20 · Phase: 5

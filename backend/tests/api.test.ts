@@ -324,3 +324,46 @@ describe('Appointment analytics (auth required)', () => {
     )
   })
 })
+
+describe('Appointment activity audit trail', () => {
+  it('blocks the activity endpoint without a token', async () => {
+    const res = await request(app).get('/api/appointments/activity')
+    expect(res.status).toBe(401)
+  })
+
+  it('records REQUEST_CREATED when a patient submits a request', async () => {
+    await createTestAppointment()
+    const res = await request(app)
+      .get('/api/appointments/activity')
+      .set('Authorization', `Bearer ${token}`)
+    expect(res.status).toBe(200)
+    expect(Array.isArray(res.body.data)).toBe(true)
+    const created = res.body.data.find(
+      (entry: { appointment: { name: string }; action: string }) =>
+        entry.action === 'REQUEST_CREATED' && entry.appointment.name === validAppointment.name,
+    )
+    expect(created).toBeTruthy()
+  })
+
+  it('records STATUS_CHANGED with actor and both statuses', async () => {
+    const id = await createTestAppointment()
+    const patch = await request(app)
+      .patch(`/api/appointments/${id}/status`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({ status: 'CONFIRMED' })
+    expect(patch.status).toBe(200)
+
+    const res = await request(app)
+      .get('/api/appointments/activity')
+      .set('Authorization', `Bearer ${token}`)
+    expect(res.status).toBe(200)
+    const entry = res.body.data.find(
+      (e: { appointment: { id: string }; action: string }) =>
+        e.action === 'STATUS_CHANGED' && e.appointment.id === id,
+    )
+    expect(entry).toBeTruthy()
+    expect(entry.previousStatus).toBe('PENDING')
+    expect(entry.newStatus).toBe('CONFIRMED')
+    expect(entry.actorName).toBeTruthy()
+  })
+})

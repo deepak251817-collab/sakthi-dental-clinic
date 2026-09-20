@@ -35,18 +35,30 @@ const LIST_SELECT = {
 } as const
 
 export async function createAppointment(input: CreateAppointmentInput) {
-  const appointment = await prisma.appointment.create({
-    data: {
-      name: input.name,
-      phone: input.phone,
-      email: input.email,
-      preferredDate: input.preferredDate ? new Date(`${input.preferredDate}T00:00:00Z`) : null,
-      preferredTime: input.preferredTime ?? null,
-      treatment: input.treatment ?? null,
-      message: input.message ?? null,
-      status: 'PENDING',
-    },
-    select: { id: true, status: true, createdAt: true },
+  // The audit row is written in the same transaction as the request, so the
+  // activity trail cannot drift from what actually happened.
+  const appointment = await prisma.$transaction(async (tx) => {
+    const created = await tx.appointment.create({
+      data: {
+        name: input.name,
+        phone: input.phone,
+        email: input.email,
+        preferredDate: input.preferredDate ? new Date(`${input.preferredDate}T00:00:00Z`) : null,
+        preferredTime: input.preferredTime ?? null,
+        treatment: input.treatment ?? null,
+        message: input.message ?? null,
+        status: 'PENDING',
+      },
+      select: { id: true, status: true, createdAt: true },
+    })
+    await tx.appointmentActivity.create({
+      data: {
+        appointmentId: created.id,
+        action: 'REQUEST_CREATED',
+        newStatus: 'PENDING',
+      },
+    })
+    return created
   })
 
   // Best-effort notifications fire after the record is safely stored; they are
@@ -122,7 +134,11 @@ const EVENT_BY_NEW_STATUS: Partial<Record<AppointmentStatus, NotificationEventTy
   COMPLETED: 'APPOINTMENT_COMPLETED',
 }
 
-export async function updateAppointmentStatus(id: string, status: AppointmentStatus) {
+export async function updateAppointmentStatus(
+  id: string,
+  status: AppointmentStatus,
+  actor?: { id: string; name: string },
+) {
   const existing = await prisma.appointment.findUnique({
     where: { id },
     select: { id: true, status: true },
@@ -141,10 +157,24 @@ export async function updateAppointmentStatus(id: string, status: AppointmentSta
     )
   }
 
-  const appointment = await prisma.appointment.update({
-    where: { id },
-    data: { status },
-    select: LIST_SELECT,
+  // Status change and its audit row commit together or not at all.
+  const appointment = await prisma.$transaction(async (tx) => {
+    const updated = await tx.appointment.update({
+      where: { id },
+      data: { status },
+      select: LIST_SELECT,
+    })
+    await tx.appointmentActivity.create({
+      data: {
+        appointmentId: id,
+        adminId: actor?.id,
+        actorName: actor?.name,
+        action: 'STATUS_CHANGED',
+        previousStatus: existing.status,
+        newStatus: status,
+      },
+    })
+    return updated
   })
 
   const event = EVENT_BY_NEW_STATUS[status]
@@ -182,13 +212,56 @@ export async function getAppointmentStats() {
   return { total, ...counts }
 }
 
-export async function deleteAppointment(id: string) {
+export async function deleteAppointment(
+  id: string,
+  actor?: { id: string; name: string },
+) {
   const existing = await prisma.appointment.findUnique({
     where: { id },
-    select: { id: true },
+    select: { id: true, status: true },
   })
   if (!existing) {
     throwApiError(404, 'Appointment not found')
   }
-  await prisma.appointment.delete({ where: { id } })
+  // The DELETED activity row is written inside the same transaction that
+  // removes the appointment, then cascades away with it — giving the trail a
+  // final entry without leaving orphaned history behind.
+  await prisma.$transaction(async (tx) => {
+    await tx.appointmentActivity.create({
+      data: {
+        appointmentId: id,
+        adminId: actor?.id,
+        actorName: actor?.name,
+        action: 'APPOINTMENT_DELETED',
+        previousStatus: existing.status,
+      },
+    })
+    await tx.appointment.delete({ where: { id } })
+  })
+}
+
+export interface ActivityEntry {
+  id: string
+  action: 'REQUEST_CREATED' | 'STATUS_CHANGED' | 'APPOINTMENT_DELETED'
+  actorName: string | null
+  previousStatus: AppointmentStatus | null
+  newStatus: AppointmentStatus | null
+  createdAt: Date
+  appointment: { id: string; name: string; phone: string }
+}
+
+export async function listActivity(limit = 50): Promise<ActivityEntry[]> {
+  return prisma.appointmentActivity.findMany({
+    orderBy: { createdAt: 'desc' },
+    take: limit,
+    select: {
+      id: true,
+      action: true,
+      actorName: true,
+      previousStatus: true,
+      newStatus: true,
+      createdAt: true,
+      appointment: { select: { id: true, name: true, phone: true } },
+    },
+  })
 }

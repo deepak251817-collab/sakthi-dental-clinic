@@ -30,6 +30,7 @@ model Appointment {
   updatedAt     DateTime          @updatedAt @map("updated_at")
 
   notifications NotificationLog[]
+  activities    AppointmentActivity[]
 
   @@index([status])
   @@index([createdAt])
@@ -47,6 +48,8 @@ model AdminUser {
   passwordHash String   @map("password_hash")
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")
+
+  activities AppointmentActivity[]
 
   @@map("admin_users")
 }
@@ -85,4 +88,33 @@ model NotificationLog {
   @@index([appointmentId])
   @@index([createdAt])
   @@map("notification_logs")
+}
+
+enum ActivityAction {
+  REQUEST_CREATED
+  STATUS_CHANGED
+  APPOINTMENT_DELETED
+}
+
+/// Audit trail for appointment lifecycle events. Written in the same
+/// transaction as the change it describes, so the trail cannot drift from
+/// reality. Activity rows cascade on delete — once an appointment is removed,
+/// its history is removed with it (the DELETED row itself is written first,
+/// inside the deleting transaction).
+model AppointmentActivity {
+  id             String             @id @default(cuid())
+  appointmentId  String             @map("appointment_id")
+  adminId        String?            @map("admin_id")
+  actorName      String?            @map("actor_name")
+  action         ActivityAction
+  previousStatus AppointmentStatus? @map("previous_status")
+  newStatus      AppointmentStatus? @map("new_status")
+  createdAt      DateTime           @default(now()) @map("created_at")
+
+  appointment Appointment @relation(fields: [appointmentId], references: [id], onDelete: Cascade)
+  admin       AdminUser?  @relation(fields: [adminId], references: [id], onDelete: SetNull)
+
+  @@index([appointmentId])
+  @@index([createdAt])
+  @@map("appointment_activities")
 }

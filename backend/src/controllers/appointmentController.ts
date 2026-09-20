@@ -8,6 +8,7 @@ import {
   getAppointmentStats,
   updateAppointmentStatus,
   deleteAppointment,
+  listActivity,
 } from '../services/appointmentService'
 import type {
   CreateAppointmentInput,
@@ -56,7 +57,7 @@ export const getAppointmentHandler = asyncHandler(
 export const updateStatusHandler = asyncHandler(
   async (req: Request, res: Response) => {
     const { status } = req.body as { status: AppointmentStatus }
-    const appointment = await updateAppointmentStatus(req.params.id, status)
+    const appointment = await updateAppointmentStatus(req.params.id, status, req.admin)
     res.json({ success: true, message: `Status updated to ${status}`, data: appointment })
   },
 )
@@ -64,7 +65,15 @@ export const updateStatusHandler = asyncHandler(
 /** DELETE /api/appointments/:id — admin only. Permanently removes the record. */
 export const deleteAppointmentHandler = asyncHandler(
   async (req: Request, res: Response) => {
-    await deleteAppointment(req.params.id)
+    await deleteAppointment(req.params.id, req.admin)
     res.json({ success: true, message: 'Appointment deleted', data: null })
+  },
+)
+
+/** GET /api/appointments/activity — admin only. Recent audit-trail entries. */
+export const getActivityHandler = asyncHandler(
+  async (_req: Request, res: Response) => {
+    const activity = await listActivity()
+    res.json({ success: true, message: 'Activity fetched', data: activity })
   },
 )

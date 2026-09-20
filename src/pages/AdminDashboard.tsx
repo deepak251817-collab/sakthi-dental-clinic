@@ -5,6 +5,7 @@ import AdminSidebar from '../components/admin/AdminSidebar'
 import AdminHeader from '../components/admin/AdminHeader'
 import DashboardStats from '../components/admin/DashboardStats'
 import AnalyticsPanel from '../components/admin/AnalyticsPanel'
+import ActivityFeed from '../components/admin/ActivityFeed'
 import AppointmentFilters from '../components/admin/AppointmentFilters'
 import AppointmentTable from '../components/admin/AppointmentTable'
 import AppointmentDetails from '../components/admin/AppointmentDetails'
@@ -12,6 +13,7 @@ import Modal from '../components/common/Modal'
 import {
   ApiError,
   deleteAppointment,
+  fetchActivity,
   fetchAppointmentStats,
   fetchAppointments,
   updateAppointmentStatus,
@@ -19,6 +21,7 @@ import {
   type AppointmentRecord,
   type AppointmentStats,
   type AppointmentStatus,
+  type ActivityEntry,
 } from '../lib/api'
 import { clearSession, getAdminEmail, getToken } from '../lib/auth'
 
@@ -34,6 +37,7 @@ export default function AdminDashboard() {
 
   const [list, setList] = useState<AppointmentListResult | null>(null)
   const [stats, setStats] = useState<AppointmentStats | null>(null)
+  const [activity, setActivity] = useState<ActivityEntry[] | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [actionError, setActionError] = useState<string | null>(null)
@@ -71,7 +75,7 @@ export default function AdminDashboard() {
     setLoading(true)
     setError(null)
     try {
-      const [listResult, statsResult] = await Promise.all([
+      const [listResult, statsResult, activityResult] = await Promise.all([
         fetchAppointments(token, {
           page,
           status: statusFilter || undefined,
@@ -80,9 +84,11 @@ export default function AdminDashboard() {
           toDate: toDate || undefined,
         }),
         fetchAppointmentStats(token),
+        fetchActivity(token),
       ])
       setList(listResult)
       setStats(statsResult)
+      setActivity(activityResult)
     } catch (err) {
       if (err instanceof ApiError && err.status === 401) {
         handleAuthFailure()
@@ -183,7 +189,10 @@ export default function AdminDashboard() {
         <AnalyticsPanel stats={stats} onAuthFailure={handleAuthFailure} />
 
         <div className="flex flex-col gap-4 lg:flex-row">
-          <AdminSidebar />
+          <div className="space-y-4 lg:w-60 lg:shrink-0">
+            <AdminSidebar />
+            <ActivityFeed entries={activity} loading={loading} />
+          </div>
           <div className="min-w-0 flex-1 space-y-4">
             <h2 className="sr-only">Appointment requests</h2>
             <AppointmentFilters

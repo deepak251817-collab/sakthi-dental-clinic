@@ -275,3 +275,52 @@ describe('Appointment admin endpoints (auth required)', () => {
     expect(get.status).toBe(404)
   })
 })
+
+describe('Appointment analytics (auth required)', () => {
+  it('blocks trends and treatment analytics without a token', async () => {
+    for (const path of ['/api/appointments/analytics/trends', '/api/appointments/analytics/treatments']) {
+      const res = await request(app).get(path)
+      expect(res.status).toBe(401)
+    }
+  })
+
+  it('rejects an unsupported days value', async () => {
+    const res = await request(app)
+      .get('/api/appointments/analytics/trends?days=5')
+      .set('Authorization', `Bearer ${token}`)
+    expect(res.status).toBe(400)
+  })
+
+  it('returns daily trend buckets covering the requested window', async () => {
+    await createTestAppointment()
+    const res = await request(app)
+      .get('/api/appointments/analytics/trends?days=7')
+      .set('Authorization', `Bearer ${token}`)
+    expect(res.status).toBe(200)
+    expect(res.body.data).toHaveLength(7)
+    for (const point of res.body.data) {
+      expect(point.day).toMatch(/^\d{4}-\d{2}-\d{2}$/)
+      expect(typeof point.count).toBe('number')
+    }
+    // The bucket for today (IST) includes the appointments created by this run.
+    const todayIst = new Date(Date.now() + 5.5 * 3_600_000).toISOString().slice(0, 10)
+    const today = res.body.data.find((point: { day: string }) => point.day === todayIst)
+    expect(today.count).toBeGreaterThan(0)
+  })
+
+  it('returns top treatments including one just created, highest count first', async () => {
+    await createTestAppointment({ treatment: 'Teeth Whitening' })
+    const res = await request(app)
+      .get('/api/appointments/analytics/treatments?days=7')
+      .set('Authorization', `Bearer ${token}`)
+    expect(res.status).toBe(200)
+    expect(Array.isArray(res.body.data)).toBe(true)
+    const counts: number[] = res.body.data.map((row: { count: number }) => row.count)
+    for (let i = 1; i < counts.length; i++) {
+      expect(counts[i - 1]).toBeGreaterThanOrEqual(counts[i])
+    }
+    expect(res.body.data).toEqual(
+      expect.arrayContaining([expect.objectContaining({ treatment: 'Teeth Whitening' })]),
+    )
+  })
+})

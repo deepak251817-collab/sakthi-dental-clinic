@@ -88,3 +88,19 @@ export const listAppointmentsQuerySchema = z
   .strict()
 
 export type ListAppointmentsQuery = z.infer<typeof listAppointmentsQuerySchema>
+
+/** Analytics window (days back, today included). Kept to a small fixed set so
+ * responses stay cheap and cacheable for a small clinic's dashboard. */
+export const analyticsQuerySchema = z
+  .object({
+    days: z.coerce
+      .number()
+      .int()
+      .refine((value) => [1, 7, 30, 90].includes(value), {
+        message: 'days must be one of 1, 7, 30 or 90',
+      })
+      .default(30),
+  })
+  .strict()
+
+export type AnalyticsQuery = z.infer<typeof analyticsQuerySchema>

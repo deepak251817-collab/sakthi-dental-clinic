@@ -35,6 +35,25 @@ Who benefits and how.
 
 Entries are appended as work lands.
 
+## feat: add appointment dashboard analytics
+
+Date: 2026-09-20 · Phase: 5
+
+### Purpose
+Give the clinic real, database-backed analytics — appointment request trends and the most requested treatments — instead of guesswork, while keeping every query cheap enough for a small clinic's dashboard.
+
+### Changes
+- `backend/src/services/analyticsService.ts`: daily trend buckets computed in SQL (`date_trunc` in the clinic's Asia/Kolkata calendar, zero-filled in JS) and top-treatment aggregation (`GROUP BY` + `LIMIT`), both bounded to a validated 1/7/30/90-day window.
+- `GET /api/appointments/analytics/trends` and `GET /api/appointments/analytics/treatments` (admin-only, before `/:id` in the router); `analyticsQuerySchema` restricts `days` to the supported set.
+- Index on `appointments.preferred_date` (justified by the existing date-range list filter); migration `add_preferred_date_index` applied.
+- 4 new API tests: auth required, invalid `days` rejected, 7 buckets with today's IST bucket non-zero, top-treatments ordering.
+
+### Validation
+`tsc` build clean; backend suite 28/28.
+
+### Impact
+Administrators can see demand over time and which treatments patients actually ask for, with no per-row API calls and no fabricated numbers.
+
 ## feat: add appointment notification logs
 
 Date: 2026-09-20 · Phase: 5

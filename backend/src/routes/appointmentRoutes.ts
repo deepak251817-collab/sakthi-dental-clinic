@@ -7,11 +7,13 @@ import {
   updateStatusHandler,
   deleteAppointmentHandler,
 } from '../controllers/appointmentController'
+import { getTrendsHandler, getTopTreatmentsHandler } from '../controllers/analyticsController'
 import { validateBody, validateQuery } from '../middleware/validationMiddleware'
 import {
   createAppointmentSchema,
   updateAppointmentStatusSchema,
   listAppointmentsQuerySchema,
+  analyticsQuerySchema,
 } from '../schemas/appointmentSchema'
 import { requireAuth } from '../middleware/authMiddleware'
 import { appointmentLimiter } from '../middleware/rateLimitMiddleware'
@@ -26,6 +28,8 @@ router.use(requireAuth)
 router.get('/', validateQuery(listAppointmentsQuerySchema), listAppointmentsHandler)
 // Declared before /:id so 'stats' is not captured as an id parameter.
 router.get('/stats', getAppointmentStatsHandler)
+router.get('/analytics/trends', validateQuery(analyticsQuerySchema), getTrendsHandler)
+router.get('/analytics/treatments', validateQuery(analyticsQuerySchema), getTopTreatmentsHandler)
 router.get('/:id', getAppointmentHandler)
 router.patch('/:id/status', validateBody(updateAppointmentStatusSchema), updateStatusHandler)
 router.delete('/:id', deleteAppointmentHandler)

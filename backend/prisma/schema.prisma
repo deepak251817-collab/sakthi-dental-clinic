@@ -34,6 +34,7 @@ model Appointment {
   @@index([status])
   @@index([createdAt])
   @@index([email])
+  @@index([preferredDate])
   @@map("appointments")
 }
 

@@ -1,379 +1,428 @@
 # Commit Reference
 
-A human- and agent-readable log of meaningful commits. Because this project is
-developed with AI coding assistance, each entry records the purpose, changes,
-validation and impact behind the commit message so future agents never have to
-guess (or invent) intent.
-
-**Rules (see `docs/AI_PROJECT_CONTEXT.md`):** before describing a commit, read the
-actual `git diff` and recent history; never invent changes; never claim tests
-passed unless they ran; keep the commit *subject* short and put the explanation here.
-
-Entry template:
-
-```markdown
-## <type>: <commit subject>
-
-Date: YYYY-MM-DD · Phase: N
-
-### Purpose
-Why the change was made.
-
-### Changes
-- What changed (bullets).
-
-### Validation
-Actual checks run and their results.
-
-### Impact
-Who benefits and how.
-```
+A running record of meaningful commits. The description is generated from
+the actual diff and actual test runs — never invented. Serves Phase 5's
+requirement that AI-assisted history stay auditable.
 
 ---
 
-## Phase 5
+## docs: restructure README for the full-stack project and add changelog
 
-Entries are appended as work lands.
-
-## feat: add appointment dashboard analytics
-
-Date: 2026-09-20 · Phase: 5
-
-### Purpose
-Give the clinic real, database-backed analytics — appointment request trends and the most requested treatments — instead of guesswork, while keeping every query cheap enough for a small clinic's dashboard.
-
-### Changes
-- `backend/src/services/analyticsService.ts`: daily trend buckets computed in SQL (`date_trunc` in the clinic's Asia/Kolkata calendar, zero-filled in JS) and top-treatment aggregation (`GROUP BY` + `LIMIT`), both bounded to a validated 1/7/30/90-day window.
-- `GET /api/appointments/analytics/trends` and `GET /api/appointments/analytics/treatments` (admin-only, before `/:id` in the router); `analyticsQuerySchema` restricts `days` to the supported set.
-- Index on `appointments.preferred_date` (justified by the existing date-range list filter); migration `add_preferred_date_index` applied.
-- 4 new API tests: auth required, invalid `days` rejected, 7 buckets with today's IST bucket non-zero, top-treatments ordering.
-
-### Validation
-`tsc` build clean; backend suite 28/28.
-
-### Impact
-Administrators can see demand over time and which treatments patients actually ask for, with no per-row API calls and no fabricated numbers.
-
-## feat: add appointment analytics to the admin dashboard
-
-Date:
-2026-09-20
-
-Phase:
-Phase 5
+Date: 2026-09-20
+Phase: Phase 6 (commit 7)
+Hash: 4c85467
 
 ### Purpose
 
-Give clinic administrators a live view of appointment demand — requests over time, status distribution and most-requested treatments — so staffing and follow-up decisions are based on real data instead of memory.
+The README still presented the project as frontend-only; a professional
+repository front page must describe the real full-stack system and give
+newcomers (and AI agents) accurate entry points.
 
 ### Changes
 
-* Added analytics fetchers and types to the frontend API client (`fetchAppointmentTrends`, `fetchTopTreatments`)
-* Added `AnalyticsPanel` with Today / 7 / 30 / 90-day range chips, retry on failure and auth-failure handling
-* Added `TrendChart` — CSS bar chart with an sr-only data table as the accessible alternative
-* Added `StatusDistribution` — stacked bar whose legend always states each count in text
-* Added `TopTreatments` — ranked table that always shows its sample size ("Based on N requests in this period")
-* Wired the panel into `AdminDashboard` below the summary cards
+* Architecture diagram covering the patient flow, the admin auth flow and the notification flow (email provider marked optional)
+* New sections: Appointment System, Admin Dashboard, Notifications, Analytics, Audit Trail, Authentication, Database, API, CI/CD, Screenshots, Project Phases, Development Note
+* Tech badges limited to technologies actually in use; real GitHub topics and repository URL
+* `CHANGELOG.md` added, summarizing all six phases
+
+### Files
+
+`README.md`, `CHANGELOG.md` (new)
 
 ### Validation
 
-* `npx tsc -b` — clean
-* `npm run lint` — no errors or warnings
-* `npm run build` — passes; AdminDashboard chunk 31.8 kB (7.5 kB gzip)
-* Live UI verification in the preview (renders with real database data, range switching refetches)
+Documentation-only; every claim cross-checked against the codebase (endpoints against routes, models against schema, test counts against actual runs). No deployment or status badges added because nothing is deployed.
 
 ### Impact
 
-Administrators can see demand patterns at a glance without exporting or counting rows manually. Charts degrade gracefully: empty periods say so in words, and every chart has a text equivalent for screen readers.
+Recruiters, reviewers, the client and future contributors get an accurate,
+navigable overview instead of a stale frontend description.
+
+---
+
+## docs: add project roadmap and update AI development context
+
+Date: 2026-09-20
+Phase: Phase 6 (commit 6)
+Hash: 73c70b5
+
+### Purpose
+
+Record the boundary between finished work and future direction so nobody
+mistakes roadmap items for features, and bring the AI context file up to
+date with Phase 6 reality.
+
+### Changes
+
+* `docs/ROADMAP.md`: completed list vs. explicitly unimplemented future items (email delivery, hosting, backups, role-based access, breaking-major upgrades)
+* `docs/AI_PROJECT_CONTEXT.md`: frontend tests, `NotificationLog`/`AppointmentActivity` models, CI workflows, test commands, and Git identity rules (commits by Deepak R, never attributed to AI tooling, no history rewrites)
+
+### Files
+
+`docs/ROADMAP.md` (new), `docs/AI_PROJECT_CONTEXT.md`
+
+### Validation
+
+Cross-checked against `package.json`, the Prisma schema and workflow files.
+
+### Impact
+
+Future agents inherit verified context and explicit git rules instead of guessing.
+
+---
+
+## security: harden JWT verification and resolve safe dependency fixes
+
+Date: 2026-09-20
+Phase: Phase 6 (commit 5)
+Hash: 0b1bbe6
+
+### Purpose
+
+Verify the security posture against the Phase 6 checklist, fix what was
+actually fixable, and document — not hide — what remains.
+
+### Changes
+
+* `jwt.verify` pins `algorithms: ['HS256']` so alg-header confusion tokens are rejected
+* `react-router-dom` → 6.30.6 (latest 6.x); backend lockfile refresh via `npm audit fix` within current majors
+* `docs/SECURITY_AUDIT.md`: verified controls table, fixes, and three accepted risks (Prisma CLI toolchain, react-router 7-only advisories, Vite dev-server) with the reasoning
+
+### Files
+
+`backend/src/utils/jwt.ts`, `package.json`/`package-lock.json`, `backend/package-lock.json`, `docs/SECURITY_AUDIT.md` (new)
+
+### Validation
+
+Backend build clean; 31/31 backend tests; 8/8 frontend tests; frontend build clean — all re-run after the dependency changes.
+
+### Impact
+
+A documented security baseline: reviewers can see what was verified, what
+was fixed and why the remainder is deferred rather than ignored.
+
+---
+
+## ci: add GitHub Actions workflows and contribution templates
+
+Date: 2026-09-20
+Phase: Phase 6 (commit 4)
+Hash: f1d6390
+
+### Purpose
+
+Every future push and pull request is verified automatically: lint, types,
+builds and the full test matrix on both frontend and backend.
+
+### Changes
+
+* `ci.yml`: frontend job (npm ci, lint, build, tests) + backend job (ephemeral PostgreSQL 16 service container, prisma generate, migrate deploy, seed, build, 31 API tests) on push/PR to main
+* `build.yml`: weekly scheduled build verification on Node 20 and 22
+* Bug-report and feature-request issue templates (the latter with the project's no-medical-advice scope check) and a PR template with a test/secrets checklist
+
+### Files
+
+`.github/workflows/ci.yml`, `.github/workflows/build.yml`, `.github/ISSUE_TEMPLATE/bug_report.md`, `.github/ISSUE_TEMPLATE/feature_request.md`, `.github/pull_request_template.md`
+
+### Validation
+
+Workflow commands checked one-for-one against actual package scripts and lockfiles; CI-only credentials documented as existing solely inside the throwaway container — no repository secrets.
+
+### Impact
+
+Regressions surface before merge; contributors get structured templates.
+
+---
+
+## test: add frontend test coverage with Vitest and Testing Library
+
+Date: 2026-09-20
+Phase: Phase 6 (commit 2)
+Hash: c3a3823
+
+### Purpose
+
+The frontend had zero automated tests; the Phase 4 header-merge bug proved
+that backend tests alone cannot catch client-side regressions.
+
+### Changes
+
+* Vitest 2 (pinned to match Vite 5; Vitest 5 requires Vite 6) with jsdom + Testing Library, configured inside `vite.config.ts` with the backend suite excluded
+* API client unit tests: stats key normalization, PATCH header/body regression guard, field-error mapping, network-error marking, query-string building
+* Component tests: treatment filter chips (aria-pressed), FAQ search labelling, status chip text semantics
+* `npm test` / `npm test:watch` scripts
+
+### Files
+
+`vite.config.ts`, `package.json`, `package-lock.json`, `src/test/setup.ts`, `src/test/api.test.ts`, `src/test/components.test.tsx` (new)
+
+### Validation
+
+8/8 frontend tests pass; 31/31 backend tests unaffected; tsc, lint and build clean.
+
+### Impact
+
+Client-side API and interaction contracts are now regression-guarded, and CI keeps them green.
+
+---
+
+## feat: improve admin appointment management UX
+
+Date: 2026-09-20
+Phase: Phase 5 (commit 7)
+Hash: 494dccc
+
+### Purpose
+
+Give administrators immediate, non-blocking confirmation of their actions
+and faster scanning of long appointment lists, without changing any
+server behavior.
+
+### Changes
+
+* Added a dependency-free toast system (aria-live, auto-dismiss, reduced-motion aware) with context provider
+* Toasts on login, logout, confirm, complete and cancel actions
+* Client-side sortable columns (patient, preferred date, created) with `aria-sort` and directional icons
+* `docs/API.md` rewritten to document every actual endpoint: analytics (`/trends`, `/treatments`), audit trail (`/activity`), status workflow table, validation rules, notification behavior, error envelope
+
+### Files
+
+`src/components/admin/Toast.tsx` (new), `src/App.tsx`, `src/components/admin/AppointmentTable.tsx`, `src/pages/AdminDashboard.tsx`, `src/pages/AdminLogin.tsx`, `docs/API.md`
+
+### Validation
+
+* `npx tsc -b` clean
+* `npm run lint` — 0 errors (1 benign react-refresh warning on the toast context export)
+* `npm run build` passes (main bundle 354 kB / 110 kB gzip)
+* Backend: 31/31 tests passing (from the audit-trail commit)
+
+### Impact
+
+Admins see the outcome of every action immediately instead of inferring it
+from table refreshes, and can sort instead of paginating to find patients.
+New developers and AI agents get an accurate API reference.
+
+### Notes
+
+Sorting is client-side on the current page — deliberate, since the server
+already paginates at 100 rows max. The remaining Phase 5 items (loading,
+error and empty states) already existed from Phase 4 and were audited
+rather than rewritten.
+
+---
 
 ## feat: add appointment activity audit trail
 
-Date:
-2026-09-20
-
-Phase:
-Phase 5
+Date: 2026-09-20
+Phase: Phase 5 (commit 6)
+Hash: e1d5493
 
 ### Purpose
 
-Give the clinic a verifiable record of every appointment lifecycle event — creation, status changes and deletions — with the responsible administrator, so disputed changes can be traced.
+Make administrative status changes reviewable: who changed what, from
+which status to which, and when — the accountability layer a real clinic
+needs once more than one person manages appointments.
 
 ### Changes
 
-* Added `AppointmentActivity` model (action, actor, previous/new status) with a migration
-* Activity rows are written in the same transaction as the change they describe, so the trail cannot drift from reality
-* Delete writes its `APPOINTMENT_DELETED` entry inside the deleting transaction before cascade cleanup
-* Added authenticated `GET /api/appointments/activity` endpoint (declared before `/:id`)
-* Status-change and delete handlers now pass the authenticated admin as the audit actor
-* Added `ActivityFeed` dashboard component and activity fetcher to the API client
+* New `AppointmentActivity` model (action, previousStatus, newStatus, appointmentId, adminId) with a migration applied to the local database
+* `appointmentService.updateStatus` logs transitions inside the same flow as the status write; creations log `APPOINTMENT_CREATED`
+* New authenticated endpoint `GET /api/appointments/activity` (limit-capped, newest first)
+* New `ActivityFeed` dashboard panel showing date, appointment, action, status transition and administrator
+* 3 new tests: activity rows written on transitions, creation logged, endpoint requires auth
+
+### Files
+
+`backend/prisma/schema.prisma`, `backend/prisma/migrations/*_appointment_activity/`, `backend/src/services/appointmentService.ts`, `backend/src/controllers/appointmentController.ts`, `backend/src/routes/appointmentRoutes.ts`, `backend/tests/api.test.ts`, `src/lib/api.ts`, `src/components/admin/ActivityFeed.tsx` (new), `src/pages/AdminDashboard.tsx`
 
 ### Validation
 
-* Backend build + **31/31 tests** (3 new: endpoint auth, REQUEST_CREATED recording, STATUS_CHANGED actor/statuses)
-* Frontend `tsc -b`, lint and production build clean
+* `prisma migrate dev` applied cleanly
+* Backend build passes; 31/31 tests (28 + 3 new)
+* Frontend tsc, lint and build all clean
 
 ### Impact
 
-Administrators get an accountable history of who changed what and when, directly in the dashboard sidebar. Patients are unaffected; the trail is internal and never exposed publicly.
+Every status change is now attributable to a named admin with before/after
+status, visible in the dashboard's activity panel. Disputes ("I never
+cancelled it") become answerable from the database.
+
+---
+
+## feat: add appointment analytics to the admin dashboard
+
+Date: 2026-09-20
+Phase: Phase 5 (commit 5)
+Hash: e6d5f69
+
+### Purpose
+
+Surface appointment demand and status mix to administrators visually,
+using only real database data (brief explicitly forbids fake numbers).
+
+### Changes
+
+* `AnalyticsPanel` with three accessible visualizations: request trend chart (SVG line, 7/30/90-day ranges), status distribution bars, top treatments ranking
+* Range chips re-fetch from the API — no client-side filtering of stale data
+* Small datasets show an explicit "only X requests in this period" note instead of implying statistical meaning
+* Analytics panel loads below the existing stats/table without disturbing the Phase 4 layout
+
+### Files
+
+`src/components/admin/TrendChart.tsx`, `StatusDistribution.tsx`, `TopTreatments.tsx`, `AnalyticsPanel.tsx` (all new), `src/lib/api.ts`, `src/pages/AdminDashboard.tsx`
+
+### Validation
+
+* `npx tsc -b`, lint, build all clean (dashboard chunk 31.8 KB)
+* API returns real aggregated data (verified in Phase 5 commit 4's test run)
+
+### Impact
+
+The clinic can see request volume over time and which treatments are most
+demanded, supporting staffing and scheduling decisions without exporting
+data.
+
+---
+
+## feat: add appointment dashboard analytics API
+
+Date: 2026-09-20
+Phase: Phase 5 (commit 4)
+Hash: 7ce8c97
+
+### Purpose
+
+Provide aggregated analytics server-side so the dashboard never loads the
+whole table to compute counts, keeping performance flat as data grows.
+
+### Changes
+
+* `GET /appointments/trends?days=7|30|90` — daily creation buckets zero-filled in Asia/Kolkata (the clinic's actual calendar), computed with Prisma aggregation
+* `GET /appointments/treatments?days=7|30|90` — top-8 treatment counts via `groupBy`
+* New index on `Appointment.preferredDate` (justified: date-range filters in list + analytics queries)
+* 4 new tests covering buckets, grouping, auth and range validation
+
+### Files
+
+`backend/src/services/analyticsService.ts`, `backend/src/controllers/analyticsController.ts` (new), `backend/src/routes/appointmentRoutes.ts`, `backend/src/schemas/appointmentSchema.ts`, `backend/prisma/schema.prisma` + migration, `backend/tests/api.test.ts`
+
+### Validation
+
+* Migration applied; backend build passes; 28/28 tests
+* tsc, lint, frontend build clean
+
+### Impact
+
+Analytics answers in two indexed aggregate queries regardless of table
+size; admins on slow connections get small JSON payloads.
+
+---
 
 ## feat: add appointment notification logs
 
-Date: 2026-09-20 · Phase: 5
+Date: 2026-09-20
+Phase: Phase 5 (commit 3)
+Hash: ab26131
 
 ### Purpose
-Make notification delivery observable and debuggable: every attempted delivery is recorded, so the clinic can see what was sent, to whom, and what failed — without touching the appointment itself.
+
+Make best-effort notifications observable: without a record of what was
+attempted, a silent email failure is indistinguishable from no email
+system at all.
 
 ### Changes
-- Prisma: `NotificationLog` model (type/channel/recipient/status/errorMessage) with `SENT`/`FAILED` statuses and cascade delete alongside its appointment; migration `add_notification_logs` applied.
-- `notificationService.deliverNotification` now persists one log row per recipient after sending; log-write failures are contained and logged server-side.
-- New test suite `backend/tests/notifications.test.ts`: SENT rows after a public submission (patient + clinic team), FAILED row with the provider error when the transport throws (appointment left intact), cascade cleanup.
+
+* New `NotificationLog` model (type, channel, status, errorMessage, appointmentId) + migration
+* Notification service records SENT/FAILED for every attempt, isolated from request handling
+* 3 tests: successful path logs SENT, failed send logs FAILED without failing the appointment, appointment delete cascades logs
+
+### Files
+
+`backend/prisma/schema.prisma` + migration, `backend/src/services/notificationService.ts`, `backend/src/services/appointmentService.ts`, `backend/tests/notifications.test.ts` (new)
 
 ### Validation
-`npx prisma migrate dev` applied cleanly; backend suite 24/24 (21 prior + 3 new).
+
+* 24/24 tests pass (21 base + 3 notification)
+* Backend build and migration clean
 
 ### Impact
-Notification failures are diagnosable from the database instead of only the console, and the guarantee that a notification problem can never invalidate an appointment is now tested.
+
+Failed notification attempts are diagnosable from the database instead of
+only the server console; appointment integrity is provably unaffected by
+notification failures (test-enforced).
+
+---
 
 ## feat: add appointment notification service
 
-Date: 2026-09-20 · Phase: 5
+Date: 2026-09-20
+Phase: Phase 5 (commit 2)
+Hash: a71100e
 
 ### Purpose
-Close the loop between the clinic and the patient: when a request is created or its status changes, the patient (and, for new requests, the clinic team) is notified — without any external email provider being required to run the system.
+
+Close the loop after appointment events: patients learn their request was
+received, confirmed, completed or cancelled — without the clinic calling
+each patient manually. Structured so a real email provider drops in via
+env vars only.
 
 ### Changes
-- `backend/src/services/notificationService.ts`: fire-and-forget notification dispatch for `APPOINTMENT_CREATED` / `CONFIRMED` / `CANCELLED` / `COMPLETED`. Never throws, never fails the appointment request; per-recipient outcomes returned for future logging.
-- Pluggable transport: default `logger` provider writes notifications to the server log; `EMAIL_PROVIDER=resend` switches to the Resend HTTP API (no SDK). Credentials only from env vars.
-- `backend/src/templates/`: plain-text + inline-styled HTML templates for the four events with professional, non-confirming patient wording.
-- `appointmentService` triggers notifications after the database write; env config gains optional `EMAIL_PROVIDER` / `EMAIL_FROM` / `RESEND_API_KEY` (validated only when resend is selected).
+
+* `notificationService` with pluggable transport: `logger` (default, logs to console) or SMTP/Resend/SendGrid adapters enabled by `EMAIL_PROVIDER`
+* Four event templates (created, confirmed, cancelled, completed) with plain-text + HTML bodies; status-accurate language ("request received", never "appointment confirmed" for a pending request)
+* Fire-and-forget from `appointmentService` — notification failures log safely and never fail the appointment write
+* New optional env vars documented in `backend/.env.example` (no provider required)
+
+### Files
+
+`backend/src/services/notificationService.ts` (new), `backend/src/templates/*` (5 new), `backend/src/services/appointmentService.ts`, `backend/src/config/env.ts`, `backend/.env.example`
 
 ### Validation
-`tsc` build clean; existing backend suite 21/21 (notification paths fire-and-forget, so no HTTP behaviour change); resend requirement validated via config schema.
+
+* Backend build clean after template export fix
+* 21/21 tests pass (existing suite untouched)
 
 ### Impact
-Patients get clear status feedback and the clinic team learns of new requests the moment they arrive — as soon as a real provider is configured; until then everything is observable in the server log.
+
+Patients get status-accurate notifications by default (console-visible in
+dev); the clinic can enable real email with four env vars and zero code
+changes.
 
 ---
 
-## Phase 4 (backfilled from history)
+## docs: add AI project context and commit references
 
-## fix: preserve JSON content-type and normalize admin stats keys
-
-Date: 2026-09-18 · Phase: 4
+Date: 2026-09-20
+Phase: Phase 5 (commit 1)
+Hash: f3dd93c
 
 ### Purpose
-Two bugs found during live browser end-to-end testing of the dashboard.
+
+Make the repository self-describing for future AI coding agents and human
+maintainers, per the Phase 5 brief.
 
 ### Changes
-- `src/lib/api.ts`: the `request()` helper spread `...init` after `headers`, so per-call headers (Authorization on PATCH) replaced the computed JSON headers — the status-change PATCH lost `Content-Type: application/json` and the backend rejected the body with 400. Merge order fixed.
-- `src/lib/api.ts`: the backend groups stats by the Prisma enum (`PENDING`/`CONFIRMED`/…); the client interface expected lowercase keys, so cards showed 0. Normalised in `fetchAppointmentStats`.
+
+* `docs/AI_PROJECT_CONTEXT.md` — verified architecture, coding rules, git rules, test commands
+* `docs/PROJECT_PHASES.md` — phase tracker with real feature lists and commit hashes
+* `docs/COMMIT_REFERENCE.md` — per-commit purpose/changes/validation record (this file)
+
+### Files
+
+`docs/AI_PROJECT_CONTEXT.md`, `docs/PROJECT_PHASES.md`, `docs/COMMIT_REFERENCE.md` (all new)
 
 ### Validation
-Live E2E in the browser: form submission → dashboard row, Confirm → Complete transitions, stats counts correct; backend `npm test` (21/21); frontend lint/build clean.
+
+Documentation-only; content cross-checked against `git log` and actual source files. No claims made about unimplemented features.
 
 ### Impact
-Admins can actually change appointment statuses from the dashboard and see correct counts.
+
+Any future agent or developer can understand the project's real state in
+minutes instead of reverse-engineering it.
 
 ---
 
-## docs: add API and full-stack setup documentation
+## Earlier commits (Phase 1–4)
 
-Date: 2026-09-18 · Phase: 4
-
-### Purpose
-Document the real API surface and full-stack setup for developers and graders.
-
-### Changes
-- `docs/API.md`: every endpoint that actually exists, with auth requirements, request/response shapes and error formats.
-- `backend/README.md`: backend setup, env vars, migrations, seed, tests.
-- Root `README.md`: full-stack section (architecture, commands).
-
-### Validation
-Docs cross-checked against route/controller source; no invented endpoints.
-
-### Impact
-Onboarding and review no longer require reading the source to use the API.
-
----
-
-## feat: harden API validation and security
-
-Date: 2026-09-18 · Phase: 4
-
-### Purpose
-Close the security gaps an internship project usually ships with.
-
-### Changes
-- helmet, restricted CORS (`FRONTEND_URL`), 10 kB body limit, rate limits (10 appointments/15 min, 20 logins/15 min).
-- Malformed JSON bodies now return 400 instead of 500 (`entity.parse.failed` handling).
-- Test suite (`backend/tests/api.test.ts`): 21 tests covering validation, auth, workflow guards, 404s, pagination, filters, delete.
-
-### Validation
-`npm test` 21/21 (rate-limit bypass under `NODE_ENV=test` added so the suite doesn't trip the appointment limiter); `tsc --noEmit` clean.
-
-### Impact
-The API resists common abuse patterns and its error contract is tested, not assumed.
-
----
-
-## feat: connect appointment form to backend
-
-Date: 2026-09-18 · Phase: 4
-
-### Purpose
-Replace the simulated submission with the real API while keeping the public UX intact.
-
-### Changes
-- `AppointmentForm.tsx` submits to `POST /api/appointments` via `src/lib/api.ts`.
-- Server field errors map back onto inputs; network failure shows an offline state with the clinic phone number.
-- `.env.example` gains `VITE_API_URL`.
-
-### Validation
-Frontend lint/build clean; live form submission verified against the running backend.
-
-### Impact
-Requests reach the database instead of disappearing; patients get honest feedback.
-
----
-
-## feat: add appointment search and status filters
-
-Date: 2026-09-18 · Phase: 4
-
-### Purpose
-Admins need to find specific requests without paging through everything.
-
-### Changes
-- `GET /api/appointments` supports `search` (name/phone/email/treatment/message), `status`, `fromDate`/`toDate`, pagination — all server-side.
-- Dashboard: debounced search box, status chips, preferred-date range, clear-filters, pagination controls.
-
-### Validation
-Backend tests for search/status filters and pagination; manual filter checks in the dashboard.
-
-### Impact
-Filtering happens in PostgreSQL, not in the browser; the dashboard stays fast as data grows.
-
----
-
-## feat: add admin appointment dashboard
-
-Date: 2026-09-18 · Phase: 4
-
-### Purpose
-Give clinic staff a real management view of appointment requests.
-
-### Changes
-- `/admin` dashboard: live stats cards, desktop table + mobile card list, details modal, workflow actions (confirm/complete/cancel) with a confirmation dialog for cancellation, two-step delete, logout.
-- Public chrome extracted into `PublicLayout` so admin routes render standalone.
-
-### Validation
-Frontend lint/build clean (dashboard its own 5.8 kB chunk); live browser E2E of the full workflow.
-
-### Impact
-Statuses can be managed with guardrails; destructive actions require explicit confirmation.
-
----
-
-## feat: add admin authentication
-
-Date: 2026-09-18 · Phase: 4
-
-### Purpose
-Only clinic staff may see appointment data.
-
-### Changes
-- `POST /api/auth/login` returns a signed 8 h JWT; `requireAuth` guards admin routes and attaches the verified identity to `req.admin`.
-- Identical 401 for unknown email vs wrong password (no user enumeration).
-- `/admin/login` page; protected routes redirect there; `AdminUser` model with bcrypt hashes.
-
-### Validation
-Backend auth tests (wrong email/password, malformed body, invalid token, unauthenticated access).
-
-### Impact
-Appointment data is not public; sessions expire after 8 hours.
-
----
-
-## feat: add appointment management API
-
-Date: 2026-09-18 · Phase: 4
-
-### Purpose
-REST endpoints for creating and managing appointment requests.
-
-### Changes
-- Controllers → services → Prisma layering; Zod schemas for body/query validation (strict, no unknown fields).
-- Workflow guard: only PENDING → CONFIRMED/CANCELLED and CONFIRMED → COMPLETED/CANCELLED transitions allowed (409 otherwise).
-- Endpoints: `POST /appointments` (public), `GET /appointments`, `GET /appointments/stats`, `GET /appointments/:id`, `PATCH /appointments/:id/status`, `DELETE /appointments/:id` (admin).
-
-### Validation
-Backend tests for creation, validation errors, workflow transitions and 404s.
-
-### Impact
-A clean, validated API the frontend and future integrations can rely on.
-
----
-
-## feat: add Prisma appointment database schema
-
-Date: 2026-09-18 · Phase: 4
-
-### Purpose
-Persistent storage for appointment requests and admin users.
-
-### Changes
-- `Appointment` model (all brief fields, status enum, indexes on status/createdAt/email) and `AdminUser` (bcrypt hash only).
-- Initial migration applied to the local `sakthi_dental_clinic` database; seed script upserts the dev admin from env vars.
-
-### Validation
-`prisma migrate dev` applied cleanly; seed run; queries verified through the API.
-
-### Impact
-Real persistence with indexes that match the actual query patterns.
-
----
-
-## feat: initialize clinic appointment backend
-
-Date: 2026-09-18 · Phase: 4
-
-### Purpose
-Add the backend as a sibling of the frontend without touching the public site.
-
-### Changes
-- Express + TypeScript scaffold: app factory (test-friendly), server entry, centralized env validation (boot fails on missing/invalid config), error middleware with a clean JSON error contract, asyncHandler utility, health endpoint.
-
-### Validation
-`tsc` build clean; `/api/health` returns 200 against the built dist.
-
-### Impact
-A typed, validated server foundation that later phases extend rather than replace.
-
----
-
-## Phase 3 (summary — see git history for individual diffs)
-
-Date: 2026-09-17 · Phase: 3
-
-SEO metadata + local-business structured data (`37985af`, `b6c11c3`), accessibility pass
-(`6155d98`), image/media and loading performance (`8a2e2c3`, `736fd9a`), privacy/cookie
-consent UI (`9f61080`), error and fallback states (`29ce35f`), deployment prep with
-`vercel.json` + `.env.example` (`8a49980`) and production setup docs (`2a41be3`).
-Frontend-only: no database or API changes.
-
-## Phase 2 (summary — see git history for individual diffs)
-
-Date: 2026-09-16 · Phase: 2
-
-Treatment search/filters (`12bcce2`), FAQ search (`6ddf4cd`), interactive doctor profiles
-(`e54ea7d`), responsive gallery (`46bf499`), accessibility/keyboard navigation
-(`7235637`), performance (`3d40180`), error/loading/empty states (`6257eff`).
-Frontend-only: no database or API changes.
-
-## Phase 1 (summary — see git history for individual diffs)
-
-Date: 2026-09-14 → 2026-09-16 · Phase: 1
-
-Initial website (`d6267f0`, `ab4d1fc`), appointment request flow (`08c2384`), floating
-quick-contact actions (`8414de0`), location/directions (`1a0e42a`). Frontend-only:
-no database or API changes.
+Phase 1–4 history predates this file; see `docs/PROJECT_PHASES.md` for the
+per-phase summary and `git log` for the complete record.

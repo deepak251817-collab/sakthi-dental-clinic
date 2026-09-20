@@ -77,7 +77,23 @@ What each phase delivered, with the actual files and commits. Commit hashes refe
 
 **API changes:** `GET /api/appointments/analytics/trends`, `GET /api/appointments/analytics/treatments`, `GET /api/appointments/activity`, `sortBy`/`sortOrder` params on `GET /api/appointments`.
 
-**Commits:** see `docs/COMMIT_REFERENCE.md` (populated as work lands).
+**Commits:** `f3dd93c` (docs context), `a71100e` (notification service), `ab26131` (notification logs), `7ce8c97` (analytics API), `e6d5f69` (analytics UI), `e1d5493` (audit trail), `494dccc` (admin UX).
+
+---
+
+## Phase 6 — Testing, CI/CD, security & GitHub polish (2026-09-20)
+
+**Purpose:** make the repository reliable, testable, secure, CI-verified and professionally documented for humans and AI agents.
+
+**Major features:** frontend test suite (Vitest 2 + Testing Library: API client units + component tests), GitHub Actions CI with ephemeral PostgreSQL for backend tests, scheduled multi-Node build checks, issue/PR templates, JWT algorithm pinning, dependency audit with documented accepted risks, README overhaul, CHANGELOG, ROADMAP, security audit doc.
+
+**Important files:** `src/test/*`, `vite.config.ts` (test config), `.github/workflows/ci.yml`, `.github/workflows/build.yml`, `.github/ISSUE_TEMPLATE/*`, `.github/pull_request_template.md`, `backend/src/utils/jwt.ts`, `docs/SECURITY_AUDIT.md`, `docs/ROADMAP.md`, `CHANGELOG.md`, `README.md`, `docs/AI_PROJECT_CONTEXT.md`.
+
+**Database changes:** none (no schema changes this phase).
+
+**API changes:** none (endpoint set unchanged; docs updated to match).
+
+**Commits:** `c3a3823` (frontend tests), `f1d6390` (CI + templates), `0b1bbe6` (security hardening), `73c70b5` (roadmap + AI context), `4c85467` (README + CHANGELOG).
 
 ---
 
@@ -87,3 +103,4 @@ What each phase delivered, with the actual files and commits. Commit hashes refe
 - No email/SMS confirmations to patients beyond the notification pipeline.
 - Token storage is localStorage (prototype-grade auth; production should use httpOnly cookies with rotation).
 - Production deployment (hosted PostgreSQL + backend host + Vercel) is prepared but not executed.
+- Dependency advisories needing breaking majors (Vite 6/Vitest 5, react-router 7, Prisma 7) are analyzed in `docs/SECURITY_AUDIT.md` and deliberately deferred.

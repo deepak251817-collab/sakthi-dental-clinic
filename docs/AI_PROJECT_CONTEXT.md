@@ -30,7 +30,8 @@ Verified against the repository. Do not write technologies that are not present 
 - Framer Motion (scroll-reveal sections), Lucide React icons
 - API client: `src/lib/api.ts` (all fetches, `VITE_API_URL` base), admin token storage: `src/lib/auth.ts`
 - Admin pages: `src/pages/AdminLogin.tsx`, `src/pages/AdminDashboard.tsx`
-- Admin components: `src/components/admin/*` (stats, filters, table, details modal, status chips)
+- Admin components: `src/components/admin/*` (stats, analytics panel, activity feed, filters, table, toast, details modal, status chips)
+- Tests: Vitest 2 + Testing Library (`src/test/`, run with `npm test`); pinned to Vitest 2 to match the project's Vite 5
 
 ### Backend (`backend/`)
 
@@ -45,8 +46,10 @@ Verified against the repository. Do not write technologies that are not present 
 
 ### Database (Prisma models)
 
-- `Appointment` — public guest requests; status workflow PENDING → CONFIRMED → COMPLETED, with CANCELLED from pending/confirmed; indexes on status, createdAt, email
+- `Appointment` — public guest requests; status workflow PENDING → CONFIRMED → COMPLETED, with CANCELLED from pending/confirmed; indexes on status, createdAt, email, preferredDate
 - `AdminUser` — clinic staff; bcrypt `passwordHash`, unique email; seeded by `backend/prisma/seed.ts` from `ADMIN_*` env vars
+- `NotificationLog` — one row per notification attempt (type, channel, status SENT/FAILED, errorMessage); cascade-deleted with its appointment
+- `AppointmentActivity` — audit trail (action, previousStatus, newStatus, appointmentId, adminId) written on creation and every status transition
 
 ### Environment variables
 
@@ -59,6 +62,7 @@ Verified against the repository. Do not write technologies that are not present 
 - Frontend: Vercel-ready (`vercel.json` rewrites all routes to `index.html` for React Router)
 - Backend: any Node host; requires platform env vars and a hosted PostgreSQL
 - Not yet deployed to production — local development only so far
+- CI: GitHub Actions (`.github/workflows/ci.yml`) runs frontend lint/build/tests and backend migrate/seed/build/tests on push and PRs to main, with an ephemeral Postgres 16 service container; `.github/workflows/build.yml` verifies builds weekly on Node 20 and 22
 
 ---
 
@@ -90,6 +94,15 @@ Verified against the repository. Do not write technologies that are not present 
 
 ---
 
+## Git Rules
+
+- Repository-local identity: `Deepak R <deepak251817@gmail.com>` (verified via `git config user.name` / `user.email` before committing).
+- Never attribute commits to Freebuff or any AI tool; no co-author or bot trailers.
+- Never rewrite history or force-push; commits are append-only records.
+- For contribution-graph attribution the commit email must stay connected to the owner's GitHub account.
+
+---
+
 ## Useful Commands
 
 ```bash
@@ -97,6 +110,7 @@ Verified against the repository. Do not write technologies that are not present 
 npm run dev            # Vite dev server on :5173
 npm run lint           # ESLint
 npm run build          # tsc -b + vite build
+npm test               # Vitest (unit + component, jsdom)
 
 # Backend (backend/)
 npm run dev            # tsx watch on :5000

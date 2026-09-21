@@ -1,30 +1,16 @@
 import {
-  createContext,
   useCallback,
-  useContext,
   useRef,
   useState,
   type ReactNode,
 } from 'react'
 import { CheckCircle2, XCircle } from 'lucide-react'
-
-type ToastTone = 'success' | 'error'
+import { ToastContext, type ToastTone } from './toastContext'
 
 interface ToastItem {
   id: number
   message: string
   tone: ToastTone
-}
-
-const ToastContext = createContext<((message: string, tone?: ToastTone) => void) | null>(null)
-
-/** Fire a quiet confirmation/error toast. Valid only inside <ToastProvider>. */
-export function useToast() {
-  const notify = useContext(ToastContext)
-  if (!notify) {
-    throw new Error('useToast must be used within ToastProvider')
-  }
-  return notify
 }
 
 const AUTO_DISMISS_MS = 4000

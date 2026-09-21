@@ -24,7 +24,7 @@ import {
   type ActivityEntry,
 } from '../lib/api'
 import { clearSession, getAdminEmail, getToken } from '../lib/auth'
-import { useToast } from '../components/admin/Toast'
+import { useToast } from '../components/admin/toastContext'
 
 const SEARCH_DEBOUNCE_MS = 350
 

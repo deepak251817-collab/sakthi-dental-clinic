@@ -3,7 +3,7 @@ import { useNavigate, useLocation, Link } from 'react-router-dom'
 import { Loader2, Lock, ShieldCheck } from 'lucide-react'
 import { ApiError, loginAdmin } from '../lib/api'
 import { setSession } from '../lib/auth'
-import { useToast } from '../components/admin/Toast'
+import { useToast } from '../components/admin/toastContext'
 
 /**
  * Admin sign-in page (/admin/login).

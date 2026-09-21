@@ -217,9 +217,129 @@ Recruiters, reviewers and future agents get an accurate map of the system and it
 
 ---
 
+## feat: add light, dark and system theme support
+
+**Date:** 2026-09-22 · **Phase:** Phase 8 · **Commit:** `8482725`
+
+### Purpose
+
+Give patients and staff a polished Light/Dark/System experience across the public website and admin dashboard while preserving the lavender healthcare identity, without adding a theme library.
+
+### Changes
+
+* Theme tokens in `src/index.css` as RGB-triplet CSS variables (light under `:root`, dark under `.dark`); `tailwind.config.js` maps every palette stop to `rgb(var(--token) / <alpha-value>)` so existing utilities *and their opacity modifiers* theme automatically
+* Inline bootstrap in `index.html` applies the theme before React renders — no flash of wrong theme; preference persisted in localStorage `sakthi-theme` (`light` | `dark` | `system`, invalid → system); system mode follows live OS changes
+* `ThemeContext`/`useTheme` (split modules for fast refresh) and `ThemeToggle`: navbar Sun/Moon/Monitor icon button + segmented control in the mobile menu
+* ~40 components migrated from hardcoded light colors to tokens (`bg-white` → `bg-surface`); admin stats/charts/badges/toasts given intentional dark variants; modals/lightbox/mobile-menu overlays use literal dark values in both themes; `color-scheme` per theme for native date/time pickers
+
+### Validation
+
+eslint 0 problems · `tsc` clean · 8/8 frontend tests · production build. Live: toggle cycle light→dark→system with aria-label updates; persistence across reload with no flash; dark admin login + dashboard verified; same-origin iframe harness measured zero horizontal overflow at 320/375/425/768/1024/1280 across /, /treatments, /faq, /contact, /gallery, /admin/login.
+
+### Impact
+
+Comfortable viewing in any lighting condition for patients and staff, with a single token source of truth keeping every surface consistent and future theme work low-risk.
+
+---
+
+## feat: improve appointment request confirmation
+
+**Date:** 2026-09-22 · **Phase:** Phase 8 · **Commit:** `002ce72`
+
+### Purpose
+
+Give patients something tangible after submitting a request: a reference number, a recap of what they asked for, and clear next steps — without implying the appointment is already confirmed.
+
+### Changes
+
+* Success panel shows the API-returned request ID, submitted treatment, preferred date (rendered from date parts to avoid timezone drift) and preferred time, plus the clinic's phones, email, address and hours
+* Actions: "Back to Home" (router link), "Contact Clinic" (`tel:` link) and "Print Request Summary" (browser print window with clinic name, request ID, patient name, treatment, requested date/time, submitted timestamp; no other personal data)
+* `AppointmentForm` now takes no props — the modal owns closing; the old `onReset` prop and empty-success flow were removed
+
+### Validation
+
+eslint/tsc clean · 8/8 frontend tests · production build. Verified live: full form submit through the modal renders the ID, details, contact block and all three actions in dark mode; QA appointment deleted from the database afterwards.
+
+### Impact
+
+Patients can save or print their request reference and call the clinic directly; the clinic's phone staff get a spoken reference number instead of "I submitted something earlier".
+
+---
+
+## fix: bucket analytics days in IST from UTC-stored timestamps
+
+**Date:** 2026-09-22 · **Phase:** Phase 8 · **Commit:** `02dedbf`
+
+### Purpose
+
+Correct the daily trend chart: day buckets were shifted by −5h30m because `created_at` stores UTC wall-clock in a naive timestamp column and a single `AT TIME ZONE 'Asia/Kolkata'` re-interpreted it instead of converting it.
+
+### Changes
+
+* `analyticsService.ts` trends query uses the double conversion `AT TIME ZONE 'UTC' AT TIME ZONE 'Asia/Kolkata'`, with a comment explaining Prisma's naive-timestamp mapping
+* Found by the existing analytics test suite at a run time where UTC and IST calendar days diverge (18:30 UTC–midnight); no test was changed
+
+### Validation
+
+Direct DB probe: appointment created at 18:36 UTC now lands in the matching JS-side IST day key (was off by one day before the fix) · backend suite 31/31 · backend build clean.
+
+### Impact
+
+The dashboard's "requests per day" now matches the days clinic staff actually see in Hosur, regardless of when the server runs.
+
+---
+
+## docs: document theme system and UX updates
+
+**Date:** 2026-09-22 · **Phase:** Phase 8 · **Commit:** `e137f73`
+
+### Purpose
+
+Record Phase 8 in the project's permanent documentation so future contributors and AI agents follow the theme conventions.
+
+### Changes
+
+* README: new "Theme Support" section (modes, persistence, no-flash bootstrap, controls), Phase 8 row in the phases table, project-structure notes for `context/` and token files
+* `docs/PROJECT_PHASES.md` and `CHANGELOG.md`: Phase 8 records with the opacity-modifier fix called out
+* `docs/AI_PROJECT_CONTEXT.md`: "Theme System" section — storage key, initialization order, token conventions (accent tokens for text, literal overlays, no plain-hex surfaces)
+
+### Validation
+
+Documentation-only; cross-checked against the shipped code.
+
+### Impact
+
+Future work can extend the theme system without reintroducing hardcoded colors or breaking the no-flash guarantee.
+
+---
+
 ## feat: add staff login entry point
 
 **Date:** 2026-09-21 · **Phase:** Phase 7 (follow-up) · **Commit:** `780722b`
+
+### Purpose
+
+Provide a discreet frontend entry point for authorized clinic staff. The admin system (route, guard, backend auth) already existed; only the way to reach it from the public site was missing.
+
+### Changes
+
+* "Staff Login" link added as the last item of the footer Quick links (`src/lib/constants.ts`), styled identically to the other secondary footer links — no admin entry in the primary navbar
+* Login page copy aligned with the staff framing: "Staff Login" title, "Sign in to manage clinic appointments." subtitle, "Back to Website" return link (`src/pages/AdminLogin.tsx`)
+* No new route, guard or endpoint — `/admin/login`, `RequireAdminAuth` and `POST /api/auth/login` were reused as-is
+
+### Validation
+
+eslint 0 problems · `tsc -b` clean · 8/8 frontend tests · production build succeeds. Verified live in the browser: footer link → `/admin/login`; invalid credentials → `role="alert"` error; valid credentials → `/admin` dashboard; unauthenticated `/admin` → redirect to `/admin/login`; "Back to Website" → `/`. Temporary QA admin used for verification deleted from the database afterwards.
+
+### Impact
+
+Clinic staff can reach the administration system from the public site without exposing admin functionality in the public navigation; patients see only a quiet footer link and can reach nothing but the login page.
+
+---
+
+## docs: record the staff login entry point commit
+
+**Date:** 2026-09-21 · **Phase:** Phase 7 (follow-up) · **Commit:** `cf8b77c`
 
 ### Purpose
 

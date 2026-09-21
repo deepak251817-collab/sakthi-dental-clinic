@@ -65,7 +65,7 @@ export default function Modal({ isOpen, onClose, label, description, children }:
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center sm:p-6">
           <motion.div
-            className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm"
+            className="absolute inset-0 bg-[#0b0817]/50 backdrop-blur-sm"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -83,7 +83,7 @@ export default function Modal({ isOpen, onClose, label, description, children }:
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 24, scale: 0.98 }}
             transition={{ duration: 0.25, ease: 'easeOut' }}
-            className="relative flex max-h-[92dvh] w-full flex-col overflow-hidden rounded-t-3xl bg-white shadow-lifted outline-none sm:max-w-lg sm:rounded-3xl"
+            className="relative flex max-h-[92dvh] w-full flex-col overflow-hidden rounded-t-3xl bg-surface shadow-lifted outline-none sm:max-w-lg sm:rounded-3xl"
           >
             <div className="flex items-start justify-between gap-4 border-b border-primary-100 px-6 py-5">
               <div>

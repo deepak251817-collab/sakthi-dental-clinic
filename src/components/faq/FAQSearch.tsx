@@ -20,7 +20,7 @@ export default function FAQSearch({ query, onChange }: FAQSearchProps) {
         onChange={(event) => onChange(event.target.value)}
         placeholder="Search dental questions..."
         aria-label="Search dental questions"
-        className="w-full rounded-full border border-primary-200 bg-white py-3 pl-12 pr-4 text-sm text-slate-700 placeholder:text-slate-400 transition-colors focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-100"
+        className="w-full rounded-full border border-primary-200 bg-surface py-3 pl-12 pr-4 text-sm text-slate-700 placeholder:text-slate-400 transition-colors focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-100"
       />
     </div>
   )

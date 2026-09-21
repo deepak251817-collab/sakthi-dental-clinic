@@ -143,7 +143,7 @@ export default function AppointmentTable({
 
   if (appointments.length === 0) {
     return (
-      <div className="rounded-2xl border border-dashed border-primary-200 bg-white p-10 text-center">
+      <div className="rounded-2xl border border-dashed border-primary-200 bg-surface p-10 text-center">
         <p className="text-sm font-semibold text-slate-700">No appointments found</p>
         <p className="mt-1 text-sm text-slate-500">
           New requests will appear here as patients submit them.
@@ -155,16 +155,16 @@ export default function AppointmentTable({
   return (
     <>
       {/* Desktop table */}
-      <div className="hidden overflow-x-auto rounded-2xl border border-primary-100 bg-white md:block">
+      <div className="hidden overflow-x-auto rounded-2xl border border-primary-100 bg-surface md:block">
         <table className="w-full min-w-[760px] text-left text-sm">
           <caption className="sr-only">Appointment requests</caption>
           <thead>
-            <tr className="border-b border-primary-100 bg-primary-50/60 text-xs uppercase tracking-wide text-slate-500">
+            <tr className="border-b border-primary-100 bg-primary-50/60 dark:bg-primary-50/30 text-xs uppercase tracking-wide text-slate-500">
               <th scope="col" aria-sort={sortKey === 'name' ? (sortDir === 'asc' ? 'ascending' : 'descending') : 'none'} className="px-4 py-3 font-semibold">
                 <button
                   type="button"
                   onClick={() => handleSort('name')}
-                  className="inline-flex items-center gap-1 uppercase tracking-wide hover:text-primary-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
+                  className="inline-flex items-center gap-1 uppercase tracking-wide hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
                 >
                   Patient {sortIcon('name')}
                 </button>
@@ -175,7 +175,7 @@ export default function AppointmentTable({
                 <button
                   type="button"
                   onClick={() => handleSort('preferredDate')}
-                  className="inline-flex items-center gap-1 uppercase tracking-wide hover:text-primary-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
+                  className="inline-flex items-center gap-1 uppercase tracking-wide hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
                 >
                   Preferred {sortIcon('preferredDate')}
                 </button>
@@ -185,7 +185,7 @@ export default function AppointmentTable({
                 <button
                   type="button"
                   onClick={() => handleSort('createdAt')}
-                  className="inline-flex items-center gap-1 uppercase tracking-wide hover:text-primary-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
+                  className="inline-flex items-center gap-1 uppercase tracking-wide hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
                 >
                   Created {sortIcon('createdAt')}
                 </button>
@@ -195,7 +195,7 @@ export default function AppointmentTable({
           </thead>
           <tbody>
             {sorted.map((appointment) => (
-              <tr key={appointment.id} className="border-b border-primary-50 last:border-0 hover:bg-primary-50/40">
+              <tr key={appointment.id} className="border-b border-primary-50 last:border-0 hover:bg-primary-50/40 dark:bg-primary-50/20">
                 <td className="px-4 py-3 font-semibold text-slate-800">{appointment.name}</td>
                 <td className="px-4 py-3 text-slate-600">
                   <div>{appointment.phone}</div>
@@ -215,7 +215,7 @@ export default function AppointmentTable({
                     <button
                       type="button"
                       onClick={() => onOpenDetails(appointment)}
-                      className="inline-flex w-fit items-center gap-1.5 rounded-full border border-primary-200 px-2.5 py-1 text-xs font-semibold text-primary-700 transition-colors hover:bg-primary-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
+                      className="inline-flex w-fit items-center gap-1.5 rounded-full border border-primary-200 px-2.5 py-1 text-xs font-semibold text-accent transition-colors hover:bg-primary-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
                     >
                       <Eye className="h-3.5 w-3.5" aria-hidden="true" />
                       View
@@ -232,7 +232,7 @@ export default function AppointmentTable({
       {/* Mobile cards */}
       <ul className="space-y-3 md:hidden">
         {sorted.map((appointment) => (
-          <li key={appointment.id} className="rounded-2xl border border-primary-100 bg-white p-4">
+          <li key={appointment.id} className="rounded-2xl border border-primary-100 bg-surface p-4">
             <div className="flex items-start justify-between gap-3">
               <div>
                 <p className="font-semibold text-slate-800">{appointment.name}</p>
@@ -258,7 +258,7 @@ export default function AppointmentTable({
               <button
                 type="button"
                 onClick={() => onOpenDetails(appointment)}
-                className="inline-flex items-center gap-1.5 rounded-full border border-primary-200 px-2.5 py-1 text-xs font-semibold text-primary-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
+                className="inline-flex items-center gap-1.5 rounded-full border border-primary-200 px-2.5 py-1 text-xs font-semibold text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
               >
                 <Eye className="h-3.5 w-3.5" aria-hidden="true" />
                 View

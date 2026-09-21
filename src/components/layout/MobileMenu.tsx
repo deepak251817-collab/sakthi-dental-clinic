@@ -5,6 +5,7 @@ import { X } from 'lucide-react'
 import { navLinks } from '../../lib/constants'
 import { cn } from '../../lib/utils'
 import AppointmentButton from '../common/AppointmentButton'
+import ThemeToggle from '../theme/ThemeToggle'
 
 interface MobileMenuProps {
   isOpen: boolean
@@ -63,7 +64,7 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
       {isOpen && (
         <>
           <motion.div
-            className="fixed inset-0 z-40 bg-slate-900/30 backdrop-blur-sm lg:hidden"
+            className="fixed inset-0 z-40 bg-[#0b0817]/40 backdrop-blur-sm lg:hidden"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -74,7 +75,7 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
           <motion.div
             ref={dialogRef}
             id="mobile-menu"
-            className="fixed inset-y-0 right-0 z-50 flex w-80 max-w-[85vw] flex-col bg-white shadow-lifted lg:hidden"
+            className="fixed inset-y-0 right-0 z-50 flex w-80 max-w-[85vw] flex-col bg-surface shadow-lifted lg:hidden"
             initial={{ x: '100%' }}
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
@@ -103,8 +104,8 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                       to={link.href}
                       className={({ isActive }) =>
                         cn(
-                          'block rounded-xl px-4 py-3 text-base font-medium text-slate-700 transition-colors hover:bg-primary-50 hover:text-primary-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600',
-                          isActive && 'bg-primary-50 text-primary-700',
+                          'block rounded-xl px-4 py-3 text-base font-medium text-slate-700 transition-colors hover:bg-primary-50 hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600',
+                          isActive && 'bg-primary-50 text-accent',
                         )
                       }
                     >
@@ -115,7 +116,8 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
               </ul>
             </nav>
 
-            <div className="border-t border-primary-100 p-5">
+            <div className="space-y-4 border-t border-primary-100 p-5">
+              <ThemeToggle variant="segmented" />
               <AppointmentButton source="Mobile menu" className="w-full" />
             </div>
           </motion.div>

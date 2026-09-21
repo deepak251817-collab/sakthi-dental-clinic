@@ -85,12 +85,12 @@ export default function AppointmentDetails({
 
         <dl className="mt-4 divide-y divide-primary-50">
           <DetailRow label="Phone">
-            <a href={`tel:${appointment.phone.replace(/\s/g, '')}`} className="text-primary-700 hover:underline">
+            <a href={`tel:${appointment.phone.replace(/\s/g, '')}`} className="text-accent hover:underline">
               {appointment.phone}
             </a>
           </DetailRow>
           <DetailRow label="Email">
-            <a href={`mailto:${appointment.email}`} className="break-all text-primary-700 hover:underline">
+            <a href={`mailto:${appointment.email}`} className="break-all text-accent hover:underline">
               {appointment.email}
             </a>
           </DetailRow>

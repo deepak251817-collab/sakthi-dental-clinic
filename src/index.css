@@ -2,20 +2,168 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
+ * Theme tokens — the single source of truth for light and dark mode.
+ *
+ * Tailwind's brand/neutral scales point at these variables as
+ * `rgb(var(--token) / <alpha-value>)` (see tailwind.config.js), so utilities
+ * AND their opacity modifiers (bg-primary-50/60, bg-surface/95 …) resolve to
+ * themed values. Values are space-separated RGB triplets for that reason.
+ *
+ * Dark mode overrides the same variables under `html.dark` — deep
+ * lavender-tinted neutrals (never pure black) with intentional accents.
+ * Primary-600..950 keep their dark-violet values in dark mode because they
+ * are button/gradient fills under white text; text accents use --sdc-accent*.
+ */
 @layer base {
+  :root {
+    /* Brand lavender — the original light identity. */
+    --sdc-primary-50: 246 245 254;
+    --sdc-primary-100: 237 234 253;
+    --sdc-primary-200: 222 217 251;
+    --sdc-primary-300: 197 190 247;
+    --sdc-primary-400: 168 156 240;
+    --sdc-primary-500: 139 122 232;
+    --sdc-primary-600: 117 89 221;
+    --sdc-primary-700: 101 70 196;
+    --sdc-primary-800: 84 59 159;
+    --sdc-primary-900: 71 52 127;
+    --sdc-primary-950: 43 29 82;
+
+    /* Heading ink. */
+    --sdc-ink-700: 91 74 158;
+    --sdc-ink-800: 71 52 127;
+    --sdc-ink-900: 58 43 107;
+
+    /* Lavender accents for TEXT/ICONS on tinted surfaces. */
+    --sdc-accent: 101 70 196;
+    --sdc-accent-strong: 71 52 127;
+    --sdc-accent-600: 117 89 221;
+
+    /* App background, elevated surface, input surface. */
+    --sdc-app: 255 255 255;
+    --sdc-surface: 255 255 255;
+    --sdc-surface-input: 255 255 255;
+
+    /* Neutrals (map to Tailwind's slate utilities). */
+    --sdc-neutral-50: 248 250 252;
+    --sdc-neutral-100: 241 245 249;
+    --sdc-neutral-200: 226 232 240;
+    --sdc-neutral-300: 203 213 225;
+    --sdc-neutral-400: 148 163 184;
+    --sdc-neutral-500: 100 116 139;
+    --sdc-neutral-600: 71 85 105;
+    --sdc-neutral-700: 51 65 85;
+    --sdc-neutral-800: 30 41 59;
+    --sdc-neutral-900: 15 23 42;
+    --sdc-neutral-950: 2 6 23;
+
+    /* Soft shadows tinted with the brand hue. */
+    --sdc-shadow-soft: rgba(84, 59, 159, 0.06);
+    --sdc-shadow-card: rgba(84, 59, 159, 0.08);
+    --sdc-shadow-lifted: rgba(84, 59, 159, 0.14);
+
+    color-scheme: light;
+  }
+
+  html.dark {
+    /* Brand lavender. Low stops become dark tints (washes, borders, hovers);
+     * 600–950 KEEP their dark-violet values because they are used as button
+     * and gradient backgrounds with white text — flipping them would break
+     * contrast. Text usage on tinted surfaces goes through --sdc-accent*. */
+    --sdc-primary-50: 42 36 64;
+    --sdc-primary-100: 50 43 76;
+    --sdc-primary-200: 62 53 96;
+    --sdc-primary-300: 76 65 120;
+    --sdc-primary-400: 107 90 168;
+    --sdc-primary-500: 139 122 232;
+    --sdc-primary-600: 117 89 221;
+    --sdc-primary-700: 101 70 196;
+    --sdc-primary-800: 84 59 159;
+    --sdc-primary-900: 71 52 127;
+    --sdc-primary-950: 43 29 82;
+
+    /* Heading ink becomes soft lavender-white. */
+    --sdc-ink-700: 200 191 248;
+    --sdc-ink-800: 221 215 251;
+    --sdc-ink-900: 239 237 253;
+
+    /* Accent: readable lavender text/icons on dark tinted surfaces. */
+    --sdc-accent: 179 166 245;
+    --sdc-accent-strong: 213 205 250;
+    --sdc-accent-600: 200 191 248;
+
+    /* Deep lavender-tinted neutrals — no pure black. */
+    --sdc-app: 23 20 42;
+    --sdc-surface: 31 27 54;
+    --sdc-surface-input: 38 32 64;
+
+    --sdc-neutral-50: 33 29 56;
+    --sdc-neutral-100: 41 35 68;
+    --sdc-neutral-200: 55 48 86;
+    --sdc-neutral-300: 74 65 114;
+    --sdc-neutral-400: 143 135 176;
+    --sdc-neutral-500: 167 160 196;
+    --sdc-neutral-600: 195 189 216;
+    --sdc-neutral-700: 217 213 232;
+    --sdc-neutral-800: 233 231 243;
+    --sdc-neutral-900: 243 241 250;
+    --sdc-neutral-950: 250 249 254;
+
+    --sdc-shadow-soft: rgba(0, 0, 0, 0.35);
+    --sdc-shadow-card: rgba(0, 0, 0, 0.4);
+    --sdc-shadow-lifted: rgba(0, 0, 0, 0.55);
+
+    color-scheme: dark;
+  }
+
   html {
     scroll-behavior: smooth;
   }
 
   body {
-    @apply bg-white text-slate-700 antialiased;
+    @apply bg-app text-slate-700 antialiased;
   }
 
   ::selection {
-    @apply bg-primary-200 text-primary-900;
+    @apply bg-primary-300 text-ink-900;
   }
 
-  /* Respect users who prefer reduced motion */
+  /* Native controls (date/time pickers, select popups, scrollbars, autofill)
+   * follow the active theme via color-scheme — set on :root/html by the
+   * token blocks above. */
+  input,
+  select,
+  textarea {
+    color-scheme: light dark;
+  }
+
+  /* Select dropdown arrows hardcode a dark glyph for light backgrounds —
+   * theme them so the arrow stays visible in both modes. */
+  select {
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23475569' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    padding-right: 2.25rem;
+  }
+
+  html.dark select {
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23c3bdd8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  }
+
+  /* Subtle cross-fade when switching themes. The ThemeProvider adds the
+   * `theme-switching` class to <html> for a moment around a theme change;
+   * outside that window nothing animates. Reduced-motion users get an
+   * instant switch (the reduced-motion block below also covers it). */
+  html.theme-switching body,
+  html.theme-switching body * {
+    transition-property: background-color, border-color, color, fill, stroke;
+    transition-duration: 180ms;
+    transition-timing-function: ease;
+  }
+
+  /* Respect users who prefer reduced motion (also kills the theme fade). */
   @media (prefers-reduced-motion: reduce) {
     html {
       scroll-behavior: auto;

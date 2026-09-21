@@ -56,9 +56,9 @@ export default function CookieConsent() {
           transition={{ duration: 0.3, ease: 'easeOut' }}
           className="fixed bottom-[4.5rem] left-4 right-4 z-30 sm:left-6 sm:right-auto sm:max-w-md lg:bottom-6"
         >
-          <div className="rounded-3xl border border-primary-100 bg-white p-5 shadow-lifted">
+          <div className="rounded-3xl border border-primary-100 bg-surface p-5 shadow-lifted">
             <div className="flex items-start gap-3">
-              <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-primary-100 text-primary-700">
+              <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-primary-100 text-accent">
                 <Cookie className="h-5 w-5" aria-hidden="true" />
               </span>
               <div>
@@ -67,7 +67,7 @@ export default function CookieConsent() {
                   We use cookies to improve your browsing experience. See our{' '}
                   <Link
                     to="/privacy-policy"
-                    className="inline-flex items-center gap-0.5 font-semibold text-primary-700 underline-offset-2 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-rounded focus-visible:outline-primary-600"
+                    className="inline-flex items-center gap-0.5 font-semibold text-accent underline-offset-2 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-rounded focus-visible:outline-primary-600"
                   >
                     Privacy Policy
                     <Link2 className="h-3.5 w-3.5" aria-hidden="true" />
@@ -87,7 +87,7 @@ export default function CookieConsent() {
               <button
                 type="button"
                 onClick={() => choose('declined')}
-                className="flex-1 rounded-full border border-primary-200 bg-white px-4 py-2.5 text-sm font-semibold text-primary-700 transition-colors hover:bg-primary-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
+                className="flex-1 rounded-full border border-primary-200 bg-surface px-4 py-2.5 text-sm font-semibold text-accent transition-colors hover:bg-primary-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
               >
                 Decline
               </button>

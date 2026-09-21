@@ -51,8 +51,8 @@ export default function FAQ() {
                   </AnimatedSection>
                 ))
               ) : (
-                <div className="rounded-2xl border border-primary-100 bg-white px-8 py-14 text-center shadow-soft">
-                  <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-primary-100 text-primary-700">
+                <div className="rounded-2xl border border-primary-100 bg-surface px-8 py-14 text-center shadow-soft">
+                  <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-primary-100 text-accent">
                     <SearchX className="h-7 w-7" aria-hidden="true" />
                   </span>
                   <h2 className="mt-5 text-xl font-bold text-ink-800">

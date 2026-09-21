@@ -47,7 +47,7 @@ export default function Hero() {
             transition={{ duration: 0.5, ease: 'easeOut', delay: 0.12 }}
             className="relative"
           >
-            <div className="overflow-hidden rounded-2xl shadow-lifted lg:-mt-3">
+            <div className="overflow-hidden rounded-2xl bg-primary-100 shadow-lifted ring-1 ring-primary-200/70 lg:-mt-3 dark:bg-primary-100/40 dark:ring-primary-300/40">
               <img
                 src="/images/hero/hero-dental-care.jpg"
                 alt="A friendly dental professional welcoming a smiling family at the clinic"

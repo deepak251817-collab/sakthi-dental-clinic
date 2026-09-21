@@ -23,7 +23,7 @@ const STATUSES: Array<{ value: AppointmentStatus | ''; label: string }> = [
 
 const chipBase =
   'rounded-full px-3.5 py-1.5 text-sm font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600'
-const chipIdle = 'bg-white text-slate-600 border border-primary-200 hover:bg-primary-50'
+const chipIdle = 'bg-surface text-slate-600 border border-primary-200 hover:bg-primary-50'
 const chipActive = 'bg-primary-600 text-white'
 
 /** Status chips, debounced search and preferred-date range filter. */
@@ -39,12 +39,12 @@ export default function AppointmentFilters({
   hasActiveFilters,
 }: AppointmentFiltersProps) {
   const inputClasses =
-    'w-full rounded-xl border border-primary-200 bg-white px-3.5 py-2.5 text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:border-primary-400 focus:ring-primary-100'
+    'w-full rounded-xl border border-primary-200 bg-surface px-3.5 py-2.5 text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:border-primary-400 focus:ring-primary-100'
 
   return (
     <section
       aria-label="Appointment filters"
-      className="rounded-2xl border border-primary-100 bg-white p-4"
+      className="rounded-2xl border border-primary-100 bg-surface p-4"
     >
       <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
         <div className="flex flex-wrap gap-2" role="group" aria-label="Filter by status">
@@ -101,7 +101,7 @@ export default function AppointmentFilters({
           <button
             type="button"
             onClick={onClear}
-            className="inline-flex items-center gap-1.5 self-start rounded-full px-3 py-1.5 text-sm font-semibold text-primary-700 transition-colors hover:bg-primary-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 sm:ml-auto"
+            className="inline-flex items-center gap-1.5 self-start rounded-full px-3 py-1.5 text-sm font-semibold text-accent transition-colors hover:bg-primary-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 sm:ml-auto"
           >
             <X className="h-4 w-4" aria-hidden="true" />
             Clear Filters

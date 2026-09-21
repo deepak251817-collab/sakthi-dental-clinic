@@ -8,7 +8,7 @@ import { CalendarDays, ExternalLink } from 'lucide-react'
 export default function AdminSidebar() {
   return (
     <nav aria-label="Admin navigation" className="lg:w-60 lg:shrink-0">
-      <div className="rounded-2xl border border-primary-100 bg-white p-4 lg:sticky lg:top-6">
+      <div className="rounded-2xl border border-primary-100 bg-surface p-4 lg:sticky lg:top-6">
         <p className="hidden text-xs font-semibold uppercase tracking-wide text-slate-400 lg:block">
           Clinic Admin
         </p>
@@ -17,7 +17,7 @@ export default function AdminSidebar() {
             <Link
               to="/admin"
               aria-current="page"
-              className="flex items-center gap-2 rounded-xl bg-primary-50 px-3 py-2 text-sm font-semibold text-primary-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
+              className="flex items-center gap-2 rounded-xl bg-primary-50 px-3 py-2 text-sm font-semibold text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
             >
               <CalendarDays className="h-4 w-4" aria-hidden="true" />
               Appointments
@@ -26,7 +26,7 @@ export default function AdminSidebar() {
           <li className="shrink-0">
             <Link
               to="/"
-              className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-primary-50 hover:text-primary-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
+              className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-primary-50 hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
             >
               <ExternalLink className="h-4 w-4" aria-hidden="true" />
               Public Website

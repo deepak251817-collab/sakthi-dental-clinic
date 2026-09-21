@@ -46,15 +46,15 @@ export default function AdminLogin() {
   }
 
   const inputClasses =
-    'w-full rounded-xl border border-primary-200 bg-white px-4 py-3 text-sm text-slate-700 placeholder:text-slate-400 transition-colors focus:outline-none focus:ring-2 focus:border-primary-400 focus:ring-primary-100'
+    'w-full rounded-xl border border-primary-200 bg-surface px-4 py-3 text-sm text-slate-700 placeholder:text-slate-400 transition-colors focus:outline-none focus:ring-2 focus:border-primary-400 focus:ring-primary-100'
 
   return (
-    <div className="flex min-h-[calc(100dvh-68px)] items-center justify-center bg-primary-50/60 px-4 py-12">
+    <div className="flex min-h-[calc(100dvh-68px)] items-center justify-center bg-primary-50/60 dark:bg-primary-50/30 px-4 py-12">
       <div className="w-full max-w-md">
-        <div className="rounded-3xl bg-white p-8 shadow-lifted">
+        <div className="rounded-3xl bg-surface p-8 shadow-lifted">
           <div className="flex items-center gap-3">
             <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-primary-100">
-              <ShieldCheck className="h-5 w-5 text-primary-700" aria-hidden="true" />
+              <ShieldCheck className="h-5 w-5 text-accent" aria-hidden="true" />
             </span>
             <div>
               <h1 className="text-lg font-bold text-ink-800">Staff Login</h1>

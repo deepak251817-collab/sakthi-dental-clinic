@@ -39,7 +39,7 @@ export default function FloatingContactBar() {
       {/* Mobile: fixed bottom action bar */}
       <nav
         aria-label="Quick contact"
-        className="fixed inset-x-0 bottom-0 z-40 border-t border-primary-100 bg-white/95 shadow-lifted backdrop-blur supports-[backdrop-filter]:bg-white/90 lg:hidden"
+        className="fixed inset-x-0 bottom-0 z-40 border-t border-primary-100 bg-surface/95 shadow-lifted backdrop-blur supports-[backdrop-filter]:bg-surface/90 lg:hidden"
         style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
       >
         <ul className="grid grid-cols-3">
@@ -52,7 +52,7 @@ export default function FloatingContactBar() {
                   rel={href.startsWith('http') ? 'noreferrer' : undefined}
                   aria-label={label}
                   className={`flex flex-col items-center gap-1 py-2.5 text-[11px] font-semibold transition-colors ${shellClasses} ${
-                    primary ? 'text-primary-700' : 'text-slate-600 hover:text-primary-700'
+                    primary ? 'text-accent' : 'text-slate-600 hover:text-accent'
                   }`}
                 >
                   <Icon className="h-5 w-5" aria-hidden="true" />
@@ -64,7 +64,7 @@ export default function FloatingContactBar() {
                   onClick={onClick}
                   aria-label={label}
                   className={`flex w-full flex-col items-center gap-1 py-2.5 text-[11px] font-semibold transition-colors ${shellClasses} ${
-                    primary ? 'text-primary-700' : 'text-slate-600 hover:text-primary-700'
+                    primary ? 'text-accent' : 'text-slate-600 hover:text-accent'
                   }`}
                 >
                   <Icon className="h-5 w-5" aria-hidden="true" />
@@ -98,7 +98,7 @@ export default function FloatingContactBar() {
                 className={`inline-flex h-12 w-12 items-center justify-center rounded-full shadow-lifted transition-all duration-200 hover:-translate-y-0.5 hover:shadow-card ${shellClasses} ${
                   primary
                     ? 'bg-primary-600 text-white hover:bg-primary-700'
-                    : 'bg-white text-primary-700 ring-1 ring-primary-100 hover:bg-primary-50'
+                    : 'bg-surface text-accent ring-1 ring-primary-100 hover:bg-primary-50'
                 }`}
               >
                 <Icon className="h-5 w-5" aria-hidden="true" />
@@ -111,7 +111,7 @@ export default function FloatingContactBar() {
                 className={`inline-flex h-12 w-12 items-center justify-center rounded-full shadow-lifted transition-all duration-200 hover:-translate-y-0.5 hover:shadow-card ${shellClasses} ${
                   primary
                     ? 'bg-primary-600 text-white hover:bg-primary-700'
-                    : 'bg-white text-primary-700 ring-1 ring-primary-100 hover:bg-primary-50'
+                    : 'bg-surface text-accent ring-1 ring-primary-100 hover:bg-primary-50'
                 }`}
               >
                 <Icon className="h-5 w-5" aria-hidden="true" />

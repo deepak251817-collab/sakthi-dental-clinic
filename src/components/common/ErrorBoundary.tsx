@@ -29,7 +29,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   render(): ReactNode {
     if (this.state.hasError) {
       return (
-        <div className="flex min-h-[70vh] items-center bg-gradient-to-b from-primary-50 to-white">
+        <div className="flex min-h-[70vh] items-center bg-gradient-to-b from-primary-50 to-app">
           <div className="mx-auto w-full max-w-xl px-6 py-20 text-center">
             <h1 className="text-4xl font-bold text-ink-800">
               We're sorry for the interruption
@@ -49,7 +49,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
               </button>
               <a
                 href="tel:+919862890897"
-                className="inline-flex items-center gap-2 rounded-full border border-primary-200 bg-white px-6 py-3 text-sm font-semibold text-primary-700 transition-colors hover:bg-primary-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
+                className="inline-flex items-center gap-2 rounded-full border border-primary-200 bg-surface px-6 py-3 text-sm font-semibold text-accent transition-colors hover:bg-primary-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
               >
                 <Phone className="h-4 w-4" aria-hidden="true" />
                 Call the clinic

@@ -69,7 +69,7 @@ export default function ContactInfo() {
         </ul>
       </div>
 
-      <div className="rounded-3xl border border-primary-100 bg-white p-6 shadow-soft">
+      <div className="rounded-3xl border border-primary-100 bg-surface p-6 shadow-soft">
         <h3 className="text-sm font-semibold text-ink-800">Find us on the map</h3>
         <p className="mt-1 text-sm leading-relaxed text-slate-500">
           We are located in SBM Layout, Anthivadi — easy to reach from anywhere in Hosur, with
@@ -79,7 +79,7 @@ export default function ContactInfo() {
           href="https://maps.google.com/?q=Sakthi+Dental+Clinic+Hosur"
           target="_blank"
           rel="noreferrer"
-          className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-primary-700 hover:text-primary-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
+          className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-accent hover:text-accent-strong focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
         >
           <MapPin className="h-4 w-4" aria-hidden="true" />
           Open in Google Maps

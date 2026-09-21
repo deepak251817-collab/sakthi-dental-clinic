@@ -11,10 +11,10 @@ const SEGMENTS: Array<{
   colorClass: string
   textClass: string
 }> = [
-  { key: 'pending', label: 'Pending', colorClass: 'bg-amber-400', textClass: 'text-amber-800' },
-  { key: 'confirmed', label: 'Confirmed', colorClass: 'bg-emerald-400', textClass: 'text-emerald-800' },
-  { key: 'completed', label: 'Completed', colorClass: 'bg-sky-400', textClass: 'text-sky-800' },
-  { key: 'cancelled', label: 'Cancelled', colorClass: 'bg-rose-400', textClass: 'text-rose-800' },
+  { key: 'pending', label: 'Pending', colorClass: 'bg-amber-400', textClass: 'text-amber-800 dark:text-amber-300' },
+  { key: 'confirmed', label: 'Confirmed', colorClass: 'bg-emerald-400', textClass: 'text-emerald-800 dark:text-emerald-300' },
+  { key: 'completed', label: 'Completed', colorClass: 'bg-sky-400', textClass: 'text-sky-800 dark:text-sky-300' },
+  { key: 'cancelled', label: 'Cancelled', colorClass: 'bg-rose-400', textClass: 'text-rose-800 dark:text-rose-300' },
 ]
 
 /**

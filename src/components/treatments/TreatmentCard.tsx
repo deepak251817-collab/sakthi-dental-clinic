@@ -17,8 +17,8 @@ export default function TreatmentCard({ treatment, Icon }: TreatmentCardProps) {
   const [expanded, setExpanded] = useState(false)
 
   return (
-    <div className="flex h-full flex-col rounded-3xl border border-primary-100 bg-white p-7 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-primary-200 hover:shadow-card">
-      <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-100 text-primary-700">
+    <div className="flex h-full flex-col rounded-3xl border border-primary-100 bg-surface p-7 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-primary-200 hover:shadow-card">
+      <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-100 text-accent">
         <Icon className="h-6 w-6" aria-hidden />
       </span>
       <h3 className="mt-5 text-lg font-semibold text-ink-800">{treatment.title}</h3>
@@ -35,7 +35,7 @@ export default function TreatmentCard({ treatment, Icon }: TreatmentCardProps) {
         type="button"
         onClick={() => setExpanded((value) => !value)}
         aria-expanded={expanded}
-        className="mt-auto inline-flex items-center gap-1 pt-4 text-sm font-semibold text-primary-700 transition-colors hover:text-primary-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
+        className="mt-auto inline-flex items-center gap-1 pt-4 text-sm font-semibold text-accent transition-colors hover:text-accent-strong focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
       >
         {expanded ? 'Show Less' : 'Learn More'}
         <ChevronDown

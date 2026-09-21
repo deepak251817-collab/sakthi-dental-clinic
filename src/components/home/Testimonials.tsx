@@ -60,7 +60,7 @@ export default function Testimonials() {
             onFocus={() => setPaused(true)}
             onBlur={() => setPaused(false)}
           >
-            <div className="relative overflow-hidden rounded-3xl border border-primary-100 bg-white p-8 shadow-card sm:p-12">
+            <div className="relative overflow-hidden rounded-3xl border border-primary-100 bg-surface p-8 shadow-card sm:p-12">
               <Quote
                 className="absolute right-8 top-8 h-12 w-12 text-primary-100"
                 aria-hidden="true"
@@ -98,7 +98,7 @@ export default function Testimonials() {
               <button
                 type="button"
                 onClick={() => goTo(activeIndex - 1)}
-                className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-primary-200 bg-white text-primary-700 shadow-soft transition-colors hover:bg-primary-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
+                className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-primary-200 bg-surface text-accent shadow-soft transition-colors hover:bg-primary-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
                 aria-label="Previous testimonial"
               >
                 <ChevronLeft className="h-5 w-5" aria-hidden="true" />
@@ -121,7 +121,7 @@ export default function Testimonials() {
               <button
                 type="button"
                 onClick={() => goTo(activeIndex + 1)}
-                className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-primary-200 bg-white text-primary-700 shadow-soft transition-colors hover:bg-primary-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
+                className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-primary-200 bg-surface text-accent shadow-soft transition-colors hover:bg-primary-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
                 aria-label="Next testimonial"
               >
                 <ChevronRight className="h-5 w-5" aria-hidden="true" />

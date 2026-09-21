@@ -28,7 +28,7 @@ export default function FinalCTA() {
               <AppointmentButton
                 source="Final CTA"
                 variant="onDark"
-                className="bg-white text-primary-700 hover:bg-primary-50 focus-visible:outline-white"
+                className="bg-surface text-accent hover:bg-primary-50 focus-visible:outline-white"
               />
               <Button
                 to="/treatments"

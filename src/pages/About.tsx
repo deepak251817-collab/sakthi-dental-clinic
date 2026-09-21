@@ -53,12 +53,12 @@ export default function About() {
         <Container>
           <div className="grid items-start gap-12 lg:grid-cols-5">
             <AnimatedSection className="lg:col-span-2">
-              <div className="rounded-3xl border border-primary-100 bg-white p-8 text-center shadow-card">
-                <div className="mx-auto flex h-40 w-40 items-center justify-center rounded-full bg-primary-100 text-4xl font-bold text-primary-700">
+              <div className="rounded-3xl border border-primary-100 bg-surface p-8 text-center shadow-card">
+                <div className="mx-auto flex h-40 w-40 items-center justify-center rounded-full bg-primary-100 text-4xl font-bold text-accent">
                   A
                 </div>
                 <h2 className="mt-5 text-xl font-bold text-ink-800">Dr. Anupriya</h2>
-                <p className="mt-1 text-sm font-semibold text-primary-700">
+                <p className="mt-1 text-sm font-semibold text-accent">
                   Founder, Sakthi Dental Clinic
                 </p>
                 <p className="mt-4 text-sm leading-relaxed text-slate-500">
@@ -106,8 +106,8 @@ export default function About() {
         <Container>
           <div className="grid gap-6 lg:grid-cols-2">
             <AnimatedSection>
-              <div className="h-full rounded-3xl border border-primary-100 bg-white p-8 shadow-soft sm:p-10">
-                <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-100 text-primary-700">
+              <div className="h-full rounded-3xl border border-primary-100 bg-surface p-8 shadow-soft sm:p-10">
+                <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-100 text-accent">
                   <Target className="h-6 w-6" aria-hidden="true" />
                 </span>
                 <h2 className="mt-5 text-2xl font-bold text-ink-800">Our Mission</h2>
@@ -131,8 +131,8 @@ export default function About() {
             </AnimatedSection>
 
             <AnimatedSection delay={0.1}>
-              <div className="h-full rounded-3xl border border-primary-100 bg-white p-8 shadow-soft sm:p-10">
-                <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-100 text-primary-700">
+              <div className="h-full rounded-3xl border border-primary-100 bg-surface p-8 shadow-soft sm:p-10">
+                <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-100 text-accent">
                   <Eye className="h-6 w-6" aria-hidden="true" />
                 </span>
                 <h2 className="mt-5 text-2xl font-bold text-ink-800">Our Vision</h2>

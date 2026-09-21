@@ -20,7 +20,7 @@ export default function FAQItem({ faq, defaultOpen = false }: FAQItemProps) {
   const buttonId = `faq-button-${rawButtonId.replace(/[^a-zA-Z0-9-]/g, '')}`
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-primary-100 bg-white shadow-soft">
+    <div className="overflow-hidden rounded-2xl border border-primary-100 bg-surface shadow-soft">
       <h3>
         <button
           type="button"
@@ -28,12 +28,12 @@ export default function FAQItem({ faq, defaultOpen = false }: FAQItemProps) {
           aria-expanded={open}
           aria-controls={panelId}
           onClick={() => setOpen((value) => !value)}
-          className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left text-base font-semibold text-slate-800 transition-colors hover:bg-primary-50/60 focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-primary-600"
+          className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left text-base font-semibold text-slate-800 transition-colors hover:bg-primary-50/60 dark:bg-primary-50/30 focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-primary-600"
         >
           {faq.question}
           <ChevronDown
             className={cn(
-              'h-5 w-5 shrink-0 text-primary-600 transition-transform duration-200',
+              'h-5 w-5 shrink-0 text-accent-600 transition-transform duration-200',
               open && 'rotate-180',
             )}
             aria-hidden="true"

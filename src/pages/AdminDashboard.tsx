@@ -194,7 +194,7 @@ export default function AdminDashboard() {
   const totalPages = list?.totalPages ?? 1
 
   return (
-    <div className="min-h-dvh bg-primary-50/40">
+    <div className="min-h-dvh bg-primary-50/40 dark:bg-primary-50/20">
       <div className="mx-auto max-w-7xl space-y-4 px-4 py-6 sm:px-6">
         <AdminHeader adminEmail={getAdminEmail()} onLogout={handleLogout} />
         <DashboardStats stats={stats} loading={loading} />
@@ -255,7 +255,7 @@ export default function AdminDashboard() {
                     type="button"
                     onClick={() => setPage((current) => Math.max(1, current - 1))}
                     disabled={page <= 1 || loading}
-                    className="inline-flex items-center gap-1 rounded-full border border-primary-200 bg-white px-3.5 py-1.5 font-semibold text-primary-700 transition-colors hover:bg-primary-50 disabled:opacity-40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
+                    className="inline-flex items-center gap-1 rounded-full border border-primary-200 bg-surface px-3.5 py-1.5 font-semibold text-accent transition-colors hover:bg-primary-50 disabled:opacity-40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
                   >
                     <ChevronLeft className="h-4 w-4" aria-hidden="true" />
                     Previous
@@ -264,7 +264,7 @@ export default function AdminDashboard() {
                     type="button"
                     onClick={() => setPage((current) => Math.min(totalPages, current + 1))}
                     disabled={page >= totalPages || loading}
-                    className="inline-flex items-center gap-1 rounded-full border border-primary-200 bg-white px-3.5 py-1.5 font-semibold text-primary-700 transition-colors hover:bg-primary-50 disabled:opacity-40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
+                    className="inline-flex items-center gap-1 rounded-full border border-primary-200 bg-surface px-3.5 py-1.5 font-semibold text-accent transition-colors hover:bg-primary-50 disabled:opacity-40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
                   >
                     Next
                     <ChevronRight className="h-4 w-4" aria-hidden="true" />

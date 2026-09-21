@@ -64,7 +64,7 @@ export default function Treatments() {
                 <button
                   type="button"
                   onClick={clearFilters}
-                  className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-semibold text-primary-700 transition-colors hover:bg-primary-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
+                  className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-semibold text-accent transition-colors hover:bg-primary-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
                 >
                   Clear Filters
                 </button>
@@ -76,8 +76,8 @@ export default function Treatments() {
                 <TreatmentGrid items={filtered} />
               </div>
             ) : (
-              <div className="mt-8 rounded-3xl border border-primary-100 bg-white px-8 py-16 text-center shadow-soft">
-                <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-primary-100 text-primary-700">
+              <div className="mt-8 rounded-3xl border border-primary-100 bg-surface px-8 py-16 text-center shadow-soft">
+                <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-primary-100 text-accent">
                   <SearchX className="h-7 w-7" aria-hidden="true" />
                 </span>
                 <h2 className="mt-5 text-xl font-bold text-ink-800">No treatments found</h2>

@@ -45,7 +45,7 @@ export default function GalleryLightbox({ items, index, onClose, onNavigate }: G
     <AnimatePresence>
       {isOpen && item && (
         <motion.div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/80 p-4 backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-[#0b0817]/90 p-4 backdrop-blur-sm"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -64,7 +64,7 @@ export default function GalleryLightbox({ items, index, onClose, onNavigate }: G
               key={item.src}
               src={item.src}
               alt={item.alt}
-              className="mx-auto max-h-[75vh] w-auto rounded-3xl bg-white object-contain shadow-lifted"
+              className="mx-auto max-h-[75vh] w-auto rounded-3xl bg-surface object-contain shadow-lifted"
               initial={{ opacity: 0, scale: 0.97 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.2 }}

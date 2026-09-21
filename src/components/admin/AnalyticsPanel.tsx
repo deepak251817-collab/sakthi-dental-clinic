@@ -87,7 +87,7 @@ export default function AnalyticsPanel({ stats, onAuthFailure }: AnalyticsPanelP
               className={`rounded-full px-3.5 py-1.5 text-sm font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 ${
                 range === days
                   ? 'bg-primary-600 text-white'
-                  : 'border border-primary-200 bg-white text-primary-700 hover:bg-primary-50'
+                  : 'border border-primary-200 bg-surface text-accent hover:bg-primary-50'
               }`}
             >
               {label}
@@ -97,21 +97,21 @@ export default function AnalyticsPanel({ stats, onAuthFailure }: AnalyticsPanelP
       </div>
 
       {error ? (
-        <div className="rounded-2xl border border-primary-100 bg-white p-6 text-center">
+        <div className="rounded-2xl border border-primary-100 bg-surface p-6 text-center">
           <p role="alert" className="text-sm text-red-700">
             {error}
           </p>
           <button
             type="button"
             onClick={() => void loadAnalytics()}
-            className="mt-3 rounded-full border border-primary-200 bg-white px-4 py-1.5 text-sm font-semibold text-primary-700 transition-colors hover:bg-primary-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
+            className="mt-3 rounded-full border border-primary-200 bg-surface px-4 py-1.5 text-sm font-semibold text-accent transition-colors hover:bg-primary-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
           >
             Retry
           </button>
         </div>
       ) : (
         <div className="grid gap-4 lg:grid-cols-3" aria-live="polite">
-          <div className="rounded-2xl border border-primary-100 bg-white p-4 lg:col-span-2">
+          <div className="rounded-2xl border border-primary-100 bg-surface p-4 lg:col-span-2">
             <h3 className="text-sm font-semibold text-slate-700">Requests over time</h3>
             <div className="mt-4">
               <TrendChart points={trends} loading={loading} />
@@ -119,13 +119,13 @@ export default function AnalyticsPanel({ stats, onAuthFailure }: AnalyticsPanelP
           </div>
 
           <div className="space-y-4 lg:col-span-1">
-            <div className="rounded-2xl border border-primary-100 bg-white p-4">
+            <div className="rounded-2xl border border-primary-100 bg-surface p-4">
               <h3 className="text-sm font-semibold text-slate-700">Status distribution</h3>
               <div className="mt-4">
                 <StatusDistribution stats={stats} loading={loading} />
               </div>
             </div>
-            <div className="rounded-2xl border border-primary-100 bg-white p-4">
+            <div className="rounded-2xl border border-primary-100 bg-surface p-4">
               <h3 className="text-sm font-semibold text-slate-700">Most requested treatments</h3>
               <div className="mt-4">
                 <TopTreatments

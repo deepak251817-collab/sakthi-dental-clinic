@@ -33,9 +33,9 @@ export default function LocationSection() {
 
           <div className="mt-10 grid gap-8 lg:grid-cols-5">
             {/* Address card */}
-            <div className="flex flex-col justify-between gap-6 rounded-3xl border border-primary-100 bg-white p-8 shadow-soft lg:col-span-2">
+            <div className="flex flex-col justify-between gap-6 rounded-3xl border border-primary-100 bg-surface p-8 shadow-soft lg:col-span-2">
               <div>
-                <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-100 text-primary-700">
+                <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-100 text-accent">
                   <MapPin className="h-6 w-6" aria-hidden="true" />
                 </span>
                 <h3 id="location-heading" className="mt-5 text-xl font-bold text-ink-800">
@@ -57,7 +57,7 @@ export default function LocationSection() {
             </div>
 
             {/* Map embed */}
-            <div className="overflow-hidden rounded-3xl border border-primary-100 bg-white shadow-soft lg:col-span-3">
+            <div className="overflow-hidden rounded-3xl border border-primary-100 bg-surface shadow-soft lg:col-span-3">
               <iframe
                 src={EMBED_URL}
                 title="Map showing the location of Sakthi Dental Clinic in Hosur"

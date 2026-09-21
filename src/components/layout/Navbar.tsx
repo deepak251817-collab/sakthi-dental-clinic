@@ -5,6 +5,7 @@ import { navLinks } from '../../lib/constants'
 import { cn } from '../../lib/utils'
 import Container from '../common/Container'
 import AppointmentButton from '../common/AppointmentButton'
+import ThemeToggle from '../theme/ThemeToggle'
 import MobileMenu from './MobileMenu'
 
 export default function Navbar() {
@@ -31,8 +32,8 @@ export default function Navbar() {
         className={cn(
           'fixed inset-x-0 top-0 z-40 transition-all duration-300',
           scrolled || menuOpen
-            ? 'bg-white/95 shadow-soft backdrop-blur supports-[backdrop-filter]:bg-white/80'
-            : 'bg-white/85 backdrop-blur supports-[backdrop-filter]:bg-white/70',
+            ? 'bg-app/95 shadow-soft backdrop-blur supports-[backdrop-filter]:bg-app/80'
+            : 'bg-app/85 backdrop-blur supports-[backdrop-filter]:bg-app/70',
         )}
       >
         <nav
@@ -47,7 +48,7 @@ export default function Navbar() {
             >
               <img src="/images/icons/logo.svg" alt="" className="h-9 w-9" width={36} height={36} />
               <span className="text-lg font-bold text-ink-800">
-                Sakthi <span className="text-primary-600">Dental</span>
+                Sakthi <span className="text-accent-600">Dental</span>
               </span>
             </Link>
 
@@ -59,8 +60,8 @@ export default function Navbar() {
                   to={link.href}
                   className={({ isActive }) =>
                     cn(
-                      'rounded-full px-4 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-primary-50 hover:text-primary-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600',
-                      isActive && 'bg-primary-50 text-primary-700',
+                      'rounded-full px-4 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-primary-50 hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600',
+                      isActive && 'bg-primary-50 text-accent',
                     )
                   }
                 >
@@ -68,6 +69,9 @@ export default function Navbar() {
                 </NavLink>
               ))}
               <AppointmentButton source="Navbar" size="md" className="ml-3" />
+              <div className="ml-2">
+                <ThemeToggle variant="icon" />
+              </div>
             </div>
 
             {/* Mobile hamburger */}

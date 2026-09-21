@@ -5,7 +5,7 @@ import SEO from '../components/seo/SEO'
 
 export default function NotFound() {
   return (
-    <section className="flex min-h-[70vh] items-center bg-gradient-to-b from-primary-50 to-white">
+    <section className="flex min-h-[70vh] items-center bg-gradient-to-b from-primary-50 to-app">
       <SEO
         title="Page Not Found | Sakthi Dental Clinic"
         description="The page you're looking for doesn't exist or may have moved."

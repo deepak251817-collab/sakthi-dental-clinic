@@ -41,7 +41,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
           <div
             key={toast.id}
             role={toast.tone === 'error' ? 'alert' : 'status'}
-            className="pointer-events-auto flex items-start gap-2 rounded-xl border border-primary-100 bg-white p-3 text-sm shadow-lifted"
+            className="pointer-events-auto flex items-start gap-2 rounded-xl border border-primary-100 bg-surface p-3 text-sm shadow-lifted"
           >
             {toast.tone === 'error' ? (
               <XCircle className="mt-0.5 h-4 w-4 shrink-0 text-red-600" aria-hidden="true" />

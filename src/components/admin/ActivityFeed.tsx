@@ -28,9 +28,9 @@ function formatWhen(iso: string): string {
  */
 export default function ActivityFeed({ entries, loading }: ActivityFeedProps) {
   return (
-    <section aria-labelledby="activity-heading" className="rounded-2xl border border-primary-100 bg-white p-4">
+    <section aria-labelledby="activity-heading" className="rounded-2xl border border-primary-100 bg-surface p-4">
       <h2 id="activity-heading" className="flex items-center gap-2 text-sm font-semibold text-slate-700">
-        <CalendarClock className="h-4 w-4 text-primary-600" aria-hidden="true" />
+        <CalendarClock className="h-4 w-4 text-accent-600" aria-hidden="true" />
         Recent activity
       </h2>
 

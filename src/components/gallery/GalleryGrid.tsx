@@ -30,7 +30,7 @@ export default function GalleryGrid({ onOpen }: { onOpen: (item: GalleryItem) =>
                 'rounded-full px-4 py-2 text-sm font-medium transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600',
                 isActive
                   ? 'bg-primary-600 text-white shadow-soft'
-                  : 'bg-white text-slate-600 ring-1 ring-primary-200 hover:bg-primary-50 hover:text-primary-700',
+                  : 'bg-surface text-slate-600 ring-1 ring-primary-200 hover:bg-primary-50 hover:text-accent',
               )}
             >
               {option}

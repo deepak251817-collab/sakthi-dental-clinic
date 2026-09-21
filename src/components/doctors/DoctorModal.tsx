@@ -22,11 +22,11 @@ export default function DoctorModal({ doctor, onClose }: DoctorModalProps) {
     >
       {doctor && (
         <div className="px-6 py-6 text-center sm:px-8">
-          <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-primary-100 text-3xl font-bold text-primary-700">
+          <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-primary-100 text-3xl font-bold text-accent">
             <UserRound className="h-10 w-10" aria-hidden="true" />
           </div>
           <h3 className="mt-4 text-xl font-bold text-ink-800">{doctor.name}</h3>
-          <p className="mt-2 inline-block rounded-full bg-primary-50 px-4 py-1 text-xs font-semibold uppercase tracking-wide text-primary-700">
+          <p className="mt-2 inline-block rounded-full bg-primary-50 px-4 py-1 text-xs font-semibold uppercase tracking-wide text-accent">
             {doctor.role}
           </p>
           <p className="mx-auto mt-4 max-w-sm text-sm leading-relaxed text-slate-500">

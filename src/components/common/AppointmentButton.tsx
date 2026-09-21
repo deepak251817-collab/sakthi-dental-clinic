@@ -27,7 +27,7 @@ export default function AppointmentButton({
   const variantClasses = {
     primary: 'bg-primary-600 text-white shadow-soft hover:bg-primary-700 focus-visible:outline-primary-600',
     onDark:
-      'bg-white text-primary-700 hover:bg-primary-50 focus-visible:outline-white',
+      'bg-surface text-accent hover:bg-primary-50 focus-visible:outline-white',
     onDarkSecondary:
       'bg-transparent text-white ring-1 ring-white/40 hover:bg-white/10 focus-visible:outline-white',
   } as const

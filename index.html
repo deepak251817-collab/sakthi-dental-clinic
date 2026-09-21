@@ -7,6 +7,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#f6f5fe" />
     <title>Sakthi Dental Clinic | Dental Care for Women, Children &amp; Families</title>
+    <script>
+      // Theme bootstrap — runs before first paint to avoid a flash of the
+      // wrong theme. Mirrors src/lib/theme.ts (kept dependency-free).
+      ;(function () {
+        try {
+          var KEY = 'sakthi-theme'
+          var raw = localStorage.getItem(KEY)
+          var pref = raw === 'light' || raw === 'dark' || raw === 'system' ? raw : 'system'
+          var dark =
+            pref === 'dark' ||
+            (pref === 'system' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)
+          if (dark) document.documentElement.classList.add('dark')
+          var meta = document.querySelector('meta[name="theme-color"]')
+          if (meta) meta.setAttribute('content', dark ? '#17142a' : '#f6f5fe')
+        } catch (e) {
+          /* storage unavailable — system preference alone decides */
+        }
+      })()
+    </script>
     <meta
       name="description"
       content="Discover compassionate, expert-led dental care for women, children and families at Sakthi Dental Clinic in Hosur."

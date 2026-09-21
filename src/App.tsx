@@ -41,7 +41,7 @@ export default function App() {
       <AppointmentProvider>
         <ScrollToTop />
         <ErrorBoundary>
-          <div className="flex min-h-screen flex-col bg-white font-sans text-slate-700 antialiased pb-16 lg:pb-0">
+          <div className="flex min-h-screen flex-col bg-app font-sans text-slate-700 antialiased pb-16 lg:pb-0">
             <Suspense fallback={<RouteFallback />}>
               <ToastProvider>
               <Routes>
@@ -58,7 +58,7 @@ export default function App() {
                 <Route
                   path="/admin/login"
                   element={
-                    <div className="min-h-screen bg-white font-sans text-slate-700 antialiased">
+                    <div className="min-h-screen bg-app font-sans text-slate-700 antialiased">
                       <Suspense fallback={<RouteFallback />}>
                         <AdminLogin />
                       </Suspense>
@@ -69,7 +69,7 @@ export default function App() {
                   path="/admin"
                   element={
                     <RequireAdminAuth>
-                      <div className="min-h-screen bg-white font-sans text-slate-700 antialiased">
+                      <div className="min-h-screen bg-app font-sans text-slate-700 antialiased">
                         <Suspense fallback={<RouteFallback />}>
                           <AdminDashboard />
                         </Suspense>

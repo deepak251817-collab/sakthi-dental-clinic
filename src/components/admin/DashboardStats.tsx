@@ -16,28 +16,28 @@ const CARDS: Array<{
     key: 'pending',
     label: 'Pending',
     totalLabel: 'Total Requests',
-    chipClass: 'bg-amber-100 text-amber-800',
+    chipClass: 'bg-amber-100 text-amber-800 dark:bg-amber-400/15 dark:text-amber-300',
     dotClass: 'bg-amber-400',
   },
   {
     key: 'confirmed',
     label: 'Confirmed',
     totalLabel: 'Confirmed Requests',
-    chipClass: 'bg-emerald-100 text-emerald-800',
+    chipClass: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-400/15 dark:text-emerald-300',
     dotClass: 'bg-emerald-400',
   },
   {
     key: 'completed',
     label: 'Completed',
     totalLabel: 'Completed Requests',
-    chipClass: 'bg-sky-100 text-sky-800',
+    chipClass: 'bg-sky-100 text-sky-800 dark:bg-sky-400/15 dark:text-sky-300',
     dotClass: 'bg-sky-400',
   },
   {
     key: 'cancelled',
     label: 'Cancelled',
     totalLabel: 'Cancelled Requests',
-    chipClass: 'bg-rose-100 text-rose-800',
+    chipClass: 'bg-rose-100 text-rose-800 dark:bg-rose-400/15 dark:text-rose-300',
     dotClass: 'bg-rose-400',
   },
 ]
@@ -50,14 +50,14 @@ export default function DashboardStats({ stats, loading }: DashboardStatsProps) 
 
   return (
     <section aria-label="Appointment summary" className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
-      <div className="rounded-2xl border border-primary-100 bg-white p-4">
+      <div className="rounded-2xl border border-primary-100 bg-surface p-4">
         <p className="text-xs font-medium uppercase tracking-wide text-slate-500">Total Requests</p>
         <p className="mt-2 text-2xl font-bold text-slate-800" aria-live="polite">
           {loading && !stats ? skeleton : stats?.total ?? 0}
         </p>
       </div>
       {CARDS.map(({ key, label, totalLabel, chipClass, dotClass }) => (
-        <div key={key} className="rounded-2xl border border-primary-100 bg-white p-4">
+        <div key={key} className="rounded-2xl border border-primary-100 bg-surface p-4">
           <p className="flex items-center gap-1.5 text-xs font-medium text-slate-500">
             <span className={`h-2 w-2 rounded-full ${dotClass}`} aria-hidden="true" />
             {label}

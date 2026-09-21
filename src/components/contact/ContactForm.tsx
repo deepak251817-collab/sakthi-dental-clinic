@@ -56,14 +56,14 @@ export default function ContactForm() {
   }
 
   const inputClasses = (hasError: boolean) =>
-    `w-full rounded-xl border bg-white px-4 py-3 text-sm text-slate-700 placeholder:text-slate-400 transition-colors focus:outline-none focus:ring-2 ${
+    `w-full rounded-xl border bg-surface px-4 py-3 text-sm text-slate-700 placeholder:text-slate-400 transition-colors focus:outline-none focus:ring-2 ${
       hasError
         ? 'border-red-300 focus:ring-red-200'
         : 'border-primary-200 focus:border-primary-400 focus:ring-primary-100'
     }`
 
   return (
-    <div className="rounded-3xl border border-primary-100 bg-white p-7 shadow-card sm:p-9">
+    <div className="rounded-3xl border border-primary-100 bg-surface p-7 shadow-card sm:p-9">
       <h2 className="text-xl font-bold text-ink-800">Send us a message</h2>
       <p className="mt-1.5 text-sm text-slate-500">
         Fill in the form and our team will get back to you.

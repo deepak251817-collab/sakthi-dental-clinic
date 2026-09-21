@@ -217,6 +217,30 @@ Recruiters, reviewers and future agents get an accurate map of the system and it
 
 ---
 
+## feat: add staff login entry point
+
+**Date:** 2026-09-21 · **Phase:** Phase 7 (follow-up) · **Commit:** `780722b`
+
+### Purpose
+
+Provide a discreet frontend entry point for authorized clinic staff. The admin system (route, guard, backend auth) already existed; only the way to reach it from the public site was missing.
+
+### Changes
+
+* "Staff Login" link added as the last item of the footer Quick links (`src/lib/constants.ts`), styled identically to the other secondary footer links — no admin entry in the primary navbar
+* Login page copy aligned with the staff framing: "Staff Login" title, "Sign in to manage clinic appointments." subtitle, "Back to Website" return link (`src/pages/AdminLogin.tsx`)
+* No new route, guard or endpoint — `/admin/login`, `RequireAdminAuth` and `POST /api/auth/login` were reused as-is
+
+### Validation
+
+eslint 0 problems · `tsc -b` clean · 8/8 frontend tests · production build succeeds. Verified live in the browser: footer link → `/admin/login`; invalid credentials → `role="alert"` error; valid credentials → `/admin` dashboard; unauthenticated `/admin` → redirect to `/admin/login`; "Back to Website" → `/`. Temporary QA admin used for verification deleted from the database afterwards.
+
+### Impact
+
+Clinic staff can reach the administration system from the public site without exposing admin functionality in the public navigation; patients see only a quiet footer link and can reach nothing but the login page.
+
+---
+
 ## feat: improve admin appointment management UX
 
 Date: 2026-09-20

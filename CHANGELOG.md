@@ -4,6 +4,20 @@ All notable changes to this project, documented per development phase.
 Format based on [Keep a Changelog](https://keepachangelog.com); per-commit
 details live in [docs/COMMIT_REFERENCE.md](docs/COMMIT_REFERENCE.md).
 
+## Phase 8 — Theme & final UX (2026-09-21)
+
+### Added
+- Light/Dark/System theme support across the public website and admin dashboard: token-based palette (RGB-triplet CSS variables mapped through `tailwind.config.js`), inline bootstrap in `index.html` (no flash of wrong theme), persisted `sakthi-theme` preference with safe fallback, navbar toggle + mobile-menu segmented control, live system-preference following
+- Appointment confirmation improvements: request ID, submitted treatment/date/time summary, clinic contact details, "Back to Home" and "Contact Clinic" actions, and a print-friendly request summary
+
+### Changed
+- ~40 components migrated from hardcoded light colors (`bg-white`, light-only text/border utilities) to theme tokens; status badges, stats cards, charts and toasts gained intentional dark variants
+- Dark overlays (modals, lightbox, mobile menu) use theme-independent dark literals so they stay dark in both themes
+- `color-scheme` set per theme for native date/time pickers, selects and scrollbars
+
+### Fixed
+- Opacity modifiers on themed utilities (`bg-surface/95`, `bg-primary-50/60`) now work in both themes by storing tokens as RGB triplets with `<alpha-value>`
+
 ## Phase 7 — Final QA, screenshots & submission (2026-09-21)
 
 ### Added

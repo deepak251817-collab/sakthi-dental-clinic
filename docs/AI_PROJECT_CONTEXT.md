@@ -106,6 +106,18 @@ Verified against the repository. Do not write technologies that are not present 
 
 ---
 
+## Theme System
+
+Light / Dark / System theming, added in Phase 8. No theme library — tokens only.
+
+* **Storage:** `localStorage` key `sakthi-theme` with values `light` | `dark` | `system`; invalid values fall back to `system`.
+* **Initialization:** inline bootstrap in `index.html` runs before React — reads the stored preference (or `prefers-color-scheme` for system), sets `html.dark`, so there is no flash of wrong theme.
+* **Tokens:** `src/index.css` defines RGB-triplet CSS variables (`--color-*`) for both themes under `:root` and `.dark`. `tailwind.config.js` maps every palette stop to `rgb(var(--token) / <alpha-value>)`, so existing utilities *and their opacity modifiers* theme automatically.
+* **Context:** `src/context/ThemeContext.tsx` (provider + system-preference listener) and `src/context/useTheme.ts` (hook, separate module for fast-refresh compliance).
+* **Controls:** `src/components/theme/ThemeToggle.tsx` — navbar icon button (Sun/Moon/Monitor) and segmented control in the mobile menu.
+* **Conventions:** background stops of `primary-600..950` stay dark in dark mode (used as fills with white text); text/icon usages use the `accent` token. Overlays use literal dark values, not tokens. Never add plain-hex utilities for surfaces — use `surface`/`surface-input`/`app` tokens.
+* **Components affected:** all public pages and admin surfaces; `.bg-white` was fully migrated to `bg-surface` (codemod in `scripts/theme-surface-codemod.mjs`).
+
 ## Useful Commands
 
 ```bash

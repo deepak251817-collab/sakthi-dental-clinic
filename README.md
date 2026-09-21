@@ -36,7 +36,20 @@ The site presents the clinic's treatments, doctors, facilities and patient testi
 * Accessible UI (semantic HTML, focus states, aria attributes)
 * Animated mobile navigation (slide-in panel, scroll lock, Escape to close)
 * Subtle Framer Motion animations that respect `prefers-reduced-motion`
+* Light/Dark/System theme with persisted preference and no flash of wrong theme (see [Theme Support](#theme-support))
 * 404 fallback route
+
+## Theme Support
+
+The entire application — public website and admin dashboard — supports **Light**, **Dark** and **System** themes.
+
+* **Light mode** preserves the original healthcare identity: white surfaces, soft lavender tints, violet accents and dark readable text.
+* **Dark mode** is an intentional palette, not an inversion: a deep lavender-tinted background (never pure black), elevated dark surfaces, accessible lavender/violet accents and soft white text.
+* **System** follows the OS/browser `prefers-color-scheme` setting and updates live if the OS preference changes while the user has not overridden it.
+* The chosen preference is persisted in `localStorage` under `sakthi-theme` (values `light`, `dark`, `system`; invalid values fall back to `system`).
+* An inline bootstrap script applies the theme before React renders, so there is **no flash of the wrong theme** on load or refresh.
+* Theme controls: an icon button in the desktop navbar (Sun / Moon / Monitor, with an accessible label) and a segmented Light/Dark/System control inside the mobile menu.
+* Theming is centralized as CSS-variable design tokens in `src/index.css`, mapped through `tailwind.config.js`, so every component (cards, forms, modals, tables, charts, status badges) themes consistently without per-component color logic.
 
 ## Tech Stack
 
@@ -397,12 +410,13 @@ sakthi-dental-clinic/
 │   │                     # Toast, RequireAdminAuth
 │   ├── data/             # treatments, doctors, testimonials, faqs, facilities (typed data)
 │   ├── lib/              # constants, utils, api client, auth token handling
+│   ├── context/          # ThemeContext (light/dark/system) + appointment context
 │   ├── pages/            # …, AdminLogin, AdminDashboard
 │   ├── App.tsx           # Routes + layout shell
 │   ├── main.tsx          # Entry point
-│   └── index.css         # Tailwind layers + base styles
-├── tailwind.config.js    # Lavender brand palette, fonts, shadows
-└── index.html            # SEO meta, Open Graph, fonts
+│   └── index.css         # Tailwind layers + theme tokens (light/dark)
+├── tailwind.config.js    # Palette mapped to CSS-variable tokens, fonts, shadows
+└── index.html            # SEO meta, theme bootstrap (no flash), fonts
 ```
 
 All clinic content (treatments, doctors, testimonials, FAQs, facilities, contact details) lives in typed files under `src/data/` and `src/lib/constants.ts`, so text can be updated without touching components.
@@ -418,6 +432,7 @@ All clinic content (treatments, doctors, testimonials, FAQs, facilities, contact
 | 5 | Notifications, analytics, audit trail, admin UX | Complete |
 | 6 | Testing, CI/CD, security audit, GitHub polish | Complete |
 | 7 | Final QA, screenshots, submission documentation | Complete |
+| 8 | Light/Dark/System theme, appointment confirmation UX | Complete |
 
 Details: [docs/PROJECT_PHASES.md](docs/PROJECT_PHASES.md) · per-commit record: [docs/COMMIT_REFERENCE.md](docs/COMMIT_REFERENCE.md) · future work: [docs/ROADMAP.md](docs/ROADMAP.md) · security posture: [docs/SECURITY_AUDIT.md](docs/SECURITY_AUDIT.md) · architecture: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) · test report: [docs/TESTING.md](docs/TESTING.md) · submission: [docs/SHADOWFOX_SUBMISSION.md](docs/SHADOWFOX_SUBMISSION.md) · demo: [docs/DEMO_SCRIPT.md](docs/DEMO_SCRIPT.md) · client-content notes: [docs/CLIENT_CONTENT_NOTES.md](docs/CLIENT_CONTENT_NOTES.md)
 

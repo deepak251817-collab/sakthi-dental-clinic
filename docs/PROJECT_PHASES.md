@@ -113,6 +113,22 @@ What each phase delivered, with the actual files and commits. Commit hashes refe
 
 ---
 
+## Phase 8 — Theme & final UX (2026-09-21)
+
+**Purpose:** polished Light/Dark/System theme across public site and admin dashboard, plus an upgraded appointment-confirmation experience.
+
+**Major features:** token-based theme system (RGB-triplet CSS variables driving the Tailwind palette; no theme library), early-init bootstrap in `index.html` (no flash of wrong theme), `sakthi-theme` localStorage persistence with safe fallback, navbar toggle + mobile-menu segmented control with live system-preference following, full dark audit of public pages, modals, forms, gallery, cookie notice, 404 and the entire admin area (login, dashboard, stats, charts, badges, toasts), and an appointment success panel showing the request ID, submitted treatment/date/time, clinic contact details, Back to Home / Contact Clinic actions and a print-friendly request summary.
+
+**Important files:** `src/index.css`, `tailwind.config.js`, `index.html`, `src/context/ThemeContext.tsx`, `src/context/useTheme.ts`, `src/components/theme/ThemeToggle.tsx`, `src/components/appointment/AppointmentForm.tsx`, `scripts/theme-surface-codemod.mjs`, plus ~40 components converted from hardcoded light colors to tokens.
+
+**Database changes:** none.
+
+**API changes:** none (create endpoint already returned the request ID).
+
+**Commits:** see `docs/COMMIT_REFERENCE.md` (Phase 8 entries).
+
+---
+
 ## Backlog / known limitations
 
 - No real email provider configured — notifications log to the server console until `EMAIL_PROVIDER` is set (see `backend/.env.example`).

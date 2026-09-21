@@ -57,8 +57,8 @@ export default function AdminLogin() {
               <ShieldCheck className="h-5 w-5 text-primary-700" aria-hidden="true" />
             </span>
             <div>
-              <h1 className="text-lg font-bold text-ink-800">Admin Sign In</h1>
-              <p className="text-xs text-slate-500">Sakthi Dental Clinic — staff area</p>
+              <h1 className="text-lg font-bold text-ink-800">Staff Login</h1>
+              <p className="text-xs text-slate-500">Sign in to manage clinic appointments.</p>
             </div>
           </div>
 
@@ -129,7 +129,7 @@ export default function AdminLogin() {
         <p className="mt-6 text-center text-xs text-slate-400">
           Staff access only.{' '}
           <Link to="/" className="underline underline-offset-2 hover:text-primary-600">
-            Return to the clinic website
+            Back to Website
           </Link>
         </p>
       </div>

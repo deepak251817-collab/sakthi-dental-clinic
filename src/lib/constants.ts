@@ -32,6 +32,9 @@ export const footerLinks = {
     { label: 'Treatments', href: '/treatments' },
     { label: 'Gallery', href: '/gallery' },
     { label: 'Privacy Policy', href: '/privacy-policy' },
+    // Discreet entry point for clinic staff — same secondary styling as the
+    // other footer links; no admin functions are exposed, only the login page.
+    { label: 'Staff Login', href: '/admin/login' },
   ],
   keyTreatments: [
     { label: 'Teeth Cleaning & Scaling', href: '/treatments' },

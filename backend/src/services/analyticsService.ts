@@ -36,7 +36,10 @@ export async function getAppointmentTrends(days: number): Promise<TrendPoint[]> 
   const { startIst, todayIst, startInstant } = istWindow(days)
 
   const rows = await prisma.$queryRaw<Array<{ day: string; count: number }>>`
-    SELECT to_char((created_at AT TIME ZONE 'Asia/Kolkata')::date, 'YYYY-MM-DD') AS day,
+    -- created_at is a naive timestamp holding UTC wall-clock (Prisma maps
+    -- DateTime to timestamp). Interpret it as UTC, then convert to the
+    -- clinic's calendar: AT TIME ZONE 'UTC' -> timestamptz -> IST wall-clock.
+    SELECT to_char((created_at AT TIME ZONE 'UTC' AT TIME ZONE 'Asia/Kolkata')::date, 'YYYY-MM-DD') AS day,
            COUNT(*)::int AS count
     FROM appointments
     WHERE created_at >= ${startInstant}

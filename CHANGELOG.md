@@ -4,6 +4,28 @@ All notable changes to this project, documented per development phase.
 Format based on [Keep a Changelog](https://keepachangelog.com); per-commit
 details live in [docs/COMMIT_REFERENCE.md](docs/COMMIT_REFERENCE.md).
 
+## Phase 7 — Final QA, screenshots & submission (2026-09-21)
+
+### Added
+- 11 real screenshots of the running app in `docs/screenshots/` (home desktop/mobile, about, treatments, FAQ, contact, gallery, admin login, dashboard, appointment management, analytics), captured with headless Chrome against a temporary QA session that was removed afterwards
+- `docs/ARCHITECTURE.md` — verified system architecture, flows and deployment targets
+- `docs/TESTING.md` — what the suites cover plus the full Phase 7 QA report (browser E2E, 17-check API E2E, responsive audit, negative tests)
+- `docs/SHADOWFOX_SUBMISSION.md` — internship submission summary with only verified claims
+- `docs/DEMO_SCRIPT.md` — 3–5 minute demonstration walkthrough
+- `docs/CLIENT_CONTENT_NOTES.md` — operating-hours discrepancy and other items needing client confirmation
+
+### Changed
+- `docs/API.md` rewritten to match the actual implementation (correct analytics paths, list/activity response shapes, validation rules, 409 transition conflicts, error copy)
+- README: screenshots section, corrected API summary table, Phase 7 status, expanded docs index
+- Phase tracker and AI context updated with the Phase 7 record and the `.env` `#` quoting gotcha
+
+### Verified (final QA)
+- Full public flow, appointment submit (incl. negative validation) and admin dashboard flow in a real browser
+- Automated 17/17 API E2E (auth, guards, CRUD, transitions, 409s, audit trail, cleanup)
+- Responsive: zero horizontal overflow across 15 route/viewport combinations (320–1280 px)
+- SEO audit: per-route titles/descriptions/canonical/OG, robots.txt, sitemap, valid Dentist JSON-LD (9 AM–7 PM)
+- Frontend lint + typecheck + build clean; backend build clean; 31/31 + 8/8 tests passing
+
 ## Phase 6 — Testing, CI/CD, security & GitHub polish (2026-09-20)
 
 ### Added

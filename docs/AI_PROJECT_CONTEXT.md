@@ -15,6 +15,8 @@ Read this file before modifying anything, then `docs/PROJECT_PHASES.md` and
 | Audience | Patients (women, children, families) and clinic administrators |
 | Project type | Client-style healthcare website + internal appointment management |
 | Internship | ShadowFox Intermediate Level Internship |
+| Current phase | Phase 7 complete (final QA, screenshots, submission docs) — see `docs/PROJECT_PHASES.md` |
+| Production status | Not deployed; deployment targets documented in README + `docs/ROADMAP.md` |
 
 ---
 
@@ -56,6 +58,7 @@ Verified against the repository. Do not write technologies that are not present 
 - Frontend: `VITE_API_URL` (see `.env.example`)
 - Backend: `DATABASE_URL`, `JWT_SECRET`, `PORT`, `FRONTEND_URL`, `ADMIN_NAME`, `ADMIN_EMAIL`, `ADMIN_PASSWORD` (seed only), optional email-provider vars (see `backend/.env.example`)
 - Never commit real `.env` values. `backend/.env` is git-ignored.
+- Gotcha: quote `.env` values containing `#` — dotenv truncates unquoted values at `#` (this bit the dev seed once: the seeded hash was built from a truncated password).
 
 ### Deployment
 

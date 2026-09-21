@@ -75,7 +75,7 @@ What each phase delivered, with the actual files and commits. Commit hashes refe
 
 **Database changes:** `NotificationLog` and `AppointmentActivity` models with enums; migration(s); index on `appointments.preferred_date`.
 
-**API changes:** `GET /api/appointments/analytics/trends`, `GET /api/appointments/analytics/treatments`, `GET /api/appointments/activity`, `sortBy`/`sortOrder` params on `GET /api/appointments`.
+**API changes:** `GET /api/appointments/analytics/trends`, `GET /api/appointments/analytics/treatments`, `GET /api/appointments/activity`. Table sorting is client-side (column headers in `AppointmentTable`); the list API itself takes only page/limit/status/search/date params.
 
 **Commits:** `f3dd93c` (docs context), `a71100e` (notification service), `ab26131` (notification logs), `7ce8c97` (analytics API), `e6d5f69` (analytics UI), `e1d5493` (audit trail), `494dccc` (admin UX).
 
@@ -94,6 +94,22 @@ What each phase delivered, with the actual files and commits. Commit hashes refe
 **API changes:** none (endpoint set unchanged; docs updated to match).
 
 **Commits:** `c3a3823` (frontend tests), `f1d6390` (CI + templates), `0b1bbe6` (security hardening), `73c70b5` (roadmap + AI context), `4c85467` (README + CHANGELOG).
+
+---
+
+## Phase 7 — Final QA, screenshots & submission (2026-09-21)
+
+**Purpose:** final quality pass — complete end-to-end verification, real screenshots, submission-ready documentation.
+
+**Major features:** full public/admin E2E run in a real browser (login negative tests, appointment submit incl. validation failures, modals, 404, contact data), 17-check automated API E2E, responsive audit (zero horizontal overflow in 15 route/viewport combinations), SEO + accessibility audit, 11 real screenshots captured with headless Chrome, `docs/API.md` rewritten to match the actual code, ARCHITECTURE/TESTING/SHADOWFOX_SUBMISSION/DEMO_SCRIPT/CLIENT_CONTENT_NOTES docs, client-side note: `.env` values containing `#` must be quoted (dotenv truncation gotcha found and fixed in the local environment).
+
+**Important files:** `docs/API.md`, `docs/ARCHITECTURE.md`, `docs/TESTING.md`, `docs/SHADOWFOX_SUBMISSION.md`, `docs/DEMO_SCRIPT.md`, `docs/CLIENT_CONTENT_NOTES.md`, `docs/screenshots/*`, `README.md`, `CHANGELOG.md`.
+
+**Database changes:** none (QA data created and fully removed).
+
+**API changes:** none (docs corrected to match implementation).
+
+**Commits:** see `docs/COMMIT_REFERENCE.md` (Phase 7 entries).
 
 ---
 

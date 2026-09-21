@@ -162,8 +162,8 @@ Full reference in [docs/API.md](docs/API.md). Summary:
 | POST | `/api/appointments` | Public (rate-limited) |
 | GET | `/api/appointments` (paginated, filterable) | Admin |
 | GET | `/api/appointments/stats` | Admin |
-| GET | `/api/appointments/trends` | Admin |
-| GET | `/api/appointments/treatments` | Admin |
+| GET | `/api/appointments/analytics/trends` | Admin |
+| GET | `/api/appointments/analytics/treatments` | Admin |
 | GET | `/api/appointments/activity` | Admin |
 | GET | `/api/appointments/:id` | Admin |
 | PATCH | `/api/appointments/:id/status` | Admin |
@@ -302,7 +302,29 @@ GitHub Actions (`.github/workflows/`) runs on every push and PR to `main`:
 
 ## Screenshots
 
-Not committed yet. Run locally (`npm run dev`) or open the deployed URL to see the site; screenshots to be added once the production domain is live.
+Captured from the running application (see `docs/screenshots/`):
+
+### Home
+
+![Home](docs/screenshots/01-home-desktop.png)
+
+### Mobile
+
+![Home on mobile](docs/screenshots/02-home-mobile.png)
+
+### Treatments
+
+![Treatments](docs/screenshots/04-treatments.png)
+
+### Admin Dashboard
+
+![Admin Dashboard](docs/screenshots/12-admin-dashboard.png)
+
+### Appointment Management
+
+![Appointment management](docs/screenshots/13-appointment-management.png)
+
+All 11 captures: home (desktop/mobile), about, treatments, FAQ, contact, gallery, admin login, dashboard, appointment management, analytics.
 
 ## Deployment
 
@@ -348,7 +370,13 @@ sakthi-dental-clinic/
 │   ├── PROJECT_PHASES.md      # Phase tracker
 │   ├── COMMIT_REFERENCE.md    # Per-commit purpose/changes/validation record
 │   ├── SECURITY_AUDIT.md      # Findings, fixes and accepted risks
-│   └── ROADMAP.md             # Completed work vs. unimplemented future items
+│   ├── ROADMAP.md             # Completed work vs. unimplemented future items
+│   ├── ARCHITECTURE.md        # Verified system architecture + flows
+│   ├── TESTING.md             # Test suites + executed QA report
+│   ├── SHADOWFOX_SUBMISSION.md# Internship submission summary
+│   ├── DEMO_SCRIPT.md         # 3–5 minute walkthrough
+│   ├── CLIENT_CONTENT_NOTES.md# Content observations needing client confirmation
+│   └── screenshots/           # 11 real captures of the running app
 ├── public/               # Static assets, favicon, robots.txt, sitemap.xml, images
 ├── src/
 │   ├── components/
@@ -389,8 +417,9 @@ All clinic content (treatments, doctors, testimonials, FAQs, facilities, contact
 | 4 | Full-stack appointment management (API, PostgreSQL, admin auth + dashboard) | Complete |
 | 5 | Notifications, analytics, audit trail, admin UX | Complete |
 | 6 | Testing, CI/CD, security audit, GitHub polish | Complete |
+| 7 | Final QA, screenshots, submission documentation | Complete |
 
-Details: [docs/PROJECT_PHASES.md](docs/PROJECT_PHASES.md) · per-commit record: [docs/COMMIT_REFERENCE.md](docs/COMMIT_REFERENCE.md) · future work: [docs/ROADMAP.md](docs/ROADMAP.md) · security posture: [docs/SECURITY_AUDIT.md](docs/SECURITY_AUDIT.md)
+Details: [docs/PROJECT_PHASES.md](docs/PROJECT_PHASES.md) · per-commit record: [docs/COMMIT_REFERENCE.md](docs/COMMIT_REFERENCE.md) · future work: [docs/ROADMAP.md](docs/ROADMAP.md) · security posture: [docs/SECURITY_AUDIT.md](docs/SECURITY_AUDIT.md) · architecture: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) · test report: [docs/TESTING.md](docs/TESTING.md) · submission: [docs/SHADOWFOX_SUBMISSION.md](docs/SHADOWFOX_SUBMISSION.md) · demo: [docs/DEMO_SCRIPT.md](docs/DEMO_SCRIPT.md) · client-content notes: [docs/CLIENT_CONTENT_NOTES.md](docs/CLIENT_CONTENT_NOTES.md)
 
 ## Development Note
 

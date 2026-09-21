@@ -29,11 +29,11 @@ export default function AppointmentModal() {
           : 'Request a visit — our team will confirm your slot by phone.'
       }
     >
-      <p className="flex items-center gap-2 px-6 pt-4 text-xs font-medium text-primary-700 sm:px-8">
+      <p className="flex items-center gap-2 px-6 pt-4 text-xs font-medium text-accent sm:px-8">
         <CalendarPlus className="h-4 w-4" aria-hidden="true" />
         Appointment request — takes under a minute
       </p>
-      <AppointmentForm key={formKey} onReset={handleClose} />
+      <AppointmentForm key={formKey} />
     </Modal>
   )
 }

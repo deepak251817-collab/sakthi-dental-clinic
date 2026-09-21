@@ -166,6 +166,57 @@ Client-side API and interaction contracts are now regression-guarded, and CI kee
 
 ---
 
+## fix: move toast context out of the component file for fast refresh
+
+**Date:** 2026-09-21 · **Phase:** Phase 7 · **Commit:** `a791ad1`
+
+### Purpose
+
+Resolve the repository's only lint warning for a real reason: `Toast.tsx`
+exported `useToast` alongside components, which breaks react-refresh fast
+refresh in development.
+
+### Changes
+
+* New `src/components/admin/toastContext.ts` holding the toast context and `useToast` hook
+* `Toast.tsx` now exports only components and imports from the new module
+* `AdminDashboard.tsx` / `AdminLogin.tsx` import `useToast` from the new module
+
+### Validation
+
+`npm run lint` — 0 problems · `tsc -b` clean · `npx vitest run` 8/8 · backend `npm test` 31/31 · `npm run build` succeeds.
+
+### Impact
+
+Zero-warning lint baseline and correct HMR behavior while editing the toast layer; no runtime behavior change.
+
+---
+
+## docs: finalize Phase 7 QA report, screenshots and submission docs
+
+**Date:** 2026-09-21 · **Phase:** Phase 7 · **Commit:** `01da041`
+
+### Purpose
+
+Record the executed final QA and make the repository submission-ready for the ShadowFox internship review.
+
+### Changes
+
+* `docs/API.md` rewritten to match the real implementation (analytics paths `/appointments/analytics/*`, list shape `{ data, page, limit, total }`, uppercase stats keys, 409 on invalid transitions, per-field validation, no `existing` field — the old file documented an API that does not exist)
+* New `docs/ARCHITECTURE.md`, `docs/TESTING.md`, `docs/SHADOWFOX_SUBMISSION.md`, `docs/DEMO_SCRIPT.md`, `docs/CLIENT_CONTENT_NOTES.md`
+* 11 real screenshots in `docs/screenshots/` captured from the running app with headless Chrome (temporary QA session and demo fixtures deleted afterwards)
+* README: screenshots section, corrected API table, Phase 7 row, expanded docs index; CHANGELOG, phase tracker and AI context updated
+
+### Validation
+
+All recorded results come from actually executed commands: 17/17 automated API E2E (auth, guards, CRUD, transitions, 409s, audit trail), 39/39 automated tests, responsive audit with zero horizontal overflow in 15 route/viewport combinations, SEO audit (titles/descriptions/canonical/OG/JSON-LD/robots/sitemap), lint + typecheck + builds clean.
+
+### Impact
+
+Recruiters, reviewers and future agents get an accurate map of the system and its verified quality; the API docs no longer mislead implementers.
+
+---
+
 ## feat: improve admin appointment management UX
 
 Date: 2026-09-20
